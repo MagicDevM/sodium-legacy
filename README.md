@@ -88,7 +88,7 @@ with `./gradlew.bat` (Windows) or `./gradlew` (macOS and Linux).
 
 ### Build Requirements
 
-- OpenJDK 21
+- OpenJDK 17
     - We recommend using the [Eclipse Temurin](https://adoptium.net/) distribution as it's regularly tested by our developers and known
       to be of high quality.
 - Gradle 8.10.x

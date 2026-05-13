@@ -53,7 +53,7 @@ Here's a summary of the features this config API provides:
 
 ### Dependency on Sodium's API
 
-Sodium publishes its api package on a maven repository that you can depend on in your buildscript. It needs `modImplementation` on Fabric 1.21.11, and `implementation` on Fabric 1.21.12+ and NeoForge 1.21.11+.
+Sodium publishes its api package on a maven repository that you can depend on in your buildscript. It needs `modImplementation` on Fabric 1.20.1, and `implementation` on Fabric 1.20.5+ and NeoForge 1.20.1+.
 
 Fabric:
 
@@ -62,9 +62,9 @@ dependencies {
     // ... other dependencies
     
     // using a tagged API build 
-    modImplementation "net.caffeinemc:sodium-fabric-api:0.8.0+mc1.21.11"
+    modImplementation "net.caffeinemc:sodium-fabric-api:0.8.0+mc1.20.1"
     // OR using a snapshot build
-    modImplementation "net.caffeinemc:sodium-fabric-api:0.8.0-SNAPSHOT+mc1.21.11-pre3-build.773"
+    modImplementation "net.caffeinemc:sodium-fabric-api:0.8.0-SNAPSHOT+mc1.20.1-pre3-build.773"
 }
 ```
 
@@ -75,9 +75,9 @@ dependencies {
     // ... other dependencies
     
     // using a tagged API build 
-    implementation "net.caffeinemc:sodium-neoforge-api:0.8.0+mc1.21.11"
+    implementation "net.caffeinemc:sodium-neoforge-api:0.8.0+mc1.20.1"
     // OR using a snapshot build
-    implementation "net.caffeinemc:sodium-neoforge-api:0.8.0-SNAPSHOT+mc1.21.11-pre3-build.773"
+    implementation "net.caffeinemc:sodium-neoforge-api:0.8.0-SNAPSHOT+mc1.20.1-pre3-build.773"
 }
 ```
 
