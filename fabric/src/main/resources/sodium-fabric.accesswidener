@@ -1,7 +1,7 @@
 accessWidener v1 named
 
 accessible class net/minecraft/client/model/ModelPart$Vertex
-accessible class net/minecraft/client/model/ModelPart$Polygon
+accessible class net/minecraft/client/model/ModelPart$Quad
 accessible class net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture
 accessible class net/minecraft/client/renderer/texture/SpriteContents$FrameInfo
 accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture interpolateFrames Z
