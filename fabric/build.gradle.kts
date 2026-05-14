@@ -64,7 +64,7 @@ sourceSets.apply {
 dependencies {
     minecraft("com.mojang:minecraft:${BuildConfig.MINECRAFT_VERSION}")
     
-    mappings(group = "net.fabricmc", name = "yarn", version = BuildConfig.YARN_VERSION, classifier = "v2")
+    mappings(group = "net.fabricmc", name = "yarn", version = BuildConfig.YARN_VERSION)
 
     modImplementation("net.fabricmc:fabric-loader:${BuildConfig.FABRIC_LOADER_VERSION}")
 
