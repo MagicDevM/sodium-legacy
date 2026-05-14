@@ -3,7 +3,7 @@ accessWidener v1 named
 accessible class net/minecraft/client/model/ModelPart$Vertex
 accessible class net/minecraft/client/model/ModelPart$Quad
 accessible class net/minecraft/client/texture/SpriteContents$Animation
-accessible class net/minecraft/client/renderer/texture/SpriteContents$FrameInfo
+accessible class net/minecraft/client/texture/SpriteContents$AnimationFrame
 accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture interpolateFrames Z
 accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture frames Ljava/util/List;
 accessible class net/minecraft/world/level/chunk/PalettedContainer$Data
