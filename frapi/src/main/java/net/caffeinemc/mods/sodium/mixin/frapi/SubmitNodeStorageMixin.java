@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.OrderedSubmitNodeCollectorExtension;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshView;
 import net.fabricmc.fabric.api.renderer.v1.render.ItemRenderTypeGetter;
@@ -21,7 +21,7 @@ public abstract class SubmitNodeStorageMixin implements OrderedSubmitNodeCollect
     public abstract SubmitNodeCollection order(int i);
 
     @Override
-    public void fabric_submitItem(PoseStack matrices, ItemDisplayContext displayContext, int light, int overlay, int outlineColors, int[] tintLayers, List<BakedQuad> quads, RenderType renderLayer, ItemStackRenderState.FoilType glintType, MeshView mesh, ItemRenderTypeGetter renderTypeGetter) {
+    public void fabric_submitItem(MatrixStack matrices, ItemDisplayContext displayContext, int light, int overlay, int outlineColors, int[] tintLayers, List<BakedQuad> quads, RenderType renderLayer, ItemStackRenderState.FoilType glintType, MeshView mesh, ItemRenderTypeGetter renderTypeGetter) {
         SubmitNodeCollection queue = order(0);
 
         if (queue instanceof OrderedSubmitNodeCollectorExtension access) {

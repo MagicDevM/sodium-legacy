@@ -17,7 +17,7 @@
 package net.caffeinemc.mods.sodium.client.render.model;
 
 import com.google.common.base.Preconditions;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormats;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
@@ -39,7 +39,7 @@ public final class EncodingFormat {
     private EncodingFormat() { }
 
     /** Count of integers in a conventional (un-modded) block or item vertex. */
-    public static final int VANILLA_VERTEX_STRIDE = DefaultVertexFormat.BLOCK.getVertexSize() / 4;
+    public static final int VANILLA_VERTEX_STRIDE = VertexFormats.BLOCK.getVertexSize() / 4;
 
     /** Count of integers in a conventional (un-modded) block or item quad. */
     public static final int VANILLA_QUAD_STRIDE = VANILLA_VERTEX_STRIDE * 4;
@@ -65,7 +65,7 @@ public final class EncodingFormat {
     public static final int TOTAL_STRIDE;
 
     static {
-        final VertexFormat format = DefaultVertexFormat.BLOCK;
+        final VertexFormat format = VertexFormats.BLOCK;
         VERTEX_X = HEADER_STRIDE + 0;
         VERTEX_Y = HEADER_STRIDE + 1;
         VERTEX_Z = HEADER_STRIDE + 2;

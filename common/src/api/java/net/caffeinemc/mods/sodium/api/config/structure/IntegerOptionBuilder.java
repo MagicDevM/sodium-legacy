@@ -3,7 +3,7 @@ package net.caffeinemc.mods.sodium.api.config.structure;
 import net.caffeinemc.mods.sodium.api.config.ConfigState;
 import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
 import net.caffeinemc.mods.sodium.api.config.option.*;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  */
 public interface IntegerOptionBuilder extends StatefulOptionBuilder<Integer> {
     @Override
-    IntegerOptionBuilder setName(Component name);
+    IntegerOptionBuilder setName(Text name);
 
     @Override
     IntegerOptionBuilder setEnabled(boolean available);
@@ -27,10 +27,10 @@ public interface IntegerOptionBuilder extends StatefulOptionBuilder<Integer> {
     IntegerOptionBuilder setStorageHandler(StorageEventHandler storage);
 
     @Override
-    IntegerOptionBuilder setTooltip(Component tooltip);
+    IntegerOptionBuilder setTooltip(Text tooltip);
 
     @Override
-    IntegerOptionBuilder setTooltip(Function<Integer, Component> tooltip);
+    IntegerOptionBuilder setTooltip(Function<Integer, Text> tooltip);
 
     @Override
     IntegerOptionBuilder setImpact(OptionImpact impact);

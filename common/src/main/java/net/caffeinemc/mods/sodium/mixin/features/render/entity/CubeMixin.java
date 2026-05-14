@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
@@ -36,8 +36,8 @@ public class CubeMixin {
         this.minX = value;
     }
 
-    @Inject(method = "compile", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack$Pose;pose()Lorg/joml/Matrix4f;"), cancellable = true)
-    private void onCompile(PoseStack.Pose pose, VertexConsumer buffer, int light, int overlay, int color, CallbackInfo ci) {
+    @Inject(method = "compile", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/MatrixStack$Pose;pose()Lorg/joml/Matrix4f;"), cancellable = true)
+    private void onCompile(MatrixStack.Pose pose, VertexConsumer buffer, int light, int overlay, int color, CallbackInfo ci) {
         VertexBufferWriter writer = VertexConsumerUtils.convertOrLog(buffer);
 
         if (writer == null) {

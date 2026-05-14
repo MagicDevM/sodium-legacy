@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.immediate.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.EntityVertex;
@@ -22,7 +22,7 @@ public class EntityRenderer {
 
     private static final int[] CUBE_FACE_NORMAL = new int[NUM_CUBE_FACES];
 
-    public static void renderCuboid(PoseStack.Pose matrices, VertexBufferWriter writer, ModelCuboid cuboid, int light, int overlay, int color) {
+    public static void renderCuboid(MatrixStack.Pose matrices, VertexBufferWriter writer, ModelCuboid cuboid, int light, int overlay, int color) {
         prepareVertices(matrices, cuboid, color);
         prepareNormalsIfChanged(matrices);
 
@@ -77,7 +77,7 @@ public class EntityRenderer {
         return ptr + EntityVertex.STRIDE;
     }
 
-    private static void prepareVertices(PoseStack.Pose matrices, ModelCuboid cuboid, int color) {
+    private static void prepareVertices(MatrixStack.Pose matrices, ModelCuboid cuboid, int color) {
         var pose = matrices.pose();
 
         float vxx = (pose.m00() * cuboid.sizeX), vxy = (pose.m01() * cuboid.sizeX), vxz = (pose.m02() * cuboid.sizeX);
@@ -138,7 +138,7 @@ public class EntityRenderer {
         CUBE_VERTEX_ZW[vertexIndex] = Int2.pack(Float.floatToRawIntBits(z), color);
     }
 
-    private static void prepareNormalsIfChanged(PoseStack.Pose matrices) {
+    private static void prepareNormalsIfChanged(MatrixStack.Pose matrices) {
         if (matrices.normal().equals(prevNormalMatrix)) {
             return;
         }

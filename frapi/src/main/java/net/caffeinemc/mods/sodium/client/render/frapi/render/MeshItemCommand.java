@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.frapi.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshView;
 import net.fabricmc.fabric.api.renderer.v1.render.ItemRenderTypeGetter;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record MeshItemCommand(PoseStack.Pose positionMatrix, ItemDisplayContext displayContext, int lightCoords,
+public record MeshItemCommand(MatrixStack.Pose positionMatrix, ItemDisplayContext displayContext, int lightCoords,
                               int overlayCoords, int outlineColor, int[] tintLayers, List<BakedQuad> quads,
                               RenderType renderType, ItemStackRenderState.FoilType glintType, MeshView mesh,
                               @Nullable ItemRenderTypeGetter renderTypeGetter) {

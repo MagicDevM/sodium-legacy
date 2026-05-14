@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.ItemRenderContext;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.MeshItemCommand;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.SubmitNodeCollectionExtension;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemFeatureRendererMixin {
     @Shadow
     @Final
-    private PoseStack poseStack;
+    private MatrixStack MatrixStack;
 
     @Unique
     private final ItemRenderContext itemRenderContext = new ItemRenderContext();
@@ -29,17 +29,17 @@ public class ItemFeatureRendererMixin {
     @Inject(method = "render", at = @At("RETURN"))
     private void onReturnRender(SubmitNodeCollection submitNodeCollection, MultiBufferSource.BufferSource bufferSource, OutlineBufferSource outlineBufferSource, CallbackInfo ci) {
         for (MeshItemCommand itemCommand : ((SubmitNodeCollectionExtension) submitNodeCollection).sodium_getMeshItemCommands()) {
-            poseStack.pushPose();
-            poseStack.last().set(itemCommand.positionMatrix());
+            MatrixStack.pushPose();
+            MatrixStack.last().set(itemCommand.positionMatrix());
 
-            itemRenderContext.renderItem(itemCommand.displayContext(), poseStack, bufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), itemCommand.glintType(), itemCommand.renderTypeGetter(), false);
+            itemRenderContext.renderItem(itemCommand.displayContext(), MatrixStack, bufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), itemCommand.glintType(), itemCommand.renderTypeGetter(), false);
 
             if (itemCommand.outlineColor() != 0) {
                 outlineBufferSource.setColor(itemCommand.outlineColor());
-                itemRenderContext.renderItem(itemCommand.displayContext(), poseStack, outlineBufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), ItemStackRenderState.FoilType.NONE, itemCommand.renderTypeGetter(), true);
+                itemRenderContext.renderItem(itemCommand.displayContext(), MatrixStack, outlineBufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), ItemStackRenderState.FoilType.NONE, itemCommand.renderTypeGetter(), true);
             }
 
-            poseStack.popPose();
+            MatrixStack.popPose();
         }
     }
 }

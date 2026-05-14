@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.model.block;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
@@ -37,7 +37,7 @@ public class ModelBlockRendererMixin {
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private static void renderQuads(PoseStack.Pose matrices, VertexBufferWriter writer, int defaultColor, List<BakedQuad> quads, int light, int overlay) {
+    private static void renderQuads(MatrixStack.Pose matrices, VertexBufferWriter writer, int defaultColor, List<BakedQuad> quads, int light, int overlay) {
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad bakedQuad = quads.get(i);
 
@@ -58,7 +58,7 @@ public class ModelBlockRendererMixin {
      * @author JellySquid
      */
     @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
-    private static void renderFast(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
+    private static void renderFast(MatrixStack.Pose entry, VertexConsumer vertexConsumer, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
         if (writer == null) {
             return;

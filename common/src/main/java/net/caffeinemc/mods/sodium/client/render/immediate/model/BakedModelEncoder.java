@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.immediate.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.api.util.ColorMixer;
 import net.caffeinemc.mods.sodium.client.model.quad.ModelQuadView;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
@@ -24,7 +24,7 @@ public class BakedModelEncoder {
 
     private static final boolean MULTIPLY_ALPHA = PlatformRuntimeInformation.getInstance().usesAlphaMultiplication();
 
-    public static void writeQuadVertices(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, int color, int light, int overlay, boolean colorize) {
+    public static void writeQuadVertices(VertexBufferWriter writer, MatrixStack.Pose matrices, ModelQuadView quad, int color, int light, int overlay, boolean colorize) {
         Matrix3f matNormal = matrices.normal();
         Matrix4f matPosition = matrices.pose();
 
@@ -62,7 +62,7 @@ public class BakedModelEncoder {
         }
     }
 
-    public static void writeQuadVertices(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, float r, float g, float b, float a, float[] brightnessTable, int[] light, int overlay) {
+    public static void writeQuadVertices(VertexBufferWriter writer, MatrixStack.Pose matrices, ModelQuadView quad, float r, float g, float b, float a, float[] brightnessTable, int[] light, int overlay) {
         Matrix3f matNormal = matrices.normal();
         Matrix4f matPosition = matrices.pose();
 

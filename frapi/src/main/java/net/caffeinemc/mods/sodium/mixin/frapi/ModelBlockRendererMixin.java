@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.mixin.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.SimpleBlockRenderContext;
 import net.minecraft.client.color.block.BlockColors;
@@ -37,7 +37,7 @@ public abstract class ModelBlockRendererMixin {
     private BlockColors blockColors;
 
     @Overwrite
-    public static void renderModel(PoseStack.Pose pose, VertexConsumer vertexConsumer, BlockStateModel model, float red, float green, float blue, int light, int overlay) {
+    public static void renderModel(MatrixStack.Pose pose, VertexConsumer vertexConsumer, BlockStateModel model, float red, float green, float blue, int light, int overlay) {
         SimpleBlockRenderContext.POOL.get().bufferModel(pose, layer -> vertexConsumer, model, red, green, blue, light, overlay, EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO, Blocks.AIR.defaultBlockState());
     }
 }

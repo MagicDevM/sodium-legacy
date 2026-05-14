@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.neoforge.level;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.client.services.PlatformLevelRenderHooks;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
@@ -31,7 +31,7 @@ public class NeoForgeLevelRenderHooks implements PlatformLevelRenderHooks {
 
     @Override
     public void runChunkMeshAppenders(List<?> renderers, Function<ChunkSectionLayer, VertexConsumer> typeToConsumer, LevelSlice slice) {
-        AddSectionGeometryEvent.SectionRenderingContext context = new AddSectionGeometryEvent.SectionRenderingContext(typeToConsumer, slice, new PoseStack());
+        AddSectionGeometryEvent.SectionRenderingContext context = new AddSectionGeometryEvent.SectionRenderingContext(typeToConsumer, slice, new MatrixStack());
         for (Object o : renderers) {
             ((AddSectionGeometryEvent.AdditionalSectionRenderer) o).render(context);
         }

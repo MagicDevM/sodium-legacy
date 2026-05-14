@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.client.render.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.client.render.frapi.mesh.MutableMeshImpl;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.AccessLayerRenderState;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.NonTerrainBlockRenderContext;
@@ -59,17 +59,17 @@ public class SodiumRenderer implements Renderer {
 
 
     @Override
-    public void render(ModelBlockRenderer modelBlockRenderer, BlockAndTintGetter blockView, BlockStateModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider multiBufferSource, boolean cull, long seed, int overlay) {
-        NonTerrainBlockRenderContext.POOL.get().renderModel(blockView, ((ModelBlockRendererAccessor) modelBlockRenderer).sodium$getBlockColors(), model, state, pos, poseStack, multiBufferSource, cull, seed, overlay);
+    public void render(ModelBlockRenderer modelBlockRenderer, BlockAndTintGetter blockView, BlockStateModel model, BlockState state, BlockPos pos, MatrixStack MatrixStack, BlockVertexConsumerProvider multiBufferSource, boolean cull, long seed, int overlay) {
+        NonTerrainBlockRenderContext.POOL.get().renderModel(blockView, ((ModelBlockRendererAccessor) modelBlockRenderer).sodium$getBlockColors(), model, state, pos, MatrixStack, multiBufferSource, cull, seed, overlay);
     }
 
     @Override
-    public void render(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public void render(MatrixStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
         SimpleBlockRenderContext.POOL.get().bufferModel(entry, vertexConsumers, model, red, green, blue, light, overlay, blockView, pos, state);
     }
 
     @Override
-    public void renderBlockAsEntity(BlockRenderDispatcher renderManager, BlockState state, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos) {
+    public void renderBlockAsEntity(BlockRenderDispatcher renderManager, BlockState state, MatrixStack MatrixStack, MultiBufferSource multiBufferSource, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos) {
         RenderShape renderShape = state.getRenderShape();
 
         if (renderShape != RenderShape.INVISIBLE) {
@@ -79,7 +79,7 @@ public class SodiumRenderer implements Renderer {
             float green = (tint >> 8 & 255) / 255.0F;
             float blue = (tint & 255) / 255.0F;
 
-            FabricBlockModelRenderer.render(poseStack.last(), RenderLayerHelper.entityDelegate(multiBufferSource), model, red, green, blue, light, overlay, blockView, pos, state);
+            FabricBlockModelRenderer.render(MatrixStack.last(), RenderLayerHelper.entityDelegate(multiBufferSource), model, red, green, blue, light, overlay, blockView, pos, state);
             }
     }
 

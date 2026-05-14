@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.vertex.buffer;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexFormat;
 import net.caffeinemc.mods.sodium.api.memory.MemoryIntrinsics;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.system.MemoryStack;

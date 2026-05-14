@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.option;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 
 /**
  * Base interface extended by enums whose members can provide display names.
@@ -11,5 +11,5 @@ public interface NameProvider {
      *
      * @return the display name
      */
-    Component getName();
+    Text getName();
 }

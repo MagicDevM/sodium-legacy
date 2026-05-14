@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
 import net.caffeinemc.mods.sodium.api.config.ConfigState;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Function;
@@ -16,7 +16,7 @@ public interface OptionBuilder {
      * @param name The display name of the option.
      * @return The current builder instance.
      */
-    OptionBuilder setName(Component name);
+    OptionBuilder setName(Text name);
 
     /**
      * Sets the tooltip of the option.
@@ -24,7 +24,7 @@ public interface OptionBuilder {
      * @param tooltip The tooltip component.
      * @return The current builder instance.
      */
-    OptionBuilder setTooltip(Component tooltip);
+    OptionBuilder setTooltip(Text tooltip);
 
     /**
      * Sets whether the option is enabled.

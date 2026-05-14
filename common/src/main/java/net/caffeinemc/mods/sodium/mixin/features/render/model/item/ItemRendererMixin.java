@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.mixin.features.render.model.item;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
@@ -37,24 +37,24 @@ public abstract class ItemRendererMixin {
      * @reason Avoid Allocations
      * @return JellySquid
      */
-    @WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
-    private static void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, int[] colors, int light, int overlay, Operation<Void> original) {
+    @WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
+    private static void renderModelFast(MatrixStack MatrixStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, int[] colors, int light, int overlay, Operation<Void> original) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
         if (writer == null) {
-            original.call(poseStack, vertexConsumer, quads, colors, light, overlay);
+            original.call(MatrixStack, vertexConsumer, quads, colors, light, overlay);
             return;
         }
 
         // TODO/NOTE: Should .last be a LocalRef?
         if (!quads.isEmpty()) {
-            renderBakedItemQuads(poseStack.last(), writer, quads, colors, light, overlay);
+            renderBakedItemQuads(MatrixStack.last(), writer, quads, colors, light, overlay);
         }
     }
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private static void renderBakedItemQuads(PoseStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, int[] colors, int light, int overlay) {
+    private static void renderBakedItemQuads(MatrixStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, int[] colors, int light, int overlay) {
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad bakedQuad = quads.get(i);
 

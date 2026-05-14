@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.client.render.frapi.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.MatrixUtil;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
@@ -85,7 +85,7 @@ public class ItemRenderContext extends AbstractRenderContext {
     };
 
     private ItemDisplayContext transformMode;
-    private PoseStack poseStack;
+    private MatrixStack MatrixStack;
     private Matrix4f matPosition;
     private boolean trustedNormals;
     private Matrix3f matNormal;
@@ -98,7 +98,7 @@ public class ItemRenderContext extends AbstractRenderContext {
     private RenderType defaultLayer;
     private ItemStackRenderState.FoilType defaultGlint;
 
-    private PoseStack.Pose specialGlintEntry;
+    private MatrixStack.Pose specialGlintEntry;
     private final VertexConsumer[] vertexConsumerCache = new VertexConsumer[3 * GLINT_COUNT];
 
     @Override
@@ -107,13 +107,13 @@ public class ItemRenderContext extends AbstractRenderContext {
         return editorQuad;
     }
 
-    public void renderItem(ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int lightmap, int overlay, int[] colors, List<BakedQuad> vanillaQuads, MeshView mesh, RenderType layer, ItemStackRenderState.FoilType glint, @Nullable ItemRenderTypeGetter renderTypeGetter, boolean ignoreQuadGlint) {
+    public void renderItem(ItemDisplayContext displayContext, MatrixStack MatrixStack, MultiBufferSource bufferSource, int lightmap, int overlay, int[] colors, List<BakedQuad> vanillaQuads, MeshView mesh, RenderType layer, ItemStackRenderState.FoilType glint, @Nullable ItemRenderTypeGetter renderTypeGetter, boolean ignoreQuadGlint) {
         this.transformMode = displayContext;
-        matPosition = poseStack.last().pose();
-        this.poseStack = poseStack;
+        matPosition = MatrixStack.last().pose();
+        this.MatrixStack = MatrixStack;
 
-        trustedNormals = this.poseStack.last().trustedNormals;
-        matNormal = this.poseStack.last().normal();
+        trustedNormals = this.MatrixStack.last().trustedNormals;
+        matNormal = this.MatrixStack.last().normal();
         this.bufferSource = bufferSource;
         this.lightmap = lightmap;
         this.overlay = overlay;
@@ -126,7 +126,7 @@ public class ItemRenderContext extends AbstractRenderContext {
 
         bufferQuads(vanillaQuads, mesh);
 
-        this.poseStack = null;
+        this.MatrixStack = null;
         this.bufferSource = null;
         this.colors = null;
         this.renderTypeGetter = null;
@@ -244,7 +244,7 @@ public class ItemRenderContext extends AbstractRenderContext {
     private VertexConsumer createVertexConsumer(RenderType type, ItemStackRenderState.FoilType glint) {
         if (glint == ItemStackRenderState.FoilType.SPECIAL) {
             if (specialGlintEntry == null) {
-                specialGlintEntry = poseStack.last().copy();
+                specialGlintEntry = MatrixStack.last().copy();
 
                 if (transformMode == ItemDisplayContext.GUI) {
                     MatrixUtil.mulComponentWise(specialGlintEntry.pose(), 0.5F);
@@ -262,6 +262,6 @@ public class ItemRenderContext extends AbstractRenderContext {
     /** used to accept a method reference from the ItemRenderer. */
     @FunctionalInterface
     public interface VanillaModelBufferer {
-        void accept(BlockStateModel model, int[] colirs, int color, int overlay, PoseStack matrixStack, VertexConsumer buffer);
+        void accept(BlockStateModel model, int[] colirs, int color, int overlay, MatrixStack matrixStack, VertexConsumer buffer);
     }
 }

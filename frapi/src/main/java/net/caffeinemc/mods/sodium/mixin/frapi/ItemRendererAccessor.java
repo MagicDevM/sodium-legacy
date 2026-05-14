@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.mixin.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(ItemRenderer.class)
 public interface ItemRendererAccessor {
     @Invoker("getSpecialFoilBuffer")
-    static VertexConsumer sodium$getSpecialFoilBuffer(MultiBufferSource provider, RenderType layer, PoseStack.Pose entry) {
+    static VertexConsumer sodium$getSpecialFoilBuffer(MultiBufferSource provider, RenderType layer, MatrixStack.Pose entry) {
         throw new AssertionError();
     }
 }

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 @Mixin(ModelPart.class)
@@ -38,7 +38,7 @@ public class ModelPartMixin {
      * @reason Apply transform more quickly
      */
     @Overwrite
-    public void translateAndRotate(PoseStack matrixStack) {
+    public void translateAndRotate(MatrixStack matrixStack) {
         if (this.x != 0.0F || this.y != 0.0F || this.z != 0.0F) {
             matrixStack.translate(this.x * (1.0f / 16.0f), this.y * (1.0f / 16.0f), this.z * (1.0f / 16.0f));
         }

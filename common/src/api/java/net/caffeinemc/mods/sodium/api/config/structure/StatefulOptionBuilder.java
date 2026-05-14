@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
 import net.caffeinemc.mods.sodium.api.config.option.OptionBinding;
 import net.caffeinemc.mods.sodium.api.config.option.OptionFlag;
 import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  */
 public interface StatefulOptionBuilder<V> extends OptionBuilder {
     @Override
-    StatefulOptionBuilder<V> setName(Component name);
+    StatefulOptionBuilder<V> setName(Text name);
 
     @Override
     OptionBuilder setEnabled(boolean available);
@@ -36,7 +36,7 @@ public interface StatefulOptionBuilder<V> extends OptionBuilder {
     StatefulOptionBuilder<V> setStorageHandler(StorageEventHandler storage);
 
     @Override
-    StatefulOptionBuilder<V> setTooltip(Component tooltip);
+    StatefulOptionBuilder<V> setTooltip(Text tooltip);
 
     /**
      * Sets a functional tooltip for this option that changes the text based on the selected value.
@@ -44,7 +44,7 @@ public interface StatefulOptionBuilder<V> extends OptionBuilder {
      * @param tooltip The function that provides the tooltip based on the option's value.
      * @return The current builder instance.
      */
-    StatefulOptionBuilder<V> setTooltip(Function<V, Component> tooltip);
+    StatefulOptionBuilder<V> setTooltip(Function<V, Text> tooltip);
 
     /**
      * Sets the performance impact level of this option.

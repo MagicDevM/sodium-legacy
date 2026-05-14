@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ public interface ExternalPageBuilder extends PageBuilder {
      * @param name The name component.
      * @return The current builder instance.
      */
-    ExternalPageBuilder setName(Component name);
+    ExternalPageBuilder setName(Text name);
 
     /**
      * Sets the screen provider for the external configuration page.

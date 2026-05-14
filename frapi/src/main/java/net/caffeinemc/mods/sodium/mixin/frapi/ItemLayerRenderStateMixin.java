@@ -19,7 +19,7 @@ package net.caffeinemc.mods.sodium.mixin.frapi;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.client.render.frapi.mesh.MutableMeshImpl;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.AccessLayerRenderState;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.ItemRenderContext;
@@ -57,13 +57,13 @@ public abstract class ItemLayerRenderStateMixin implements FabricLayerRenderStat
         renderTypeGetter = null;
     }
 
-    @Redirect(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"))
-    private void submitItemProxy(SubmitNodeCollector instance, PoseStack poseStack, ItemDisplayContext displayContext, int light, int overlay, int outlineColor, int[] tints, List<BakedQuad> quads, RenderType layer, ItemStackRenderState.FoilType glint) {
+    @Redirect(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/MatrixStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"))
+    private void submitItemProxy(SubmitNodeCollector instance, MatrixStack MatrixStack, ItemDisplayContext displayContext, int light, int overlay, int outlineColor, int[] tints, List<BakedQuad> quads, RenderType layer, ItemStackRenderState.FoilType glint) {
         if (mutableMesh.size() > 0 && instance instanceof OrderedSubmitNodeCollectorExtension access) {
             // We don't have to copy the mesh here because vanilla doesn't copy the tint array or quad list either.
-            access.fabric_submitItem(poseStack, displayContext, light, overlay, outlineColor, tints, quads, layer, glint, mutableMesh, renderTypeGetter);
+            access.fabric_submitItem(MatrixStack, displayContext, light, overlay, outlineColor, tints, quads, layer, glint, mutableMesh, renderTypeGetter);
         } else {
-            instance.submitItem(poseStack, displayContext, light, overlay, outlineColor, tints, quads, layer, glint);
+            instance.submitItem(MatrixStack, displayContext, light, overlay, outlineColor, tints, quads, layer, glint);
         }
     }
 

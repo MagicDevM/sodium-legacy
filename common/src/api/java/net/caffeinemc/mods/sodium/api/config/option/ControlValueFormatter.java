@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.option;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 
 /**
  * A formatter for control values, converting integer values into display components.
@@ -13,5 +13,5 @@ public interface ControlValueFormatter {
      * @param value the integer value to format
      * @return the formatted value
      */
-    Component format(int value);
+    Text format(int value);
 }

@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 
 /**
  * Builder interface for defining option groups, which are collections of related options.
@@ -14,7 +14,7 @@ public interface OptionGroupBuilder {
      * @param name This option group's display name.
      * @return The current builder instance.
      */
-    OptionGroupBuilder setName(Component name);
+    OptionGroupBuilder setName(Text name);
 
     /**
      * Adds an option to this option group.

@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.matrix_stack;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import org.joml.Math;
@@ -37,7 +37,7 @@ public interface VertexConsumerMixin {
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer setNormal(PoseStack.Pose pose, float x, float y, float z) {
+    default VertexConsumer setNormal(MatrixStack.Pose pose, float x, float y, float z) {
         Matrix3f matrix = pose.normal();
 
         float xt = MatrixHelper.transformNormalX(matrix, x, y, z);

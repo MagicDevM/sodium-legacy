@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.texture;
 
 import net.caffeinemc.mods.sodium.api.internal.DependencyInjection;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.texture.Sprite;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
@@ -19,7 +19,7 @@ public interface SpriteUtil {
      * call this method once every frame, when their sprite is actively being used in rendering.
      * @param sprite The sprite to mark as active
      */
-    void markSpriteActive(@NonNull TextureAtlasSprite sprite);
+    void markSpriteActive(@NonNull Sprite sprite);
 
     /**
      * Returns if the provided sprite has an animation.
@@ -27,5 +27,5 @@ public interface SpriteUtil {
      * @param sprite The sprite to query an animation for
      * @return {@code true} if the provided sprite has an animation, otherwise {@code false}
      */
-    boolean hasAnimation(@NonNull TextureAtlasSprite sprite);
+    boolean hasAnimation(@NonNull Sprite sprite);
 }

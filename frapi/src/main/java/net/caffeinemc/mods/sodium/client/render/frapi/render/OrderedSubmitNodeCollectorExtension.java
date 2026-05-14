@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.frapi.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshView;
 import net.fabricmc.fabric.api.renderer.v1.render.ItemRenderTypeGetter;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderedSubmitNodeCollectorExtension {
     void fabric_submitItem(
-            PoseStack matrices,
+            MatrixStack matrices,
             ItemDisplayContext displayContext,
             int light,
             int overlay,

@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.client.render;
 
 import com.mojang.blaze3d.textures.GpuSampler;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.gl.device.CommandList;
@@ -310,7 +310,7 @@ public class SodiumWorldRenderer {
     }
 
     public void extractBlockEntities(Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression, LevelRenderState levelRenderState) {
-        PoseStack stack = new PoseStack();
+        MatrixStack stack = new MatrixStack();
 
         SortedRenderLists renderLists = this.renderSectionManager.getRenderLists();
         Iterator<ChunkRenderList> renderListIterator = renderLists.iterator();
@@ -354,15 +354,15 @@ public class SodiumWorldRenderer {
         }
     }
 
-    private void extractBlockEntity(BlockEntity blockEntity, PoseStack poseStack, Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression, LevelRenderState levelRenderState) {
+    private void extractBlockEntity(BlockEntity blockEntity, MatrixStack MatrixStack, Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression, LevelRenderState levelRenderState) {
         BlockPos blockPos = blockEntity.getBlockPos();
         SortedSet<BlockDestructionProgress> sortedSet = progression.get(blockPos.asLong());
         ModelFeatureRenderer.CrumblingOverlay crumblingOverlay;
         if (sortedSet != null && !sortedSet.isEmpty()) {
-            poseStack.pushPose();
-            poseStack.translate(blockPos.getX() - camera.position().x, blockPos.getY() - camera.position().y, blockPos.getZ() - camera.position().z);
-            crumblingOverlay = new ModelFeatureRenderer.CrumblingOverlay(sortedSet.last().getProgress(), poseStack.last());
-            poseStack.popPose();
+            MatrixStack.pushPose();
+            MatrixStack.translate(blockPos.getX() - camera.position().x, blockPos.getY() - camera.position().y, blockPos.getZ() - camera.position().z);
+            crumblingOverlay = new ModelFeatureRenderer.CrumblingOverlay(sortedSet.last().getProgress(), MatrixStack.last());
+            MatrixStack.popPose();
         } else {
             crumblingOverlay = null;
         }

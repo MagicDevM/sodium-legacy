@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
 import net.caffeinemc.mods.sodium.api.config.option.OptionBinding;
 import net.caffeinemc.mods.sodium.api.config.option.OptionFlag;
 import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 public interface BooleanOptionBuilder extends StatefulOptionBuilder<Boolean> {
     @Override
-    BooleanOptionBuilder setName(Component name);
+    BooleanOptionBuilder setName(Text name);
 
     @Override
     BooleanOptionBuilder setEnabled(boolean available);
@@ -29,10 +29,10 @@ public interface BooleanOptionBuilder extends StatefulOptionBuilder<Boolean> {
     BooleanOptionBuilder setStorageHandler(StorageEventHandler storage);
 
     @Override
-    BooleanOptionBuilder setTooltip(Component tooltip);
+    BooleanOptionBuilder setTooltip(Text tooltip);
 
     @Override
-    BooleanOptionBuilder setTooltip(Function<Boolean, Component> tooltip);
+    BooleanOptionBuilder setTooltip(Function<Boolean, Text> tooltip);
 
     @Override
     BooleanOptionBuilder setImpact(OptionImpact impact);

@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.client.render.frapi.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.client.render.frapi.wrapper.ExtendedMutableQuadViewImpl;
@@ -55,7 +55,7 @@ public class SimpleBlockRenderContext extends AbstractBlockRenderContext {
     private ChunkSectionLayer lastRenderLayer;
     @Nullable
     private VertexConsumer lastVertexConsumer;
-    private PoseStack.Pose matrices;
+    private MatrixStack.Pose matrices;
     private int overlay;
 
     @Override
@@ -98,7 +98,7 @@ public class SimpleBlockRenderContext extends AbstractBlockRenderContext {
         SpriteUtil.INSTANCE.markSpriteActive(quad.sprite(SpriteFinderCache.forBlockAtlas()));
     }
 
-    public void bufferModel(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public void bufferModel(MatrixStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
         matrices = entry;
         this.overlay = overlay;
 

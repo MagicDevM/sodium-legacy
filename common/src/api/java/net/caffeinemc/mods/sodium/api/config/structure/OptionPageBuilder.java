@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 
 /**
  * Builder interface for defining option pages, which are lists of option groups.
@@ -12,7 +12,7 @@ public interface OptionPageBuilder extends PageBuilder {
      * @param name The name component.
      * @return The current builder instance.
      */
-    OptionPageBuilder setName(Component name);
+    OptionPageBuilder setName(Text name);
 
     /**
      * Adds an option group to the option page.

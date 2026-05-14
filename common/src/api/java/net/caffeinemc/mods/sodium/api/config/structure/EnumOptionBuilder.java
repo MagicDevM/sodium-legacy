@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
 import net.caffeinemc.mods.sodium.api.config.option.OptionBinding;
 import net.caffeinemc.mods.sodium.api.config.option.OptionFlag;
 import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.Set;
@@ -26,7 +26,7 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
      * @param <E>   The enum type.
      * @return A function that provides names for enum constants.
      */
-    static <E extends Enum<E>> Function<E, Component> nameProviderFrom(Component... names) {
+    static <E extends Enum<E>> Function<E, Text> nameProviderFrom(Text... names) {
         return e -> names[e.ordinal()];
     }
 
@@ -43,10 +43,10 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
     EnumOptionBuilder<E> setStorageHandler(StorageEventHandler storage);
 
     @Override
-    EnumOptionBuilder<E> setTooltip(Component tooltip);
+    EnumOptionBuilder<E> setTooltip(Text tooltip);
 
     @Override
-    EnumOptionBuilder<E> setTooltip(Function<E, Component> tooltip);
+    EnumOptionBuilder<E> setTooltip(Function<E, Text> tooltip);
 
     @Override
     EnumOptionBuilder<E> setImpact(OptionImpact impact);
@@ -98,5 +98,5 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
      * @param provider The function that provides the display name for each enum constant.
      * @return This builder instance.
      */
-    EnumOptionBuilder<E> setElementNameProvider(Function<E, Component> provider);
+    EnumOptionBuilder<E> setElementNameProvider(Function<E, Text> provider);
 }

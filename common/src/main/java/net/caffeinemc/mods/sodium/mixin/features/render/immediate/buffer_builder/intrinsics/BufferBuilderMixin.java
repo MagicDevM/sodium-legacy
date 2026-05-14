@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.buffer_builder.intrinsics;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
@@ -21,7 +21,7 @@ public abstract class BufferBuilderMixin implements VertexConsumer {
     private boolean fastFormat;
 
     @Override
-    public void putBulkData(PoseStack.Pose matrices, BakedQuad bakedQuad, float r, float g, float b, float a, int light, int overlay) {
+    public void putBulkData(MatrixStack.Pose matrices, BakedQuad bakedQuad, float r, float g, float b, float a, int light, int overlay) {
         if (!this.fastFormat) {
             VertexConsumer.super.putBulkData(matrices, bakedQuad, r, g, b, a, light, overlay);
 
@@ -45,7 +45,7 @@ public abstract class BufferBuilderMixin implements VertexConsumer {
     }
 
     @Override
-    public void putBulkData(PoseStack.Pose matrices, BakedQuad bakedQuad, float[] brightnessTable, float r, float g, float b, float a, int[] light, int overlay) {
+    public void putBulkData(MatrixStack.Pose matrices, BakedQuad bakedQuad, float[] brightnessTable, float r, float g, float b, float a, int[] light, int overlay) {
         if (!this.fastFormat) {
             VertexConsumer.super.putBulkData(matrices, bakedQuad, brightnessTable, r, g, b, a, light, overlay);
 

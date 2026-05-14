@@ -16,7 +16,7 @@
 
 package net.caffeinemc.mods.sodium.client.render.frapi.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
@@ -62,7 +62,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
         this.random = new SingleThreadedRandomSource(42L);
     }
 
-    public void renderModel(BlockAndTintGetter blockView, BlockColors blockColors, BlockStateModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider buffer, boolean cull, long seed, int overlay) {
+    public void renderModel(BlockAndTintGetter blockView, BlockColors blockColors, BlockStateModel model, BlockState state, BlockPos pos, MatrixStack MatrixStack, BlockVertexConsumerProvider buffer, boolean cull, long seed, int overlay) {
         this.level = blockView;
         this.state = state;
         this.pos = pos;
@@ -70,9 +70,9 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
 
 
         this.vertexConsumer = buffer;
-        this.matPosition = poseStack.last().pose();
-        this.trustedNormals = poseStack.last().trustedNormals;
-        this.matNormal = poseStack.last().normal();
+        this.matPosition = MatrixStack.last().pose();
+        this.trustedNormals = MatrixStack.last().trustedNormals;
+        this.matNormal = MatrixStack.last().normal();
         this.overlay = overlay;
         this.defaultRenderType = ItemBlockRenderTypes.getChunkRenderType(state);
 

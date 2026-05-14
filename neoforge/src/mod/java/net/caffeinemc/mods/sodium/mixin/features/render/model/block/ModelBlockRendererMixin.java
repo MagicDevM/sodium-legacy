@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.model.block;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
@@ -41,7 +41,7 @@ public class ModelBlockRendererMixin {
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private static void renderQuads(PoseStack.Pose matrices, VertexBufferWriter writer, int defaultColor, List<BakedQuad> quads, int light, int overlay) {
+    private static void renderQuads(MatrixStack.Pose matrices, VertexBufferWriter writer, int defaultColor, List<BakedQuad> quads, int light, int overlay) {
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad bakedQuad = quads.get(i);
 
@@ -61,8 +61,8 @@ public class ModelBlockRendererMixin {
      * @reason Use optimized vertex writer intrinsics, avoid allocations
      * @author JellySquid
      */
-    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/renderer/block/model/BlockStateModel;FFFIILnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
-    private static void renderFast(PoseStack.Pose entry, MultiBufferSource bufferSource, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, BlockAndTintGetter level, BlockPos pos, BlockState state, CallbackInfo ci) {
+    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/MatrixStack$Pose;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/renderer/block/model/BlockStateModel;FFFIILnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
+    private static void renderFast(MatrixStack.Pose entry, MultiBufferSource bufferSource, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, BlockAndTintGetter level, BlockPos pos, BlockState state, CallbackInfo ci) {
         RandomSource random = RANDOM.get();
 
         // Clamp color ranges

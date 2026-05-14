@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.frapi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.MatrixStack;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.MeshItemCommand;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.OrderedSubmitNodeCollectorExtension;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.SubmitNodeCollectionExtension;
@@ -35,7 +35,7 @@ public class SubmitNodeCollectionMixin implements OrderedSubmitNodeCollectorExte
     }
 
     @Override
-    public void fabric_submitItem(PoseStack matrices, ItemDisplayContext displayContext, int light, int overlay, int outlineColors, int[] tintLayers, List<BakedQuad> quads, RenderType renderLayer, ItemStackRenderState.FoilType glintType, MeshView mesh, ItemRenderTypeGetter renderTypeGetter) {
+    public void fabric_submitItem(MatrixStack matrices, ItemDisplayContext displayContext, int light, int overlay, int outlineColors, int[] tintLayers, List<BakedQuad> quads, RenderType renderLayer, ItemStackRenderState.FoilType glintType, MeshView mesh, ItemRenderTypeGetter renderTypeGetter) {
         wasUsed = true;
         meshItemCommands.add(new MeshItemCommand(matrices.last().copy(), displayContext, light, overlay, outlineColors, tintLayers, quads, renderLayer, glintType, mesh, renderTypeGetter));
     }

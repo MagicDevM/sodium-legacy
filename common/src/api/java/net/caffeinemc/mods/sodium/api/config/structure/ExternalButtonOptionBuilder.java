@@ -1,8 +1,8 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
 import net.caffeinemc.mods.sodium.api.config.ConfigState;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
@@ -13,10 +13,10 @@ import java.util.function.Function;
  */
 public interface ExternalButtonOptionBuilder extends OptionBuilder {
     @Override
-    ExternalButtonOptionBuilder setName(Component name);
+    ExternalButtonOptionBuilder setName(Text name);
 
     @Override
-    ExternalButtonOptionBuilder setTooltip(Component tooltip);
+    ExternalButtonOptionBuilder setTooltip(Text tooltip);
 
     @Override
     ExternalButtonOptionBuilder setEnabled(boolean available);
