@@ -33,7 +33,7 @@ public enum OptionFlag {
      */
     REQUIRES_GAME_RESTART;
 
-    private final Identifier id = new Identifier.of("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
+    private final Identifier id = new Identifier("sodium").of("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
 
     /**
      * Gets the {@link Identifier} for this option flag.

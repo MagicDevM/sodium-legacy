@@ -31,7 +31,7 @@ public enum OptionImpact implements NameProvider {
 
     OptionImpact(Formatting formatting, String text) {
         this.text = Text.translatable(text)
-                .withStyle(formatting);
+                .styled(formatting);
     }
 
     @Override
