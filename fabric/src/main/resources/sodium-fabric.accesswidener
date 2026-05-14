@@ -4,25 +4,18 @@ accessible class net/minecraft/client/model/ModelPart$Vertex
 accessible class net/minecraft/client/model/ModelPart$Quad
 accessible class net/minecraft/client/texture/SpriteContents$Animation
 accessible class net/minecraft/client/texture/SpriteContents$AnimationFrame
-accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture interpolateFrames Z
-accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture frames Ljava/util/List;
-accessible class net/minecraft/world/level/chunk/PalettedContainer$Data
-accessible class net/minecraft/client/renderer/texture/Stitcher$Holder
-accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
-accessible method net/minecraft/client/renderer/SectionBufferBuilderPool <init> (Ljava/util/List;)V
-accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$EffectInstance
-accessible field com/mojang/blaze3d/vertex/MatrixStack$Pose trustedNormals Z
-accessible class net/minecraft/client/renderer/CloudRenderer$RelativeCameraPos
+accessible field net/minecraft/client/texture/SpriteContents$Animation interpolation Z
+accessible field net/minecraft/client/texture/SpriteContents$Animation frames Ljava/util/List;
+accessible class net/minecraft/world/level/PalettedContainer$Data
+accessible class net/minecraft/client/texture/TextureStitcher$Holder
+accessible class net/minecraft/world/biome/Biome$Weather
+accessible class net/minecraft/client/font/BakedGlyph$Effect
+accessible field com/mojang/blaze3d/vertex/MatrixStack$Entry normalMatrix Z
 
-accessible field net/minecraft/world/level/GrassColor pixels [I
-accessible field net/minecraft/world/level/FoliageColor pixels [I
+accessible field net/minecraft/client/color/GrassColor pixels [I
+accessible field net/minecraft/client/colors/world/FoliageColor pixels [I
 
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MIN_Z F
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MAX_Z F
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator TEXTURE_SLOTS Lnet/minecraft/client/renderer/block/model/TextureSlots$Data;
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator SOUTH_FACE_UVS Lnet/minecraft/client/renderer/block/model/BlockElementFace$UVs;
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator NORTH_FACE_UVS Lnet/minecraft/client/renderer/block/model/BlockElementFace$UVs;
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator UV_SHRINK F
-accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator isTransparent (Lnet/minecraft/client/renderer/texture/SpriteContents;IIIII)Z
-accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection
-accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection isHorizontal ()Z
+accessible field net/minecraft/client/render/model/json/ItemModelGenerator MIN_Z F
+accessible field net/minecraft/client/render/model/json/ItemModelGenerator MAX_Z F
+accessible class net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing isHorizontal ()Z
