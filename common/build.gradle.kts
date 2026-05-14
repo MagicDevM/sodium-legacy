@@ -20,7 +20,7 @@ sourceSets {
 
     api.apply {
         java {
-            compileClasspath += main.compileClasspath
+            compileClasspath += configurationPreLaunch
         }
     }
 
