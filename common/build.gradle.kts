@@ -21,6 +21,7 @@ sourceSets {
     api.apply {
         java {
             compileClasspath += main.compileClasspath
+            compileClasspath += configurationPreLaunch
         }
     }
 
@@ -33,7 +34,7 @@ sourceSets {
     main.apply {
         java {
             compileClasspath += api.output
-            compileClasspath += boot.compileClasspath
+            compileClasspath += boot.output
         }
     }
 
