@@ -147,7 +147,7 @@ public class MatrixHelper {
      * @param angleX The angle to rotate by on the X-axis
      */
     public static void rotateZYX(MatrixStack.Entry matrices, float angleZ, float angleY, float angleX) {
-        matrices.getPositionMetrix()
+        matrices.getPositionMatrix()
                 .rotateZYX(angleZ, angleY, angleX);
 
         matrices.getNormalMatrix()
