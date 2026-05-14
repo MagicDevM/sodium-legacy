@@ -13,7 +13,7 @@ import net.caffeinemc.mods.sodium.client.compatibility.checks.PostLaunchChecks;
 import net.caffeinemc.mods.sodium.client.compatibility.environment.GlContextInfo;
 import net.caffeinemc.mods.sodium.client.platform.NativeWindowHandle;
 import net.minecraft.util.Util;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 import org.lwjgl.glfw.GLFWNativeWin32;
 import org.lwjgl.opengl.WGL;
 import org.lwjgl.system.MemoryUtil;

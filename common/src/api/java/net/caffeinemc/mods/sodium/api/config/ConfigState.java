@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config;
 
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 
 /**
  * Represents the current state of configuration options. This interface is accessed through dynamic value providers throughout the API. Only declared dependencies of a dynamic value provider are allowed to be queried (and doing otherwise will result in a crash).

@@ -15,7 +15,7 @@ import net.caffeinemc.mods.sodium.client.config.value.DynamicValue;
 import net.caffeinemc.mods.sodium.client.console.Console;
 import net.caffeinemc.mods.sodium.client.console.message.MessageLevel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 
 import java.util.*;
 import java.util.function.Consumer;

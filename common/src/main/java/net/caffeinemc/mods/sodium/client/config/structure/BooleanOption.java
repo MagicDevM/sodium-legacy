@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.client.config.value.DependentValue;
 import net.caffeinemc.mods.sodium.client.gui.options.control.Control;
 import net.caffeinemc.mods.sodium.client.gui.options.control.TickBoxControl;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 
 import java.util.Collection;
 import java.util.Set;

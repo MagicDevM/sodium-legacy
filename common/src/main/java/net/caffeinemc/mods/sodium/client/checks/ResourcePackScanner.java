@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.checks;
 
 import net.caffeinemc.mods.sodium.client.console.Console;
 import net.caffeinemc.mods.sodium.client.console.message.MessageLevel;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 import net.minecraft.server.packs.*;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.NonNull;

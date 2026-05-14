@@ -17,7 +17,7 @@ import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexT
 import net.caffeinemc.mods.sodium.client.gl.shader.*;
 import net.caffeinemc.mods.sodium.client.util.FogParameters;
 import net.caffeinemc.mods.sodium.mixin.core.GlCommandEncoderAccessor;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 import java.util.Map;
 
 public abstract class ShaderChunkRenderer implements ChunkRenderer {

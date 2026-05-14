@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.client.config.value;
 
 import net.caffeinemc.mods.sodium.client.config.structure.Config;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 
 import java.util.Collection;
 import java.util.Set;

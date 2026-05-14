@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.gl.shader;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
 import net.caffeinemc.mods.sodium.client.gl.GlObject;
-import net.minecraft.resources.Identifier;
+import net.minecraft.utils.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL20C;
