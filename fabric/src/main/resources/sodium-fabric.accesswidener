@@ -6,7 +6,7 @@ accessible class net/minecraft/client/texture/SpriteContents$Animation
 accessible class net/minecraft/client/texture/SpriteContents$AnimationFrame
 accessible field net/minecraft/client/texture/SpriteContents$Animation interpolation Z
 accessible field net/minecraft/client/texture/SpriteContents$Animation frames Ljava/util/List;
-accessible class net/minecraft/world/level/PalettedContainer$Data
+accessible class net/minecraft/world/chunk/PalettedContainer$Data
 accessible class net/minecraft/client/texture/TextureStitcher$Holder
 accessible class net/minecraft/world/biome/Biome$Weather
 accessible class net/minecraft/client/font/BakedGlyph$Effect
