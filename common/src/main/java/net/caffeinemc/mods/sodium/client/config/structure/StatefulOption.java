@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
 import net.caffeinemc.mods.sodium.client.config.value.DependentValue;
 import net.caffeinemc.mods.sodium.client.config.value.DynamicValue;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.Collection;
 import java.util.Set;

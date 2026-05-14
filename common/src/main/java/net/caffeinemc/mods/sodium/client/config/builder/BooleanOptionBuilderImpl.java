@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
 import net.caffeinemc.mods.sodium.api.config.structure.BooleanOptionBuilder;
 import net.caffeinemc.mods.sodium.client.config.structure.BooleanOption;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

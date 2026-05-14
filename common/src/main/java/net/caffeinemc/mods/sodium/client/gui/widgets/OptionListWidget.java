@@ -19,7 +19,7 @@ import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 

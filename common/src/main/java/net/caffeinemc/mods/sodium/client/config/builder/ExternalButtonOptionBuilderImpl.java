@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.api.config.structure.ExternalButtonOptionBuild
 import net.caffeinemc.mods.sodium.client.config.structure.ExternalButtonOption;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.Validate;
 
 import java.util.function.Consumer;

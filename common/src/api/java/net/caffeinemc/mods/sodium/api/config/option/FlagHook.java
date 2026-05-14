@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.api.config.option;
 
 import net.caffeinemc.mods.sodium.api.config.ConfigState;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;

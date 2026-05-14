@@ -17,7 +17,7 @@ import net.caffeinemc.mods.sodium.client.gui.options.control.ExternalButtonContr
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import org.jspecify.annotations.NonNull;
 
 public class PageListWidget extends AbstractScrollable {

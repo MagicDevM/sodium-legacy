@@ -6,7 +6,7 @@ import net.caffeinemc.mods.sodium.api.config.option.OptionBinding;
 import net.caffeinemc.mods.sodium.api.config.option.OptionFlag;
 import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

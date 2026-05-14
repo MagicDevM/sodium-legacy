@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;

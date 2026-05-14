@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.config.structure;
 
 import net.caffeinemc.mods.sodium.api.config.ConfigState;
 import net.caffeinemc.mods.sodium.api.config.option.FlagHook;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;

@@ -12,7 +12,7 @@ import net.caffeinemc.mods.sodium.client.config.value.DependentValue;
 import net.caffeinemc.mods.sodium.client.config.value.DynamicValue;
 import net.caffeinemc.mods.sodium.client.gui.options.TextProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Collection;

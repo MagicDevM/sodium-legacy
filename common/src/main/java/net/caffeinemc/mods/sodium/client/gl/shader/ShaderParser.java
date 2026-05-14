@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.gl.shader;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.io.BufferedReader;
 import java.io.IOException;

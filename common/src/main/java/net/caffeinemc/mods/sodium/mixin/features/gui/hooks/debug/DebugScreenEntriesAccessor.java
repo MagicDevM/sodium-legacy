@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.debug;
 
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

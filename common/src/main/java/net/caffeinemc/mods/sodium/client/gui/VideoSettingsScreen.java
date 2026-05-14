@@ -25,7 +25,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;

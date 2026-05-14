@@ -4,7 +4,7 @@ import net.caffeinemc.mods.sodium.api.config.ConfigState;
 import net.caffeinemc.mods.sodium.api.config.StorageEventHandler;
 import net.caffeinemc.mods.sodium.api.config.option.*;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

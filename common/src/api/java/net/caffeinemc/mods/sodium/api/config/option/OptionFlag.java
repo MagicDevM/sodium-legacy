@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.option;
 
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 
 import java.util.Locale;
 

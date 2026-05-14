@@ -29,7 +29,7 @@ import net.minecraft.client.renderer.texture.TextureContents;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.utils.Identifier;
+import net.minecraft.util.Identifier;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.Nullable;
