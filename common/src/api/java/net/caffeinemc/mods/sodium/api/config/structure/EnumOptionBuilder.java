@@ -31,7 +31,7 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
     }
 
     @Override
-    EnumOptionBuilder<E> setName(Component name);
+    EnumOptionBuilder<E> setName(Text name);
 
     @Override
     EnumOptionBuilder<E> setEnabled(boolean available);

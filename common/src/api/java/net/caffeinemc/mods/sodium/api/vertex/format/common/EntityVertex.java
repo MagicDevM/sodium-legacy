@@ -5,7 +5,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.*;
 
 public final class EntityVertex {
-    public static final VertexFormat FORMAT = VertexFormats.NEW_ENTITY;
+    public static final VertexFormat FORMAT = VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL;
 
     public static final int STRIDE = 36;
 

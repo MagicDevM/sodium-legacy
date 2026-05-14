@@ -88,7 +88,7 @@ public interface VertexBufferWriter {
                          MemoryStack stack, long ptr, int count,
                          VertexFormat format)
     {
-        var length = count * format.getVertexSize();
+        var length = count * format.getVertexSizeByte();
         var copy = stack.nmalloc(length);
 
         MemoryIntrinsics.copyMemory(ptr, copy, length);

@@ -7,7 +7,7 @@ import net.caffeinemc.mods.sodium.api.vertex.attributes.common.NormalAttribute;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.PositionAttribute;
 
 public final class LineVertex  {
-    public static final VertexFormat FORMAT = VertexFormats.POSITION_COLOR_NORMAL;
+    public static final VertexFormat FORMAT = VertexFormats.LINES;
 
     public static final int STRIDE = 20;
 

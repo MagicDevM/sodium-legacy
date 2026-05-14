@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.api.vertex.attributes.common.PositionAttribute
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.TextureAttribute;
 
 public final class ParticleVertex {
-    public static final VertexFormat FORMAT = VertexFormats.PARTICLE;
+    public static final VertexFormat FORMAT = VertexFormats.POSITION_TEXTURE_COLOR_LIGHT;
 
     public static final int STRIDE = 28;
 

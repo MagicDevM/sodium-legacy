@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.option;
 
-import net.minecraft.Formatting;
+import net.minecraft.util.Formatting;
 import net.minecraft.text.Text;
 
 /**

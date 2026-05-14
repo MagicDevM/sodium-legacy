@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.api.vertex.attributes.common.PositionAttribute
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.TextureAttribute;
 
 public final class GlyphVertex  {
-    public static final VertexFormat FORMAT = VertexFormats.POSITION_COLOR_TEX_LIGHTMAP;
+    public static final VertexFormat FORMAT = VertexFormats.POSITION_COLOR_TEXTURE_LIGHT;
 
     public static final int STRIDE = 28;
 
