@@ -18,9 +18,9 @@ import net.caffeinemc.mods.sodium.client.render.chunk.data.BuiltSectionMeshParts
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.DefaultTerrainRenderPasses;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.data.SharedIndexSorter;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.profiling.Profilers;
 import net.minecraft.util.profiling.Profiler;
-import net.minecraft.util.profiling.ProfilerFiller;
 import org.jspecify.annotations.NonNull;
 
 import java.util.*;
@@ -132,7 +132,7 @@ public class RenderRegionManager {
             }
         }
 
-        ProfilerFiller profiler = Profiler.get();
+        Profiler profiler = Profilers.get();
 
         // If we have nothing to upload, abort!
         var translucentStorage = region.getStorage(DefaultTerrainRenderPasses.TRANSLUCENT);
@@ -141,7 +141,7 @@ public class RenderRegionManager {
             return;
         }
 
-        var cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        var cameraPosition = MinecraftClient.getInstance().gameRenderer.getMainCamera().position();
 
         var resources = region.createResources(commandList);
         var regionFillFractionInv = region.getFillFractionInv();

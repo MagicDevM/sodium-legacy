@@ -8,8 +8,8 @@ import net.caffeinemc.mods.sodium.client.render.chunk.compile.ChunkBuildContext;
 import net.caffeinemc.mods.sodium.client.render.chunk.compile.tasks.ChunkBuilderTask;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexType;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.util.Mth;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +27,7 @@ public class ChunkBuilder {
     private final AtomicInteger busyThreadCount = new AtomicInteger();
     private final ChunkBuildContext localContext;
 
-    public ChunkBuilder(ClientLevel level, ChunkVertexType vertexType) {
+    public ChunkBuilder(ClientWorld level, ChunkVertexType vertexType) {
         int count = getThreadCount();
 
         for (int i = 0; i < count; i++) {
@@ -110,7 +110,7 @@ public class ChunkBuilder {
      * thread.
      */
     private static int getOptimalThreadCount() {
-        return Mth.clamp(Math.max(getMaxThreadCount() / 3, getMaxThreadCount() - 6), 1, 10);
+        return MathHelper.clamp(Math.max(getMaxThreadCount() / 3, getMaxThreadCount() - 6), 1, 10);
     }
 
     private static int getThreadCount() {

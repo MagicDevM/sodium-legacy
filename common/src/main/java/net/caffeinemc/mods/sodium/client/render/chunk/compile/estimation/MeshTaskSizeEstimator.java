@@ -2,8 +2,8 @@ package net.caffeinemc.mods.sodium.client.render.chunk.compile.estimation;
 
 import net.caffeinemc.mods.sodium.client.render.chunk.RenderSection;
 import net.caffeinemc.mods.sodium.client.render.chunk.region.RenderRegion;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class MeshTaskSizeEstimator extends Average1DEstimator<MeshResultSize.Sec
     
     private final int seaLevelChunk;
 
-    public MeshTaskSizeEstimator(ClientLevel level) {
+    public MeshTaskSizeEstimator(ClientWorld level) {
         super(NEW_DATA_RATIO, RenderRegion.SECTION_BUFFER_ESTIMATE);
         this.seaLevelChunk = level.getSeaLevel() >> 4;
     }

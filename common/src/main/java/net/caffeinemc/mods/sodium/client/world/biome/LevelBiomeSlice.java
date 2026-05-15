@@ -11,7 +11,7 @@ import net.minecraft.world.biome.source.SeedMixer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.level.biome.BiomeKeys;
+import net.minecraft.world.biome.BiomeKeys;
 
 public class LevelBiomeSlice {
     private static final int SIZE = 3 * 4; // 3 chunks * 4 biomes per chunk

@@ -70,7 +70,7 @@ public final class LevelSlice implements BlockRenderView {
     private static final BlockState EMPTY_BLOCK_STATE = Blocks.AIR.defaultBlockState();
 
     // The level this slice has copied data from
-    private final ClientLevel level;
+    private final ClientWorld level;
 
     // The accessor used for fetching biome data from the slice
     private final LevelBiomeSlice biomeSlice;
@@ -149,7 +149,7 @@ public final class LevelSlice implements BlockRenderView {
     }
 
     @SuppressWarnings("unchecked")
-    public LevelSlice(ClientLevel level) {
+    public LevelSlice(ClientWorld level) {
         this.level = level;
 
         this.blockArrays = new BlockState[SECTION_ARRAY_SIZE][SECTION_BLOCK_COUNT];

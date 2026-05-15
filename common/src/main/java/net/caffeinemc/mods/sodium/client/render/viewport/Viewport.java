@@ -1,8 +1,8 @@
 package net.caffeinemc.mods.sodium.client.render.viewport;
 
 import net.caffeinemc.mods.sodium.client.render.viewport.frustum.Frustum;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
 import org.joml.Vector3d;
 
 public final class Viewport {
@@ -18,17 +18,17 @@ public final class Viewport {
     private final Frustum frustum;
     private final CameraTransform transform;
 
-    private final SectionPos sectionCoords;
+    private final ChunkSectionPos sectionCoords;
     private final BlockPos blockCoords;
 
     public Viewport(Frustum frustum, Vector3d position) {
         this.frustum = frustum;
         this.transform = new CameraTransform(position.x, position.y, position.z);
 
-        this.sectionCoords = SectionPos.of(
-                SectionPos.posToSectionCoord(position.x),
-                SectionPos.posToSectionCoord(position.y),
-                SectionPos.posToSectionCoord(position.z)
+        this.sectionCoords = ChunkSectionPos.of(
+                ChunkSectionPos.posToSectionCoord(position.x),
+                ChunkSectionPos.posToSectionCoord(position.y),
+                ChunkSectionPos.posToSectionCoord(position.z)
         );
 
         this.blockCoords = BlockPos.containing(position.x, position.y, position.z);
@@ -78,7 +78,7 @@ public final class Viewport {
         return this.transform;
     }
 
-    public SectionPos getChunkCoord() {
+    public ChunkSectionPos getChunkCoord() {
         return this.sectionCoords;
     }
 

@@ -8,11 +8,11 @@ import net.caffeinemc.mods.sodium.client.render.chunk.occlusion.GraphDirectionSe
 import net.caffeinemc.mods.sodium.client.render.chunk.occlusion.VisibilityEncoding;
 import net.caffeinemc.mods.sodium.client.render.chunk.region.RenderRegion;
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.data.TranslucentData;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.block.entity.BlockEntity;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -49,7 +49,7 @@ public class RenderSection {
     private int flags = RenderSectionFlags.NONE;
     private BlockEntity @Nullable[] globalBlockEntities;
     private BlockEntity @Nullable[] culledBlockEntities;
-    private TextureAtlasSprite @Nullable[] animatedSprites;
+    private Sprite @Nullable[] animatedSprites;
     @Nullable
     private TranslucentData translucentData;
 
@@ -194,8 +194,8 @@ public class RenderSection {
     /**
      * Returns the chunk section position which this render refers to in the level.
      */
-    public SectionPos getPosition() {
-        return SectionPos.of(this.chunkX, this.chunkY, this.chunkZ);
+    public ChunkSectionPos getPosition() {
+        return ChunkSectionPos.of(this.chunkX, this.chunkY, this.chunkZ);
     }
 
     /**
@@ -332,7 +332,7 @@ public class RenderSection {
     /**
      * Returns the collection of animated sprites contained by this rendered chunk section.
      */
-    public TextureAtlasSprite @Nullable[] getAnimatedSprites() {
+    public Sprite @Nullable[] getAnimatedSprites() {
         return this.animatedSprites;
     }
 
@@ -402,7 +402,7 @@ public class RenderSection {
         int currentTime = Math.toIntExact(System.currentTimeMillis() - region.getCreationTime());
         int fadeTime = currentTime - this.fadeTime;
         float elapsed = (float) fadeTime;
-        return Math.clamp(elapsed / ((float) (Minecraft.getInstance().options.chunkSectionFadeInTime().get() * 1000)), 0.0f, 1.0f);
+        return Math.clamp(elapsed / ((float) (MinecraftClient.getInstance().options.chunkSectionFadeInTime().get() * 1000)), 0.0f, 1.0f);
     }
 
     public void setFadeTime(int relativeBuiltTime) {

@@ -8,14 +8,14 @@ import net.caffeinemc.mods.sodium.client.render.viewport.Viewport;
 import net.caffeinemc.mods.sodium.client.util.collections.DoubleBufferedQueue;
 import net.caffeinemc.mods.sodium.client.util.collections.ReadQueue;
 import net.caffeinemc.mods.sodium.client.util.collections.WriteQueue;
-import net.minecraft.core.SectionPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import org.jspecify.annotations.NonNull;
 
 public class OcclusionCuller {
     private final Long2ReferenceMap<RenderSection> sections;
-    private final Level level;
+    private final World level;
 
     private final DoubleBufferedQueue<RenderSection> queue = new DoubleBufferedQueue<>();
 
@@ -23,7 +23,7 @@ public class OcclusionCuller {
     private int outOfWorldHeight;
     private int outOfWorldDirection;
 
-    public OcclusionCuller(Long2ReferenceMap<RenderSection> sections, Level level) {
+    public OcclusionCuller(Long2ReferenceMap<RenderSection> sections, World level) {
         this.sections = sections;
         this.level = level;
     }
@@ -184,7 +184,7 @@ public class OcclusionCuller {
         render.addIncomingDirections(incoming);
     }
 
-    private static int getOutwardDirections(SectionPos origin, RenderSection section) {
+    private static int getOutwardDirections(ChunkSectionPos origin, RenderSection section) {
         int planes = 0;
 
         planes |= section.getChunkX() <= origin.getX() ? 1 << GraphDirection.WEST  : 0;
@@ -326,7 +326,7 @@ public class OcclusionCuller {
                                         float searchDistance,
                                         int frame) {
         var origin = viewport.getChunkCoord();
-        var radius = Mth.floor(searchDistance / 16.0f);
+        var radius = MathHelper.floor(searchDistance / 16.0f);
         var height = this.outOfWorldHeight;
         var direction = this.outOfWorldDirection;
         var layer = this.outOfWorldRadius;
@@ -392,7 +392,7 @@ public class OcclusionCuller {
     }
 
     private RenderSection getRenderSection(int x, int y, int z) {
-        return this.sections.get(SectionPos.asLong(x, y, z));
+        return this.sections.get(ChunkSectionPos.asLong(x, y, z));
     }
 
 }

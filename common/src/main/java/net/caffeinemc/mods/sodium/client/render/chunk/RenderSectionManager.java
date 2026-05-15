@@ -44,15 +44,15 @@ import net.caffeinemc.mods.sodium.client.util.MathUtil;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.caffeinemc.mods.sodium.client.world.cloned.ChunkRenderContext;
 import net.caffeinemc.mods.sodium.client.world.cloned.ClonedChunkSectionCache;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkSection;
 import org.apache.commons.lang3.ArrayUtils;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.NonNull;
@@ -62,9 +62,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class RenderSectionManager {
-    private static final float NEARBY_REBUILD_DISTANCE = Mth.square(16.0f);
-    private static final float IMMEDIATE_PRESENT_DISTANCE = Mth.square(64.0f);
-    private static final float NEARBY_SORT_DISTANCE = Mth.square(25.0f);
+    private static final float NEARBY_REBUILD_DISTANCE = MathHelper.square(16.0f);
+    private static final float IMMEDIATE_PRESENT_DISTANCE = MathHelper.square(64.0f);
+    private static final float NEARBY_SORT_DISTANCE = MathHelper.square(25.0f);
 
     private static final float FRAME_DURATION_UPLOAD_FRACTION = 0.1f;
     private static final long MIN_UPLOAD_DURATION_BUDGET = 2_000_000L; // 2ms
@@ -87,7 +87,7 @@ public class RenderSectionManager {
 
     private final ChunkRenderer chunkRenderer;
 
-    private final ClientLevel level;
+    private final ClientWorld level;
 
     private final ReferenceSet<RenderSection> sectionsWithGlobalEntities = new ReferenceOpenHashSet<>();
 
@@ -119,7 +119,7 @@ public class RenderSectionManager {
 
     private final RemovableMultiForest renderableSectionTree;
 
-    public RenderSectionManager(ClientLevel level, int renderDistance, SortBehavior sortBehavior, CommandList commandList) {
+    public RenderSectionManager(ClientWorld level, int renderDistance, SortBehavior sortBehavior, CommandList commandList) {
         this.meshTaskSizeEstimator = new MeshTaskSizeEstimator(level);
 
         this.chunkRenderer = new DefaultChunkRenderer(RenderDevice.INSTANCE, ChunkMeshFormats.COMPACT);
@@ -160,7 +160,7 @@ public class RenderSectionManager {
         } else {
             this.averageFrameDuration = MathUtil.exponentialMovingAverage(this.averageFrameDuration, this.lastFrameDuration, FRAME_DURATION_UPDATE_RATIO);
         }
-        this.averageFrameDuration = Mth.clamp(this.averageFrameDuration, 1_000_100, 100_000_000);
+        this.averageFrameDuration = MathHelper.clamp(this.averageFrameDuration, 1_000_100, 100_000_000);
 
         this.frame += 1;
 
@@ -212,7 +212,7 @@ public class RenderSectionManager {
         }
     }
 
-    private boolean isOutOfGraph(SectionPos pos) {
+    private boolean isOutOfGraph(ChunkSectionPos pos) {
         var sectionY = pos.getY();
         return this.level.getMinSectionY() <= sectionY && sectionY <= this.level.getMaxSectionY() && !this.sectionByPosition.containsKey(pos.asLong());
     }
@@ -237,7 +237,7 @@ public class RenderSectionManager {
                 .isSolidRender()) {
             useOcclusionCulling = false;
         } else {
-            useOcclusionCulling = Minecraft.getInstance().smartCull;
+            useOcclusionCulling = MinecraftClient.getInstance().smartCull;
         }
         return useOcclusionCulling;
     }
@@ -255,7 +255,7 @@ public class RenderSectionManager {
     }
 
     public void onSectionAdded(int x, int y, int z) {
-        long key = SectionPos.asLong(x, y, z);
+        long key = ChunkSectionPos.asLong(x, y, z);
 
         if (this.sectionByPosition.containsKey(key)) {
             return;
@@ -268,8 +268,8 @@ public class RenderSectionManager {
 
         this.sectionByPosition.put(key, renderSection);
 
-        ChunkAccess chunk = this.level.getChunk(x, z);
-        LevelChunkSection section = chunk.getSections()[this.level.getSectionIndexFromSectionY(y)];
+        Chunk chunk = this.level.getChunk(x, z);
+        ChunkSection section = chunk.getSections()[this.level.getSectionIndexFromSectionY(y)];
 
         if (section.hasOnlyAir()) {
             this.updateSectionInfo(renderSection, BuiltSectionInfo.EMPTY);
@@ -285,7 +285,7 @@ public class RenderSectionManager {
     }
 
     public void onSectionRemoved(int x, int y, int z) {
-        long sectionPos = SectionPos.asLong(x, y, z);
+        long sectionPos = ChunkSectionPos.asLong(x, y, z);
         RenderSection section = this.sectionByPosition.remove(sectionPos);
 
         if (section == null) {
@@ -348,7 +348,7 @@ public class RenderSectionManager {
                     continue;
                 }
 
-                for (TextureAtlasSprite sprite : sprites) {
+                for (Sprite sprite : sprites) {
                     SpriteUtil.INSTANCE.markSpriteActive(sprite);
                 }
             }
@@ -789,7 +789,7 @@ public class RenderSectionManager {
 
         this.sectionCache.invalidate(x, y, z);
 
-        RenderSection section = this.sectionByPosition.get(SectionPos.asLong(x, y, z));
+        RenderSection section = this.sectionByPosition.get(ChunkSectionPos.asLong(x, y, z));
 
         if (section != null && section.isBuilt()) {
             int pendingUpdate;
@@ -820,7 +820,7 @@ public class RenderSectionManager {
         var renderDistance = this.getRenderDistance();
 
         // The fog must be fully opaque in order to skip rendering of chunks behind it
-        if (!Mth.equal(alpha, 1.0f)) {
+        if (!MathHelper.equal(alpha, 1.0f)) {
             return renderDistance;
         }
 
@@ -856,7 +856,7 @@ public class RenderSectionManager {
     }
 
     private RenderSection getRenderSection(int x, int y, int z) {
-        return this.sectionByPosition.get(SectionPos.asLong(x, y, z));
+        return this.sectionByPosition.get(ChunkSectionPos.asLong(x, y, z));
     }
 
     public Collection<String> getDebugStrings(boolean verbose) {
