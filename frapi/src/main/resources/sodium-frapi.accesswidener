@@ -1,18 +1,15 @@
 accessWidener v1 named
 
-accessible class net/minecraft/client/model/geom/ModelPart$Vertex
-accessible class net/minecraft/client/model/geom/ModelPart$Polygon
-accessible class net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture
-accessible class net/minecraft/client/renderer/texture/SpriteContents$FrameInfo
-accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture interpolateFrames Z
-accessible field net/minecraft/client/renderer/texture/SpriteContents$AnimatedTexture frames Ljava/util/List;
-accessible class net/minecraft/world/level/chunk/PalettedContainer$Data
-accessible class net/minecraft/client/renderer/texture/Stitcher$Holder
-accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
-accessible method net/minecraft/client/renderer/SectionBufferBuilderPool <init> (Ljava/util/List;)V
-accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$EffectInstance
-accessible field com/mojang/blaze3d/vertex/MatrixStack$Pose trustedNormals Z
-accessible class net/minecraft/client/renderer/CloudRenderer$RelativeCameraPos
+accessible class net/minecraft/client/model/ModelPart$Vertex
+accessible class net/minecraft/client/model/ModelPart$Quad
+accessible class net/minecraft/client/texture/SpriteContents$Animation
+accessible class net/minecraft/client/texture/SpriteContents$AnimationFrame
+accessible field net/minecraft/client/texture/SpriteContents$Animation interpolation Z
+accessible field net/minecraft/client/texture/SpriteContents$Animation frames Ljava/util/List;
+accessible class net/minecraft/world/chunk/PalettedContainer$Data
+accessible class net/minecraft/client/texture/TextureStitcher$Holder
+accessible class net/minecraft/world/biome/Biome$Weather
+accessible class net/minecraft/client/font/GlyphRenderer$Rectangle
 
-accessible field net/minecraft/world/level/GrassColor pixels [I
-accessible field net/minecraft/world/level/FoliageColor pixels [I
+accessible field net/minecraft/client/color/world/GrassColors colorMap [I
+accessible field net/minecraft/client/color/world/FoliageColors colorMap [I
