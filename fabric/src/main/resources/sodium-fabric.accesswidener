@@ -16,5 +16,5 @@ accessible field net/minecraft/client/color/world/FoliageColors colorMap [I
 
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32806 F
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32807 F
-accessible class net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing
-accessible method net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing isVertical ()Z
+accessible class net/minecraft/client/render/model/json/ItemModelGenerator$Side
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator$Side isVertical ()Z
