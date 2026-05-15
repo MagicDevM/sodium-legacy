@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.mixin.features.textures.animations.tracking;
 
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.texture.Sprite;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,7 +14,7 @@ public class AtlasGlyphProviderMixin {
 
     @Shadow
     @Final
-    private TextureAtlasSprite sprite;
+    private Sprite sprite;
 
     @Inject(method = "renderSprite", at = @At("HEAD"))
     private void preRenderSprite(CallbackInfo ci) {

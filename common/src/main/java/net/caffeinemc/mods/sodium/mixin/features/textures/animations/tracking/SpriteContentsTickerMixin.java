@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SpriteContentsTickerMixin {
     @Shadow
     @Final
-    private SpriteContents.AnimatedTexture animationInfo;
+    private SpriteContents.Animation animationInfo;
     @Shadow
     private int frame;
     @Unique
@@ -35,7 +35,7 @@ public class SpriteContentsTickerMixin {
      * @reason Replace fragile Shadow
      */
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void assignParent(SpriteContents spriteContents, SpriteContents.AnimatedTexture animatedTexture, Int2ObjectMap int2ObjectMap, GpuBufferSlice[] gpuBufferSlices, CallbackInfo ci) {
+    public void assignParent(SpriteContents spriteContents, SpriteContents.Animation animatedTexture, Int2ObjectMap int2ObjectMap, GpuBufferSlice[] gpuBufferSlices, CallbackInfo ci) {
         this.parent = spriteContents;
     }
 

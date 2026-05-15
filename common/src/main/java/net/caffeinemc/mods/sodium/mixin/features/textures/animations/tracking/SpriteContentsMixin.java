@@ -13,7 +13,7 @@ public abstract class SpriteContentsMixin implements SpriteContentsExtension {
     @Shadow
     @Final
     @Nullable
-    private SpriteContents.AnimatedTexture animatedTexture;
+    private SpriteContents.Animation animatedTexture;
 
     @Unique
     private boolean active;
