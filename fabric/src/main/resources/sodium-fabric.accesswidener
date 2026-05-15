@@ -12,7 +12,7 @@ accessible class net/minecraft/world/biome/Biome$Weather
 accessible class net/minecraft/client/font/GlyphRenderer$Rectangle
 
 accessible field net/minecraft/client/color/world/GrassColors colorMap [I
-accessible field net/minecraft/client/colors/world/FoliageColors colorMap [I
+accessible field net/minecraft/client/color/world/FoliageColors colorMap [I
 
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32806 F
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32807 F
