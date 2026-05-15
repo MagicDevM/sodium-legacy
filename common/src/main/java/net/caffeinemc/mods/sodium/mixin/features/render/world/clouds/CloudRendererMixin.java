@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.world.clouds;
 
 import net.minecraft.client.renderer.CloudRenderer;
-import net.minecraft.core.Direction;
+import net.minecraft.util.math.Direction;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Final;

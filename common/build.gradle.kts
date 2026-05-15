@@ -35,6 +35,7 @@ sourceSets {
         java {
             compileClasspath += api.output
             compileClasspath += boot.output
+            compileClasspath += configurationPreLaunch
         }
     }
 

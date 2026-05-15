@@ -2,13 +2,13 @@ package net.caffeinemc.mods.sodium.mixin.features.render.entity;
 
 import net.caffeinemc.mods.sodium.client.render.immediate.model.EntityRenderer;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
-import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.ModelPart;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.mojang.blaze3d.vertex.MatrixStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
 
 @Mixin(ModelPart.class)
 public class ModelPartMixin {

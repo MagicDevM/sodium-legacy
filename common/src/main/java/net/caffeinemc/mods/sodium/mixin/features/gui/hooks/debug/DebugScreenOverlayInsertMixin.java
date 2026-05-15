@@ -3,10 +3,10 @@ package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.debug;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.util.FrameTimeStatistics;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.DebugScreenOverlay;
+import net.minecraft.util.Formatting;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,14 +15,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(DebugScreenOverlay.class)
+@Mixin(DebugHud.class)
 public class DebugScreenOverlayInsertMixin {
     @Inject(
             method = "render",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;renderLines(Lnet/minecraft/client/gui/GuiGraphics;Ljava/util/List;Z)V", ordinal = 0)
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;renderLines(Lnet/minecraft/client/gui/DrawContext;Ljava/util/List;Z)V", ordinal = 0)
     )
-    private void sodium$insertFpsPercentiles(GuiGraphics guiGraphics, CallbackInfo ci, @Local(ordinal = 0) List<String> leftLines) {
-        Minecraft minecraft = Minecraft.getInstance();
+    private void sodium$insertFpsPercentiles(DrawContext guiGraphics, CallbackInfo ci, @Local(ordinal = 0) List<String> leftLines) {
+        MinecraftClient minecraft = MinecraftClient.getInstance();
         if (!minecraft.debugEntries.isCurrentlyEnabled(SodiumClientMod.SODIUM_FPS_PERCENTILES)) {
             return;
         }
@@ -48,13 +48,13 @@ public class DebugScreenOverlayInsertMixin {
                 sb.append(' ');
             }
             long ns = entry.getLongValue();
-            sb.append(ChatFormatting.GRAY)
+            sb.append(Formatting.GRAY)
                     .append(entry.getKey().name()).append('=')
-                    .append(ChatFormatting.RESET)
+                    .append(Formatting.RESET)
                     .append(sodium$nanosToFps(ns));
         }
 
-        sb.append(ChatFormatting.GRAY).append(" fps");
+        sb.append(Formatting.GRAY).append(" fps");
 
         leftLines.add(insertAt, sb.toString());
     }

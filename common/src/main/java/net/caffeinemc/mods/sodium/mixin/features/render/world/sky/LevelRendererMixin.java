@@ -2,14 +2,14 @@ package net.caffeinemc.mods.sodium.mixin.features.render.world.sky;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.world.level.material.FogType;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.world.render.CameraSubmersionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(LevelRenderer.class)
+@Mixin(WorldRenderer.class)
 public abstract class LevelRendererMixin {
     @Shadow
     protected abstract boolean doesMobEffectBlockSky(Camera camera);
@@ -39,7 +39,7 @@ public abstract class LevelRendererMixin {
         // This prevents the sky from being visible through chunks culled by Sodium's fog occlusion.
         // Fixes https://bugs.mojang.com/browse/MC-152504.
         // Credit to bytzo for noticing the change in 1.18.2.
-        if (Minecraft.getInstance().gameRenderer.getMainCamera().getFluidInCamera() != FogType.NONE) {
+        if (MinecraftClient.getInstance().gameRenderer.getMainCamera().getFluidInCamera() != CameraSubmersionType.NONE) {
             return true;
         }
 

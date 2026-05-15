@@ -1,9 +1,9 @@
 package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.settings;
 
 import net.caffeinemc.mods.sodium.client.gui.VideoSettingsScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.options.OptionsScreen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin extends Screen {
-    protected OptionsScreenMixin(Component title) {
+    protected OptionsScreenMixin(Text title) {
         super(title);
     }
 

@@ -5,8 +5,8 @@ import net.caffeinemc.mods.sodium.client.util.NativeBuffer;
 import net.minecraft.client.gui.components.debug.DebugEntryMemory;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +36,7 @@ public class DebugEntryMemoryMixin {
     }
 
     @Inject(method = "display", at = @At(value = "RETURN"))
-    private void sodium$addOffHeap(DebugScreenDisplayer debugScreenDisplayer, Level level, LevelChunk levelChunk, LevelChunk levelChunk2, CallbackInfo ci) {
+    private void sodium$addOffHeap(DebugScreenDisplayer debugScreenDisplayer, World level, WordChunk levelChunk, WordChunk levelChunk2, CallbackInfo ci) {
         debugScreenDisplayer.addToGroup(GROUP, getNativeMemoryString());
     }
 }

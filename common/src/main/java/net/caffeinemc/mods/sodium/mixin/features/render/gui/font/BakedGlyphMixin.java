@@ -1,10 +1,10 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.gui.font;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.GlyphVertex;
-import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.client.font.GlyphRenderer;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
@@ -53,7 +53,7 @@ public class BakedGlyphMixin {
      * @reason Use intrinsics
      * @author JellySquid
      */
-    @Inject(method = "render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render(ZFFFLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumer;IZI)V", at = @At("HEAD"), cancellable = true)
     private void drawFast(boolean italic, float x, float y, float z, Matrix4f matrix, VertexConsumer vertexConsumer, int c, boolean bl2, int light, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 

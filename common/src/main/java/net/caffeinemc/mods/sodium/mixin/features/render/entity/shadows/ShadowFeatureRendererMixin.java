@@ -1,16 +1,16 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.entity.shadows;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.EntityVertex;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.render.*;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.feature.ShadowFeatureRenderer;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.util.math.Box;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import org.joml.Matrix4f;
@@ -30,7 +30,7 @@ public class ShadowFeatureRendererMixin {
 
     @Shadow
     @Final
-    private static RenderType SHADOW_RENDER_TYPE;
+    private static RenderLayer SHADOW_RENDER_TYPE;
 
     @Unique
     private static final int SHADOW_COLOR = ColorABGR.pack(1.0f, 1.0f, 1.0f);
@@ -64,7 +64,7 @@ public class ShadowFeatureRendererMixin {
                         alpha = 1.0F;
                     }
 
-                    AABB box = shadowPiece.shapeBelow().bounds();
+                    Box box = shadowPiece.shapeBelow().bounds();
 
                     float minX = (float) (shadowPiece.relativeX() + box.minX);
                     float maxX = (float) (shadowPiece.relativeX() + box.maxX);

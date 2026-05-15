@@ -1,14 +1,14 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.entity;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.client.render.immediate.model.EntityRenderer;
 import net.caffeinemc.mods.sodium.client.render.immediate.model.ModelCuboid;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.core.Direction;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.util.math.Direction;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
