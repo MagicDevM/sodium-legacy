@@ -11,8 +11,8 @@ accessible class net/minecraft/client/texture/TextureStitcher$Holder
 accessible class net/minecraft/world/biome/Biome$Weather
 accessible class net/minecraft/client/font/GlyphRenderer$Rectangle
 
-accessible field net/minecraft/client/color/GrassColor pixels [I
-accessible field net/minecraft/client/colors/world/FoliageColor pixels [I
+accessible field net/minecraft/client/color/world/GrassColors pixels [I
+accessible field net/minecraft/client/colors/world/FoliageColors pixels [I
 
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator MIN_Z F
 accessible field net/minecraft/client/render/model/json/ItemModelGenerator MAX_Z F
