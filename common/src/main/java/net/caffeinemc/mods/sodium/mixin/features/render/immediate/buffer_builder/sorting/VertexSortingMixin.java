@@ -1,24 +1,24 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.buffer_builder.sorting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.mojang.blaze3d.vertex.VertexSorting;
+import com.mojang.blaze3d.system.VertexSorter;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSorters;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(VertexSorting.class)
+@Mixin(VertexSorter.class)
 public interface VertexSortingMixin {
     @SuppressWarnings("DiscouragedShift") // Not currently avoidable.
     @ModifyExpressionValue(
             method = "<clinit>",
             at = @At(
                     value = "FIELD",
-                    target = "Lcom/mojang/blaze3d/vertex/VertexSorting;ORTHOGRAPHIC_Z:Lcom/mojang/blaze3d/vertex/VertexSorting;",
+                    target = "Lcom/mojang/blaze3d/system/VertexSorter;ORTHOGRAPHIC_Z:Lcom/mojang/blaze3d/system/VertexSorter;",
                     opcode = Opcodes.PUTSTATIC,
                     shift = At.Shift.BEFORE))
-    private static VertexSorting modifyVertexSorting(VertexSorting original) {
+    private static VertexSorter modifyVertexSorting(VertexSorter original) {
         return VertexSorters.orthographicZ();
     }
 
@@ -27,7 +27,7 @@ public interface VertexSortingMixin {
      * @reason Optimize vertex sorting
      */
     @Overwrite
-    static VertexSorting byDistance(float x, float y, float z) {
+    static VertexSorter byDistance(float x, float y, float z) {
         return VertexSorters.distance(x, y, z);
     }
 
@@ -36,7 +36,7 @@ public interface VertexSortingMixin {
      * @reason Optimize vertex sorting
      */
     @Overwrite
-    static VertexSorting byDistance(VertexSorting.DistanceFunction function) {
+    static VertexSorter byDistance(VertexSorter.DistanceFunction function) {
         return VertexSorters.fallback(function);
     }
 }

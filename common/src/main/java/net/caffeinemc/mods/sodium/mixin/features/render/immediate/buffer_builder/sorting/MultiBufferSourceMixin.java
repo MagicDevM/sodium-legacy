@@ -4,17 +4,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexSorting;
+import net.minecraft.client.render.VertexFormat;
+import com.mojang.blaze3d.systems.VertexSorting;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSorters;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSortingExtended;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.render.VertexConsumerProvider;
 import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(MultiBufferSource.BufferSource.class)
+@Mixin(VertexConsumerProvider.Immediate.class)
 public class MultiBufferSourceMixin {
     @Unique
     private static final int VERTICES_PER_QUAD = 6;

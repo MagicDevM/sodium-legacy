@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.world.render.CameraSubmersionType;
+import net.minecraft.client.render.CameraSubmersionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

@@ -1,11 +1,11 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate;
 
-import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
+import net.minecraft.client.render.OverlayVertexConsumer;
 import net.caffeinemc.mods.sodium.mixin.core.render.immediate.consumer.SheetedDecalTextureGeneratorMixin;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.client.render.model.json.JsonUnbakedModel;
+import net.minecraft.client.render.model.BakedQuadFactory;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.hit.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -19,8 +19,8 @@ public class DirectionMixin {
      * </ul>
      * Used by:
      * <ul>
-     *     <li>{@link SheetedDecalTextureGenerator}</li>
-     *     <li>UV-locked faces and cullfaces in {@link BlockModel} and {@link FaceBakery}</li>
+     *     <li>{@link OverlayVertexConsumer}</li>
+     *     <li>UV-locked faces and cullfaces in {@link JsonUnbakedModel} and {@link BakedQuadFactory}</li>
      *     <li>Raycasts, when creating the {@link BlockHitResult}</li>
      * </ul>
      *

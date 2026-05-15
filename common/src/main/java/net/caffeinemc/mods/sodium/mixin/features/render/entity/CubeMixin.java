@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Set;
 
-@Mixin(ModelPart.Cube.class)
+@Mixin(ModelPart.Cuboid.class)
 public class CubeMixin {
     @Mutable
     @Shadow
@@ -29,15 +29,15 @@ public class CubeMixin {
     private ModelCuboid sodium$cuboid;
 
     // Inject at the start of the function, so we don't capture modified locals
-    @Redirect(method = "<init>", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/model/geom/ModelPart$Cube;minX:F", ordinal = 0))
-    private void onInit(ModelPart.Cube instance, float value, int u, int v, float x, float y, float z, float sizeX, float sizeY, float sizeZ, float extraX, float extraY, float extraZ, boolean mirror, float textureWidth, float textureHeight, Set<Direction> renderDirections) {
+    @Redirect(method = "<init>", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/model/ModelPart$Cuboid;minX:F", ordinal = 0))
+    private void onInit(ModelPart.Cuboid instance, float value, int u, int v, float x, float y, float z, float sizeX, float sizeY, float sizeZ, float extraX, float extraY, float extraZ, boolean mirror, float textureWidth, float textureHeight, Set<Direction> renderDirections) {
         this.sodium$cuboid = new ModelCuboid(u, v, x, y, z, sizeX, sizeY, sizeZ, extraX, extraY, extraZ, mirror, textureWidth, textureHeight, renderDirections);
 
         this.minX = value;
     }
 
-    @Inject(method = "compile", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/MatrixStack$Pose;pose()Lorg/joml/Matrix4f;"), cancellable = true)
-    private void onCompile(MatrixStack.Pose pose, VertexConsumer buffer, int light, int overlay, int color, CallbackInfo ci) {
+    @Inject(method = "compile", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MatrixStack$Entry;getPositionMatrix()Lorg/joml/Matrix4f;"), cancellable = true)
+    private void onCompile(MatrixStack.Entry pose, VertexConsumer buffer, int light, int overlay, int color, CallbackInfo ci) {
         VertexBufferWriter writer = VertexConsumerUtils.convertOrLog(buffer);
 
         if (writer == null) {

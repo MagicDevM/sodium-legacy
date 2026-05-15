@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.matrix_stack;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import org.joml.Math;
 import org.joml.Matrix3f;
