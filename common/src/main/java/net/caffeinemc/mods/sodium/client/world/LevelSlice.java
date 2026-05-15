@@ -7,27 +7,27 @@ import net.caffeinemc.mods.sodium.client.world.biome.LevelBiomeSlice;
 import net.caffeinemc.mods.sodium.client.world.cloned.ChunkRenderContext;
 import net.caffeinemc.mods.sodium.client.world.cloned.ClonedChunkSection;
 import net.caffeinemc.mods.sodium.client.world.cloned.ClonedChunkSectionCache;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.SectionPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.DataLayer;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.lighting.LevelLightEngine;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.world.biome.ColorResolver;
+import net.minecraft.world.World;
+import net.minecraft.world.LightType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.world.chunk.ChunkNibbleArray;
+import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.util.math.BlockBox;
+import net.minecraft.world.chunk.light.LightingProvider;
+import net.minecraft.fluid.FluidState;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -45,8 +45,8 @@ import java.util.Objects;
  *
  * <p>Object pooling should be used to avoid huge allocations as this class contains many large arrays.</p>
  */
-public final class LevelSlice implements BlockAndTintGetter {
-    private static final LightLayer[] LIGHT_TYPES = LightLayer.values();
+public final class LevelSlice implements BlockRenderView {
+    private static final LightType[] LIGHT_TYPES = LightType.values();
 
     // The number of blocks in a section.
     private static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
@@ -55,7 +55,7 @@ public final class LevelSlice implements BlockAndTintGetter {
     private static final int NEIGHBOR_BLOCK_RADIUS = 2;
 
     // The radius of chunks around the origin chunk that should be copied.
-    private static final int NEIGHBOR_CHUNK_RADIUS = Mth.roundToward(NEIGHBOR_BLOCK_RADIUS, 16) >> 4;
+    private static final int NEIGHBOR_CHUNK_RADIUS = MathHelper.roundToward(NEIGHBOR_BLOCK_RADIUS, 16) >> 4;
 
     // The number of sections on each axis of this slice.
     private static final int SECTION_ARRAY_LENGTH = 1 + (NEIGHBOR_CHUNK_RADIUS * 2);
@@ -86,7 +86,7 @@ public final class LevelSlice implements BlockAndTintGetter {
     private final SodiumAuxiliaryLightManager[] auxLightManager;
 
     // (Local Section -> Light Arrays) table.
-    private final @Nullable DataLayer[][] lightArrays;
+    private final @Nullable ChunkNibbleArray[][] lightArrays;
 
     // (Local Section -> Block Entity) table.
     private final @Nullable Int2ReferenceMap<BlockEntity>[] blockEntityArrays;
@@ -103,11 +103,11 @@ public final class LevelSlice implements BlockAndTintGetter {
     private int originBlockX, originBlockY, originBlockZ;
 
     // The volume that this WorldSlice contains
-    private BoundingBox volume;
+    private BlockBox volume;
 
-    public static ChunkRenderContext prepare(Level level, SectionPos pos, ClonedChunkSectionCache cache) {
-        LevelChunk chunk = level.getChunk(pos.getX(), pos.getZ());
-        LevelChunkSection section = chunk.getSections()[level.getSectionIndexFromSectionY(pos.getY())];
+    public static ChunkRenderContext prepare(World level, ChunkSectionPos pos, ClonedChunkSectionCache cache) {
+        WorldChunk chunk = level.getChunk(pos.getX(), pos.getZ());
+        ChunkSection section = chunk.getSections()[level.getSectionIndexFromSectionY(pos.getY())];
 
         // If the chunk section is absent or empty, simply terminate now. There will never be anything in this chunk
         // section to render, so we need to signal that a chunk render task shouldn't be created. This saves a considerable
@@ -116,7 +116,7 @@ public final class LevelSlice implements BlockAndTintGetter {
             return null;
         }
 
-        BoundingBox box = new BoundingBox(pos.minBlockX() - NEIGHBOR_BLOCK_RADIUS,
+        BlockBox box = new BlockBox(pos.minBlockX() - NEIGHBOR_BLOCK_RADIUS,
                 pos.minBlockY() - NEIGHBOR_BLOCK_RADIUS,
                 pos.minBlockZ() - NEIGHBOR_BLOCK_RADIUS,
                 pos.maxBlockX() + NEIGHBOR_BLOCK_RADIUS,
@@ -153,7 +153,7 @@ public final class LevelSlice implements BlockAndTintGetter {
         this.level = level;
 
         this.blockArrays = new BlockState[SECTION_ARRAY_SIZE][SECTION_BLOCK_COUNT];
-        this.lightArrays = new DataLayer[SECTION_ARRAY_SIZE][LIGHT_TYPES.length];
+        this.lightArrays = new ChunkNibbleArray[SECTION_ARRAY_SIZE][LIGHT_TYPES.length];
 
         this.blockEntityArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
         this.blockEntityRenderDataArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
@@ -161,7 +161,7 @@ public final class LevelSlice implements BlockAndTintGetter {
         this.modelMapArrays = new SodiumModelDataContainer[SECTION_ARRAY_SIZE];
 
         this.biomeSlice = new LevelBiomeSlice();
-        this.biomeColors = new LevelColorCache(this.biomeSlice, Minecraft.getInstance().options.biomeBlendRadius().get());
+        this.biomeColors = new LevelColorCache(this.biomeSlice, MinecraftClient.getInstance().options.biomeBlendRadius().get());
 
         for (BlockState[] blockArray : this.blockArrays) {
             Arrays.fill(blockArray, EMPTY_BLOCK_STATE);
@@ -169,9 +169,9 @@ public final class LevelSlice implements BlockAndTintGetter {
     }
 
     public void copyData(ChunkRenderContext context) {
-        this.originBlockX = SectionPos.sectionToBlockCoord(context.getOrigin().getX() - NEIGHBOR_CHUNK_RADIUS);
-        this.originBlockY = SectionPos.sectionToBlockCoord(context.getOrigin().getY() - NEIGHBOR_CHUNK_RADIUS);
-        this.originBlockZ = SectionPos.sectionToBlockCoord(context.getOrigin().getZ() - NEIGHBOR_CHUNK_RADIUS);
+        this.originBlockX = ChunkSectionPos.sectionToBlockCoord(context.getOrigin().getX() - NEIGHBOR_CHUNK_RADIUS);
+        this.originBlockY = ChunkSectionPos.sectionToBlockCoord(context.getOrigin().getY() - NEIGHBOR_CHUNK_RADIUS);
+        this.originBlockZ = ChunkSectionPos.sectionToBlockCoord(context.getOrigin().getZ() - NEIGHBOR_CHUNK_RADIUS);
 
         this.volume = context.getVolume();
 
@@ -194,8 +194,8 @@ public final class LevelSlice implements BlockAndTintGetter {
 
         this.unpackBlockData(this.blockArrays[sectionIndex], context, section);
 
-        this.lightArrays[sectionIndex][LightLayer.BLOCK.ordinal()] = section.getLightArray(LightLayer.BLOCK);
-        this.lightArrays[sectionIndex][LightLayer.SKY.ordinal()] = section.getLightArray(LightLayer.SKY);
+        this.lightArrays[sectionIndex][LightType.BLOCK.ordinal()] = section.getLightArray(LightType.BLOCK);
+        this.lightArrays[sectionIndex][LightType.SKY.ordinal()] = section.getLightArray(LightType.SKY);
 
         this.blockEntityArrays[sectionIndex] = section.getBlockEntityMap();
         this.auxLightManager[sectionIndex] = section.getAuxLightManager();
@@ -211,7 +211,7 @@ public final class LevelSlice implements BlockAndTintGetter {
 
         var container = PalettedContainerROExtension.of(section.getBlockData());
 
-        SectionPos sectionPos = section.getPosition();
+        ChunkSectionPos sectionPos = section.getPosition();
 
         if (sectionPos.equals(context.getOrigin())) {
             container.sodium$unpack(blockArray);
@@ -275,13 +275,13 @@ public final class LevelSlice implements BlockAndTintGetter {
     }
 
     @Override
-    public @NonNull LevelLightEngine getLightEngine() {
-        // Not thread-safe to access lighting data from off-thread, even if Minecraft allows it.
+    public @NonNull LightingProvider getLightEngine() {
+        // Not thread-safe to access lighting data from off-thread, even if MinecraftClient allows it.
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int getBrightness(LightLayer type, BlockPos pos) {
+    public int getBrightness(LightType type, BlockPos pos) {
         if (!this.volume.isInside(pos.getX(), pos.getY(), pos.getZ())) {
             return 0;
         }
@@ -312,8 +312,8 @@ public final class LevelSlice implements BlockAndTintGetter {
 
         var lightArrays = this.lightArrays[getLocalSectionIndex(relBlockX >> 4, relBlockY >> 4, relBlockZ >> 4)];
 
-        var skyLightArray = lightArrays[LightLayer.SKY.ordinal()];
-        var blockLightArray = lightArrays[LightLayer.BLOCK.ordinal()];
+        var skyLightArray = lightArrays[LightType.SKY.ordinal()];
+        var blockLightArray = lightArrays[LightType.BLOCK.ordinal()];
 
         int localBlockX = relBlockX & 15;
         int localBlockY = relBlockY & 15;

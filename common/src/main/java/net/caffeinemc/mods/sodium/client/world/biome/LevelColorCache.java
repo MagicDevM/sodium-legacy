@@ -4,9 +4,9 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.caffeinemc.mods.sodium.client.util.color.BoxBlur;
 import net.caffeinemc.mods.sodium.client.util.color.BoxBlur.ColorBuffer;
 import net.caffeinemc.mods.sodium.client.world.cloned.ChunkRenderContext;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.biome.ColorResolver;
+import net.minecraft.world.biome.Biome;
 
 public class LevelColorCache {
     private static final int NEIGHBOR_BLOCK_RADIUS = 2;
@@ -51,9 +51,9 @@ public class LevelColorCache {
 
     public int getColor(ColorResolver resolver, int blockX, int blockY, int blockZ) {
         // Clamp inputs
-        blockX = Mth.clamp(blockX, this.minBlockX, this.maxBlockX) - this.minBlockX;
-        blockY = Mth.clamp(blockY, this.minBlockY, this.maxBlockY) - this.minBlockY;
-        blockZ = Mth.clamp(blockZ, this.minBlockZ, this.maxBlockZ) - this.minBlockZ;
+        blockX = MathHelper.clamp(blockX, this.minBlockX, this.maxBlockX) - this.minBlockX;
+        blockY = MathHelper.clamp(blockY, this.minBlockY, this.maxBlockY) - this.minBlockY;
+        blockZ = MathHelper.clamp(blockZ, this.minBlockZ, this.maxBlockZ) - this.minBlockZ;
 
         if (!this.slices.containsKey(resolver)) {
             this.initializeSlices(resolver);

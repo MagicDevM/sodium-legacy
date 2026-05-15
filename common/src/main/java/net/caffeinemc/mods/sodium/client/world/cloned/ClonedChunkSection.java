@@ -8,18 +8,18 @@ import net.caffeinemc.mods.sodium.client.util.iterator.WrappedIterator;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.caffeinemc.mods.sodium.client.world.PalettedContainerROExtension;
 import net.caffeinemc.mods.sodium.client.world.SodiumAuxiliaryLightManager;
-import net.minecraft.core.Holder;
-import net.minecraft.core.SectionPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.*;
-import net.minecraft.world.level.levelgen.DebugLevelSource;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.world.World;
+import net.minecraft.world.LightType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.world.chunk.*;
+import net.minecraft.world.gen.chunk.DebugChunkGenerator;
+import net.minecraft.util.math.BlockBox;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public class ClonedChunkSection {
     private static final DataLayer DEFAULT_BLOCK_LIGHT_ARRAY = new DataLayer(0);
     private static final PalettedContainer<BlockState> DEFAULT_STATE_CONTAINER = new PalettedContainer<>(Blocks.AIR.defaultBlockState(), Strategy.createForBlockStates(Block.BLOCK_STATE_REGISTRY));
 
-    private final SectionPos pos;
+    private final ChunkSectionPos pos;
 
     private final @Nullable Int2ReferenceMap<BlockEntity> blockEntityMap;
     private final @Nullable Int2ReferenceMap<Object> blockEntityRenderDataMap;
@@ -38,16 +38,16 @@ public class ClonedChunkSection {
 
     private final @Nullable PalettedContainerRO<BlockState> blockData;
 
-    private final @Nullable PalettedContainerRO<Holder<Biome>> biomeData;
+    private final @Nullable PalettedContainerRO<RegistryEntry<Biome>> biomeData;
     private final SodiumModelDataContainer modelMap;
 
     private long lastUsedTimestamp = Long.MAX_VALUE;
 
-    public ClonedChunkSection(Level level, LevelChunk chunk, @Nullable LevelChunkSection section, SectionPos pos) {
+    public ClonedChunkSection(World level, LevelChunk chunk, @Nullable LevelChunkSection section, ChunkSectionPos pos) {
         this.pos = pos;
 
         PalettedContainerRO<BlockState> blockData = null;
-        PalettedContainerRO<Holder<Biome>> biomeData = null;
+        PalettedContainerRO<RegistryEntry<Biome>> biomeData = null;
 
         Int2ReferenceMap<BlockEntity> blockEntityMap = null;
         Int2ReferenceMap<Object> blockEntityRenderDataMap = null;
@@ -85,7 +85,7 @@ public class ClonedChunkSection {
      * match vanilla's odd approach of short-circuiting getBlockState calls inside its render region class.
      */
     @NonNull
-    private static PalettedContainer<BlockState> constructDebugWorldContainer(SectionPos pos) {
+    private static PalettedContainer<BlockState> constructDebugWorldContainer(ChunkSectionPos pos) {
         // Fast path for sections which are guaranteed to be empty
         if (pos.getY() != 3 && pos.getY() != 4)
             return DEFAULT_STATE_CONTAINER;
@@ -104,7 +104,7 @@ public class ClonedChunkSection {
             // Set the blocks at relative Y 6 (world Y 70) to the appropriate state from the generator
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
-                    container.getAndSetUnchecked(x, 6, z, DebugLevelSource.getBlockStateFor(SectionPos.sectionToBlockCoord(pos.getX(), x), SectionPos.sectionToBlockCoord(pos.getZ(), z)));
+                    container.getAndSetUnchecked(x, 6, z, DebugChunkGenerator.getBlockStateFor(ChunkSectionPos.sectionToBlockCoord(pos.getX(), x), ChunkSectionPos.sectionToBlockCoord(pos.getZ(), z)));
                 }
             }
         }
@@ -112,13 +112,13 @@ public class ClonedChunkSection {
     }
 
     @NonNull
-    private static DataLayer[] copyLightData(Level level, SectionPos pos) {
+    private static DataLayer[] copyLightData(World level, ChunkSectionPos pos) {
         var arrays = new DataLayer[2];
-        arrays[LightLayer.BLOCK.ordinal()] = copyLightArray(level, LightLayer.BLOCK, pos);
+        arrays[LightType.BLOCK.ordinal()] = copyLightArray(level, LightType.BLOCK, pos);
 
         // Dimensions without sky-light should not have a default-initialized array
         if (level.dimensionType().hasSkyLight()) {
-            arrays[LightLayer.SKY.ordinal()] = copyLightArray(level, LightLayer.SKY, pos);
+            arrays[LightType.SKY.ordinal()] = copyLightArray(level, LightType.SKY, pos);
         }
 
         return arrays;
@@ -129,7 +129,7 @@ public class ClonedChunkSection {
      * the light array is not loaded.
      */
     @NonNull
-    private static DataLayer copyLightArray(Level level, LightLayer type, SectionPos pos) {
+    private static DataLayer copyLightArray(World level, LightType type, ChunkSectionPos pos) {
         var array = level.getLightEngine()
                 .getLayerListener(type)
                 .getDataLayerData(pos);
@@ -145,7 +145,7 @@ public class ClonedChunkSection {
     }
 
     @Nullable
-    private static Int2ReferenceMap<BlockEntity> tryCopyBlockEntities(LevelChunk chunk, SectionPos chunkCoord) {
+    private static Int2ReferenceMap<BlockEntity> tryCopyBlockEntities(LevelChunk chunk, ChunkSectionPos chunkCoord) {
         try {
             // Some mods are violating memory safety, and the block entity iterator occasionally returns garbage results
             // or otherwise throws exceptions because of this. To better diagnose these crashes, wrap the iterator
@@ -169,8 +169,8 @@ public class ClonedChunkSection {
     }
 
     @Nullable
-    private static Int2ReferenceMap<BlockEntity> copyBlockEntities(LevelChunk chunk, SectionPos chunkCoord) {
-        BoundingBox box = new BoundingBox(chunkCoord.minBlockX(), chunkCoord.minBlockY(), chunkCoord.minBlockZ(),
+    private static Int2ReferenceMap<BlockEntity> copyBlockEntities(LevelChunk chunk, ChunkSectionPos chunkCoord) {
+        BlockBox box = new BlockBox(chunkCoord.minBlockX(), chunkCoord.minBlockY(), chunkCoord.minBlockZ(),
                 chunkCoord.maxBlockX(), chunkCoord.maxBlockY(), chunkCoord.maxBlockZ());
 
         Int2ReferenceOpenHashMap<BlockEntity> blockEntities = null;
@@ -201,7 +201,7 @@ public class ClonedChunkSection {
     }
 
     @Nullable
-    private static Int2ReferenceMap<Object> copyBlockEntityRenderData(Level level, Int2ReferenceMap<BlockEntity> blockEntities) {
+    private static Int2ReferenceMap<Object> copyBlockEntityRenderData(World level, Int2ReferenceMap<BlockEntity> blockEntities) {
         Int2ReferenceOpenHashMap<Object> blockEntityRenderDataMap = null;
 
         // Retrieve any render data after we have copied all block entities, as this will call into the code of
@@ -227,7 +227,7 @@ public class ClonedChunkSection {
         return blockEntityRenderDataMap;
     }
 
-    public SectionPos getPosition() {
+    public ChunkSectionPos getPosition() {
         return this.pos;
     }
 
@@ -235,7 +235,7 @@ public class ClonedChunkSection {
         return this.blockData;
     }
 
-    public @Nullable PalettedContainerRO<Holder<Biome>> getBiomeData() {
+    public @Nullable PalettedContainerRO<RegistryEntry<Biome>> getBiomeData() {
         return this.biomeData;
     }
 
@@ -251,7 +251,7 @@ public class ClonedChunkSection {
         return modelMap;
     }
 
-    public @Nullable DataLayer getLightArray(LightLayer lightType) {
+    public @Nullable DataLayer getLightArray(LightType lightType) {
         return this.lightDataArrays[lightType.ordinal()];
     }
 

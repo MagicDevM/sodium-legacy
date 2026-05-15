@@ -3,22 +3,22 @@ package net.caffeinemc.mods.sodium.client.world.biome;
 import net.caffeinemc.mods.sodium.client.world.BiomeSeedProvider;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.caffeinemc.mods.sodium.client.world.cloned.ChunkRenderContext;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Holder;
-import net.minecraft.core.QuartPos;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.util.LinearCongruentialGenerator;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.biome.source.BiomeCoords;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.world.biome.source.SeedMixer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.BiomeKeys;
 
 public class LevelBiomeSlice {
     private static final int SIZE = 3 * 4; // 3 chunks * 4 biomes per chunk
 
     // Arrays are in ZYX order
     @SuppressWarnings("unchecked")
-    private final Holder<Biome>[] biomes = new Holder[SIZE * SIZE * SIZE];
+    private final RegistryEntry<Biome>[] biomes = new RegistryEntry[SIZE * SIZE * SIZE];
     private final boolean[] uniform = new boolean[SIZE * SIZE * SIZE];
     private final BiasMap bias = new BiasMap();
 
@@ -26,7 +26,7 @@ public class LevelBiomeSlice {
 
     private int blockX, blockY, blockZ;
 
-    public void update(ClientLevel level, ChunkRenderContext context) {
+    public void update(ClientWorld level, ChunkRenderContext context) {
         this.blockX = context.getOrigin().minBlockX() - 16;
         this.blockY = context.getOrigin().minBlockY() - 16;
         this.blockZ = context.getOrigin().minBlockZ() - 16;
@@ -39,10 +39,10 @@ public class LevelBiomeSlice {
         this.calculateUniform();
     }
 
-    private void copyBiomeData(Level level, ChunkRenderContext context) {
+    private void copyBiomeData(World level, ChunkRenderContext context) {
         var defaultValue = level.registryAccess()
-                .lookupOrThrow(Registries.BIOME)
-                .getOrThrow(Biomes.PLAINS);
+                .lookupOrThrow(RegistryKeys.BIOME)
+                .getOrThrow(BiomeKeys.PLAINS);
 
         for (int sectionX = 0; sectionX < 3; sectionX++) {
             for (int sectionY = 0; sectionY < 3; sectionY++) {
@@ -53,7 +53,7 @@ public class LevelBiomeSlice {
         }
     }
 
-    private void copySectionBiomeData(ChunkRenderContext context, int sectionX, int sectionY, int sectionZ, Holder<Biome> defaultBiome) {
+    private void copySectionBiomeData(ChunkRenderContext context, int sectionX, int sectionY, int sectionZ, RegistryEntry<Biome> defaultBiome) {
         var section = context.getSections()[LevelSlice.getLocalSectionIndex(sectionX, sectionY, sectionZ)];
         var biomeData = section.getBiomeData();
 
@@ -95,15 +95,15 @@ public class LevelBiomeSlice {
 
         for (int relCellX = 1; relCellX < 11; relCellX++) {
             int cellX = originX + relCellX;
-            long seedX = LinearCongruentialGenerator.next(seed, cellX);
+            long seedX = SeedMixer.next(seed, cellX);
 
             for (int relCellY = 1; relCellY < 11; relCellY++) {
                 int cellY = originY + relCellY;
-                long seedXY = LinearCongruentialGenerator.next(seedX, cellY);
+                long seedXY = SeedMixer.next(seedX, cellY);
 
                 for (int relCellZ = 1; relCellZ < 11; relCellZ++) {
                     int cellZ = originZ + relCellZ;
-                    long seedXYZ = LinearCongruentialGenerator.next(seedXY, cellZ);
+                    long seedXYZ = SeedMixer.next(seedXY, cellZ);
 
                     this.calculateBias(dataArrayIndex(relCellX, relCellY, relCellZ),
                             cellX, cellY, cellZ, seedXYZ);
@@ -114,12 +114,12 @@ public class LevelBiomeSlice {
     }
 
     private void calculateBias(int cellIndex, int cellX, int cellY, int cellZ, long seed) {
-        seed = LinearCongruentialGenerator.next(seed, cellX);
-        seed = LinearCongruentialGenerator.next(seed, cellY);
-        seed = LinearCongruentialGenerator.next(seed, cellZ);
+        seed = SeedMixer.next(seed, cellX);
+        seed = SeedMixer.next(seed, cellY);
+        seed = SeedMixer.next(seed, cellZ);
 
-        var gradX = getBias(seed); seed = LinearCongruentialGenerator.next(seed, this.biomeZoomSeed);
-        var gradY = getBias(seed); seed = LinearCongruentialGenerator.next(seed, this.biomeZoomSeed);
+        var gradX = getBias(seed); seed = SeedMixer.next(seed, this.biomeZoomSeed);
+        var gradY = getBias(seed); seed = SeedMixer.next(seed, this.biomeZoomSeed);
         var gradZ = getBias(seed);
 
         this.bias.set(cellIndex, gradX, gradY, gradZ);
@@ -145,15 +145,15 @@ public class LevelBiomeSlice {
         return true;
     }
 
-    public Holder<Biome> getBiome(int blockX, int blockY, int blockZ) {
+    public RegistryEntry<Biome> getBiome(int blockX, int blockY, int blockZ) {
         int relBlockX = blockX - this.blockX;
         int relBlockY = blockY - this.blockY;
         int relBlockZ = blockZ - this.blockZ;
 
         int centerIndex = dataArrayIndex(
-                QuartPos.fromBlock(relBlockX - 2),
-                QuartPos.fromBlock(relBlockY - 2),
-                QuartPos.fromBlock(relBlockZ - 2));
+                BiomeCoords.fromBlock(relBlockX - 2),
+                BiomeCoords.fromBlock(relBlockY - 2),
+                BiomeCoords.fromBlock(relBlockZ - 2));
 
         if (this.uniform[centerIndex]) {
             return this.biomes[centerIndex];
@@ -162,18 +162,18 @@ public class LevelBiomeSlice {
         return this.getBiomeUsingVoronoi(relBlockX, relBlockY, relBlockZ);
     }
 
-    private Holder<Biome> getBiomeUsingVoronoi(int blockX, int blockY, int blockZ) {
+    private RegistryEntry<Biome> getBiomeUsingVoronoi(int blockX, int blockY, int blockZ) {
         int x = blockX - 2;
         int y = blockY - 2;
         int z = blockZ - 2;
 
-        int originIntX = QuartPos.fromBlock(x);
-        int originIntY = QuartPos.fromBlock(y);
-        int originIntZ = QuartPos.fromBlock(z);
+        int originIntX = BiomeCoords.fromBlock(x);
+        int originIntY = BiomeCoords.fromBlock(y);
+        int originIntZ = BiomeCoords.fromBlock(z);
 
-        float originFracX = QuartPos.quartLocal(x) * 0.25f;
-        float originFracY = QuartPos.quartLocal(y) * 0.25f;
-        float originFracZ = QuartPos.quartLocal(z) * 0.25f;
+        float originFracX = BiomeCoords.quartLocal(x) * 0.25f;
+        float originFracY = BiomeCoords.quartLocal(y) * 0.25f;
+        float originFracZ = BiomeCoords.quartLocal(z) * 0.25f;
 
         float closestDistance = Float.POSITIVE_INFINITY;
         int closestArrayIndex = 0;
@@ -200,9 +200,9 @@ public class LevelBiomeSlice {
             float biasY = biasToVector(this.bias.getY(biasIndex));
             float biasZ = biasToVector(this.bias.getZ(biasIndex));
 
-            float distanceX = Mth.square(cellFracX + biasX);
-            float distanceY = Mth.square(cellFracY + biasY);
-            float distanceZ = Mth.square(cellFracZ + biasZ);
+            float distanceX = MathHelper.square(cellFracX + biasX);
+            float distanceY = MathHelper.square(cellFracY + biasY);
+            float distanceZ = MathHelper.square(cellFracZ + biasZ);
 
             float distance = distanceX + distanceY + distanceZ;
 
