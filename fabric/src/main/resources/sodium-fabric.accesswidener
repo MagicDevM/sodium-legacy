@@ -14,7 +14,7 @@ accessible class net/minecraft/client/font/GlyphRenderer$Rectangle
 accessible field net/minecraft/client/color/world/GrassColors colorMap [I
 accessible field net/minecraft/client/colors/world/FoliageColors colorMap [I
 
-accessible field net/minecraft/client/render/model/json/ItemModelGenerator MIN_Z F
-accessible field net/minecraft/client/render/model/json/ItemModelGenerator MAX_Z F
+accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32806 F
+accessible field net/minecraft/client/render/model/json/ItemModelGenerator field_32807 F
 accessible class net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing
-accessible method net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing isHorizontal ()Z
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator$SpanFacing isVertical ()Z
