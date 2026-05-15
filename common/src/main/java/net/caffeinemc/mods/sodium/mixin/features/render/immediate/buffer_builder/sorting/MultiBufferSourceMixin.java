@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
 import net.minecraft.client.render.VertexFormat;
-import com.mojang.blaze3d.systems.VertexSorting;
+import com.mojang.blaze3d.systems.VertexSorter;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSorters;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSortingExtended;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -23,10 +23,10 @@ public class MultiBufferSourceMixin {
             method = "endBatch(Lnet/minecraft/client/renderer/rendertype/RenderType;Lcom/mojang/blaze3d/vertex/BufferBuilder;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/MeshData;sortQuads(Lcom/mojang/blaze3d/vertex/ByteBufferBuilder;Lcom/mojang/blaze3d/vertex/VertexSorting;)Lcom/mojang/blaze3d/vertex/MeshData$SortState;"
+                    target = "Lcom/mojang/blaze3d/vertex/MeshData;sortQuads(Lcom/mojang/blaze3d/vertex/ByteBufferBuilder;Lcom/mojang/blaze3d/system/VertexSorter;)Lcom/mojang/blaze3d/vertex/MeshData$SortState;"
             )
     )
-    private MeshData.SortState redirectSortQuads(MeshData meshData, ByteBufferBuilder bufferBuilder, VertexSorting sorting, Operation<MeshData.SortState> original) {
+    private MeshData.SortState redirectSortQuads(MeshData meshData, ByteBufferBuilder bufferBuilder, VertexSorter sorting, Operation<MeshData.SortState> original) {
         if (sorting instanceof VertexSortingExtended sortingExtended) {
             // Replace the vertex sorting algorithm when it implements our accelerated sort.
             acceleratedSort(meshData, bufferBuilder, sortingExtended);

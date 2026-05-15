@@ -37,7 +37,7 @@ public interface VertexConsumerMixin {
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer setNormal(MatrixStack.Pose pose, float x, float y, float z) {
+    default VertexConsumer setNormal(MatrixStack.Entry pose, float x, float y, float z) {
         Matrix3f matrix = pose.normal();
 
         float xt = MatrixHelper.transformNormalX(matrix, x, y, z);

@@ -1,12 +1,12 @@
 package net.caffeinemc.mods.sodium.mixin.features.textures.animations.tracking;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
-import net.minecraft.client.Camera;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.particle.BillboardParticle;
 import net.minecraft.client.renderer.state.QuadParticleRenderState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.texture.Sprite;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,16 +15,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SingleQuadParticle.class)
+@Mixin(BillboardParticle.class)
 public abstract class TextureSheetParticleMixin {
     @Shadow
-    protected TextureAtlasSprite sprite;
+    protected Sprite sprite;
 
     @Unique
     private boolean shouldTickSprite;
 
-    @Inject(method = "setSprite(Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V", at = @At("RETURN"))
-    private void afterSetSprite(TextureAtlasSprite sprite, CallbackInfo ci) {
+    @Inject(method = "setSprite(Lnet/minecraft/client/texture/Sprite;)V", at = @At("RETURN"))
+    private void afterSetSprite(Sprite sprite, CallbackInfo ci) {
         this.shouldTickSprite = sprite != null && SpriteUtil.INSTANCE.hasAnimation(sprite);
     }
 

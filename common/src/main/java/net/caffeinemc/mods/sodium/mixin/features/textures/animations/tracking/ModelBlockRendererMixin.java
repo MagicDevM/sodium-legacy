@@ -1,13 +1,13 @@
 package net.caffeinemc.mods.sodium.mixin.features.textures.animations.tracking;
 
-import com.mojang.blaze3d.vertex.MatrixStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.VertexConsumer;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.render.block.ModelBlockRenderer;
+import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -22,7 +22,7 @@ public class ModelBlockRendererMixin {
      * @author embeddedt
      */
     @Inject(method = "putQuadData", at = @At("HEAD"))
-    private void preRenderQuad(BlockAndTintGetter blockAndTintGetter, BlockState blockState, BlockPos blockPos, VertexConsumer vertexConsumer, MatrixStack.Pose pose, BakedQuad quad, @Coerce Object commonRenderStorage, int i, CallbackInfo ci) {
+    private void preRenderQuad(BlockRenderView blockAndTintGetter, BlockState blockState, BlockPos blockPos, VertexConsumer vertexConsumer, MatrixStack.Pose pose, BakedQuad quad, @Coerce Object commonRenderStorage, int i, CallbackInfo ci) {
         if (quad.sprite() != null) {
             SpriteUtil.INSTANCE.markSpriteActive(quad.sprite());
         }

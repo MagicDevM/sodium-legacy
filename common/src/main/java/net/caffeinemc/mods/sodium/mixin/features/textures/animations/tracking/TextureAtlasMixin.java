@@ -1,18 +1,18 @@
 package net.caffeinemc.mods.sodium.mixin.features.textures.animations.tracking;
 
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.texture.Sprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(TextureAtlas.class)
+@Mixin(SpriteAtlasTexture.class)
 public class TextureAtlasMixin {
     @Inject(method = "getSprite", at = @At("RETURN"))
-    private void preReturnSprite(CallbackInfoReturnable<TextureAtlasSprite> cir) {
-        TextureAtlasSprite sprite = cir.getReturnValue();
+    private void preReturnSprite(CallbackInfoReturnable<Sprite> cir) {
+        Sprite sprite = cir.getReturnValue();
 
         if (sprite != null) {
             SpriteUtil.INSTANCE.markSpriteActive(sprite);

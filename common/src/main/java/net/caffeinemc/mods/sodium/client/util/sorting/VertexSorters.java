@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.client.util.sorting;
 
 import com.mojang.blaze3d.vertex.CompactVectorArray;
-import com.mojang.blaze3d.system.VertexSorter;
+import com.mojang.blaze3d.systems.VertexSorter;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.util.MathUtil;
 import org.apache.commons.lang3.Validate;
