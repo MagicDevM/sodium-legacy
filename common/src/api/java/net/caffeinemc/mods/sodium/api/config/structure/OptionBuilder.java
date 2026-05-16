@@ -41,5 +41,5 @@ public interface OptionBuilder {
      * @param dependencies The options that this provider depends on.
      * @return The current builder instance.
      */
-    OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies);
+    OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies);
 }

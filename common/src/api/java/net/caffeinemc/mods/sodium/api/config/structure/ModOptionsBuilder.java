@@ -64,15 +64,15 @@ public interface ModOptionsBuilder {
      * @param texture The ID of the icon texture.
      * @return The current builder instance.
      */
-    ModOptionsBuilder setIcon(Identifier texture);
+    ModOptionsBuilder setIcon(ResourceLocation texture);
 
     /**
-     * Sets the icon texture for the mod. Same as {@link #setIcon(Identifier)}, but the texture will be rendered in its original color instead of being tinted.
+     * Sets the icon texture for the mod. Same as {@link #setIcon(ResourceLocation)}, but the texture will be rendered in its original color instead of being tinted.
      *
      * @param texture The ID of the icon texture.
      * @return The current builder instance.
      */
-    ModOptionsBuilder setNonTintedIcon(Identifier texture);
+    ModOptionsBuilder setNonTintedIcon(ResourceLocation texture);
 
     /**
      * Adds a configuration page to the mod options.
@@ -91,7 +91,7 @@ public interface ModOptionsBuilder {
      * @param replacement The option builder that defines the replacement option.
      * @return The current builder instance.
      */
-    ModOptionsBuilder registerOptionReplacement(Identifier target, OptionBuilder replacement);
+    ModOptionsBuilder registerOptionReplacement(ResourceLocation target, OptionBuilder replacement);
 
     /**
      * Registers an option overlay provided by this mod. Overlays allow partially changing an option instead of replacing it entirely.
@@ -102,7 +102,7 @@ public interface ModOptionsBuilder {
      * @param overlay The option builder that defines the overlay changes.
      * @return The current builder instance.
      */
-    ModOptionsBuilder registerOptionOverlay(Identifier target, OptionBuilder overlay);
+    ModOptionsBuilder registerOptionOverlay(ResourceLocation target, OptionBuilder overlay);
 
     /**
      * Registers a hook that will be called after an option which has any of the specified flags changed. This can be used to implement custom behavior in response to option changes. To hook on built-in flags, use the identifiers given by {@link OptionFlag#getId()}. The hook is given an array of all flags that triggered the hook. Note that the hook may be called with a set of flags larger than the set of flags it is interested in for performance reasons, since this lets us avoid generating a different flag set for every hook.
@@ -111,10 +111,10 @@ public interface ModOptionsBuilder {
      * @param triggers The flags to listen for.
      * @return The current builder instance.
      */
-    ModOptionsBuilder registerFlagHook(BiConsumer<Collection<Identifier>, ConfigState> hook, Identifier... triggers);
+    ModOptionsBuilder registerFlagHook(BiConsumer<Collection<ResourceLocation>, ConfigState> hook, ResourceLocation... triggers);
 
     /**
-     * Registers a hook just like {@link #registerFlagHook(BiConsumer, Identifier...)}, but using a {@link FlagHook}.
+     * Registers a hook just like {@link #registerFlagHook(BiConsumer, ResourceLocation...)}, but using a {@link FlagHook}.
      *
      * @param hook The flag hook to register.
      * @return The current builder instance.

@@ -67,7 +67,7 @@ public interface ConfigBuilder {
      * @param id The unique identifier for this option.
      * @return A builder for defining a boolean option.
      */
-    BooleanOptionBuilder createBooleanOption(Identifier id);
+    BooleanOptionBuilder createBooleanOption(ResourceLocation id);
 
     /**
      * Creates a new integer option builder.
@@ -75,7 +75,7 @@ public interface ConfigBuilder {
      * @param id The unique identifier for this option.
      * @return A builder for defining an integer option.
      */
-    IntegerOptionBuilder createIntegerOption(Identifier id);
+    IntegerOptionBuilder createIntegerOption(ResourceLocation id);
 
     /**
      * Creates a new enum option builder.
@@ -85,7 +85,7 @@ public interface ConfigBuilder {
      * @param <E>       The enum type.
      * @return A builder for defining an enum option.
      */
-    <E extends Enum<E>> EnumOptionBuilder<E> createEnumOption(Identifier id, Class<E> enumClass);
+    <E extends Enum<E>> EnumOptionBuilder<E> createEnumOption(ResourceLocation id, Class<E> enumClass);
 
     /**
      * Creates a new external button option builder.
@@ -93,5 +93,5 @@ public interface ConfigBuilder {
      * @param id The unique identifier for this option.
      * @return A builder for defining an external button option.
      */
-    ExternalButtonOptionBuilder createExternalButtonOption(Identifier id);
+    ExternalButtonOptionBuilder createExternalButtonOption(ResourceLocation id);
 }

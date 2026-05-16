@@ -22,7 +22,7 @@ public interface ExternalButtonOptionBuilder extends OptionBuilder {
     ExternalButtonOptionBuilder setEnabled(boolean available);
 
     @Override
-    ExternalButtonOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies);
+    ExternalButtonOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies);
 
     /** Sets the screen consumer for the external button option.
      *

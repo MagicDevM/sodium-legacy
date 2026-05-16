@@ -37,7 +37,7 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
     EnumOptionBuilder<E> setEnabled(boolean available);
 
     @Override
-    EnumOptionBuilder<E> setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies);
+    EnumOptionBuilder<E> setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies);
 
     @Override
     EnumOptionBuilder<E> setStorageHandler(StorageEventHandler storage);
@@ -55,13 +55,13 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
     EnumOptionBuilder<E> setFlags(OptionFlag... flags);
 
     @Override
-    EnumOptionBuilder<E> setFlags(Identifier... flags);
+    EnumOptionBuilder<E> setFlags(ResourceLocation... flags);
 
     @Override
     EnumOptionBuilder<E> setDefaultValue(E value);
 
     @Override
-    EnumOptionBuilder<E> setDefaultProvider(Function<ConfigState, E> provider, Identifier... dependencies);
+    EnumOptionBuilder<E> setDefaultProvider(Function<ConfigState, E> provider, ResourceLocation... dependencies);
 
     @Override
     EnumOptionBuilder<E> setControlHiddenWhenDisabled(boolean hidden);
@@ -90,7 +90,7 @@ public interface EnumOptionBuilder<E extends Enum<E>> extends StatefulOptionBuil
      * @param dependencies The options that this provider depends on.
      * @return This builder instance.
      */
-    EnumOptionBuilder<E> setAllowedValuesProvider(Function<ConfigState, Set<E>> provider, Identifier... dependencies);
+    EnumOptionBuilder<E> setAllowedValuesProvider(Function<ConfigState, Set<E>> provider, ResourceLocation... dependencies);
 
     /**
      * Sets a provider function to determine the display name for each enum constant.

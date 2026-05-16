@@ -9,12 +9,12 @@ public interface ConfigState {
     /**
      * Special option ID to be passed as a dependency of a dynamic value provider to indicate that the provider should be re-evaluated when the configuration screen is rebuilt. It is unlikely that you need to use this.
      */
-    Identifier UPDATE_ON_REBUILD = Identifier.parse("__meta__:update_on_rebuild");
+    ResourceLocation UPDATE_ON_REBUILD = new ResourceLocation("sodium").tryParse("__meta__:update_on_rebuild");
 
     /**
      * Special option ID to be passed as a dependency of a dynamic value provider to indicate that the provider should be re-evaluated when the value for the parent option is applied. This allows the dynamic value to read the value of the option itself, which would be an error otherwise. It does not allow reading other options unless they are also declared as dependencies.
      */
-    Identifier UPDATE_ON_APPLY = Identifier.parse("__meta__:update_on_apply");
+    ResourceLocation UPDATE_ON_APPLY = new ResourceLocation("sodium").tryParse("__meta__:update_on_apply");
 
     /**
      * Reads a boolean option from the configuration state.
@@ -22,7 +22,7 @@ public interface ConfigState {
      * @param id The ID of the option.
      * @return The current value of the boolean option.
      */
-    boolean readBooleanOption(Identifier id);
+    boolean readBooleanOption(ResourceLocation id);
 
     /**
      * Reads an integer option from the configuration state.
@@ -30,7 +30,7 @@ public interface ConfigState {
      * @param id The ID of the option.
      * @return The current value of the integer option.
      */
-    int readIntOption(Identifier id);
+    int readIntOption(ResourceLocation id);
 
     /**
      * Reads an enum option from the configuration state.
@@ -40,5 +40,5 @@ public interface ConfigState {
      * @param <E>       The enum type.
      * @return The current value of the enum option.
      */
-    <E extends Enum<E>> E readEnumOption(Identifier id, Class<E> enumClass);
+    <E extends Enum<E>> E readEnumOption(ResourceLocation id, Class<E> enumClass);
 }

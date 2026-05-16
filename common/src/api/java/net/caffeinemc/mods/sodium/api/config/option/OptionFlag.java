@@ -33,13 +33,13 @@ public enum OptionFlag {
      */
     REQUIRES_GAME_RESTART;
 
-    private final Identifier id = Identifier.fromNamespaceAndPath("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
+    private final ResourceLocation id = new ResourceLocation("sodium").fromNamespaceAndPath("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
 
     /**
-     * Gets the {@link Identifier} for this option flag.
+     * Gets the {@link ResourceLocation} for this option flag.
      * @return The identifier.
      */
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return this.id;
     }
 }

@@ -25,7 +25,7 @@ public interface StatefulOptionBuilder<V> extends OptionBuilder {
     OptionBuilder setEnabled(boolean available);
 
     @Override
-    OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies);
+    OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies);
 
     /**
      * Sets the storage handler for this option.
@@ -63,12 +63,12 @@ public interface StatefulOptionBuilder<V> extends OptionBuilder {
     StatefulOptionBuilder<V> setFlags(OptionFlag... flags);
 
     /**
-     * Sets flags for this option using {@link Identifier} instances.
+     * Sets flags for this option using {@link ResourceLocation} instances.
      *
      * @param flags The flags as identifiers.
      * @return The current builder instance.
      */
-    StatefulOptionBuilder<V> setFlags(Identifier... flags);
+    StatefulOptionBuilder<V> setFlags(ResourceLocation... flags);
 
     /**
      * Sets the default value for this option. The default value is used when the binding returns an invalid value, such as during the first load.
@@ -85,7 +85,7 @@ public interface StatefulOptionBuilder<V> extends OptionBuilder {
      * @param dependencies The options that this provider depends on.
      * @return The current builder instance.
      */
-    StatefulOptionBuilder<V> setDefaultProvider(Function<ConfigState, V> provider, Identifier... dependencies);
+    StatefulOptionBuilder<V> setDefaultProvider(Function<ConfigState, V> provider, ResourceLocation... dependencies);
 
     /**
      * Sets whether the control for this option should be hidden when the option is disabled. This should only be set to false when the user should know what the state of the option is even when it is disabled, and they cannot interact with it.
