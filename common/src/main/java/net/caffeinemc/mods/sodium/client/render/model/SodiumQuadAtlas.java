@@ -1,7 +1,7 @@
 package net.caffeinemc.mods.sodium.client.render.model;
 
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public enum SodiumQuadAtlas {
     BLOCK,

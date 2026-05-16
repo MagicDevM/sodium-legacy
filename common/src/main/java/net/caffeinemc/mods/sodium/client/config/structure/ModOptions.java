@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.api.config.option.FlagHook;
 import net.caffeinemc.mods.sodium.client.config.search.SearchIndex;
 import net.caffeinemc.mods.sodium.client.config.search.Searchable;
 import net.caffeinemc.mods.sodium.client.gui.ColorTheme;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 import java.util.List;

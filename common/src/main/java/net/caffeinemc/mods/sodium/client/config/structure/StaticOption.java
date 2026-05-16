@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.config.structure;
 
 import net.caffeinemc.mods.sodium.client.config.value.DependentValue;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 

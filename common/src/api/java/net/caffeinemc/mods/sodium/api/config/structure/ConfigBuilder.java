@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.api.config.structure;
 
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Root builder interface for defining configuration structures. An implementation of this class is passed to your entry point and lets you create builders for everything in the API. Builders do not need to be built manually, as they are automatically closed when the enclosing scope ends.
