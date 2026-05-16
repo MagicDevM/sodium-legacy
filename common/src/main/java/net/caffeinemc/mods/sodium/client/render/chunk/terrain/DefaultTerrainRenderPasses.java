@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.chunk.terrain;
 
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 
 public class DefaultTerrainRenderPasses {
