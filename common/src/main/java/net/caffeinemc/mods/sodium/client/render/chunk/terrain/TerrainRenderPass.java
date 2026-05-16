@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.render.chunk.terrain;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.textures.GpuTextureView;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -37,7 +37,7 @@ public class TerrainRenderPass {
         return (isTranslucent && Minecraft.useShaderTransparency()) ? Minecraft.getInstance().levelRenderer.getTranslucentTarget() : Minecraft.getInstance().getMainRenderTarget();
     }
 
-    public GpuTextureView getAtlas() {
+    public AbstractTexture getAtlas() {
         return Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).getTextureView();
     }
 }
