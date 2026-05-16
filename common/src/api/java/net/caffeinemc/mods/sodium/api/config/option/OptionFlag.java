@@ -33,7 +33,7 @@ public enum OptionFlag {
      */
     REQUIRES_GAME_RESTART;
 
-    private final ResourceLocation id = new ResourceLocation("sodium").fromNamespaceAndPath("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
+    private final ResourceLocation id = new ResourceLocation("sodium").tryBuild("sodium", "builtin_option_flag." + this.name().toLowerCase(Locale.ROOT));
 
     /**
      * Gets the {@link ResourceLocation} for this option flag.
