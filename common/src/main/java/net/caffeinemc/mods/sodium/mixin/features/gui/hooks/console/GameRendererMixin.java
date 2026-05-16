@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -46,7 +45,7 @@ public class GameRendererMixin {
             }
         }
 
-        Profiler.get().push("sodium_console_overlay");
+        minecraft.getProfiler().push("sodium_console_overlay");
         int mouseX = (int)this.minecraft.mouseHandler.getScaledXPos(this.minecraft.getWindow());
         int mouseY = (int)this.minecraft.mouseHandler.getScaledYPos(this.minecraft.getWindow());
         GuiGraphics drawContext = new GuiGraphics(this.minecraft, this.guiRenderState, mouseX, mouseY);

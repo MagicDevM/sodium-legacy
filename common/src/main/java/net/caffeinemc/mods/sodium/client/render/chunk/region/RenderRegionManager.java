@@ -19,13 +19,14 @@ import net.caffeinemc.mods.sodium.client.render.chunk.terrain.DefaultTerrainRend
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.data.SharedIndexSorter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
 public class RenderRegionManager {
+    private final Minecraft client;
+    
     private final Long2ReferenceOpenHashMap<RenderRegion> regions = new Long2ReferenceOpenHashMap<>();
 
     private final StagingBuffer stagingBuffer;
@@ -132,7 +133,7 @@ public class RenderRegionManager {
             }
         }
 
-        ProfilerFiller profiler = Profiler.get();
+        ProfilerFiller profiler = this.client.getProfiler();
 
         // If we have nothing to upload, abort!
         var translucentStorage = region.getStorage(DefaultTerrainRenderPasses.TRANSLUCENT);

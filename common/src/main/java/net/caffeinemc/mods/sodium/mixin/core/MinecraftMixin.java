@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.gui.SodiumConfigBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.lwjgl.opengl.GL32C;
 import org.spongepowered.asm.mixin.Final;
@@ -37,7 +36,7 @@ public class MinecraftMixin {
      */
     @Inject(method = "runTick", at = @At("HEAD"))
     private void preRender(boolean tick, CallbackInfo ci) {
-        ProfilerFiller profiler = Profiler.get();
+        ProfilerFiller profiler = Minecraft.getProfiler();
         profiler.push("wait_for_gpu");
 
         while (this.fences.size() > SodiumClientMod.options().advanced.cpuRenderAheadLimit) {

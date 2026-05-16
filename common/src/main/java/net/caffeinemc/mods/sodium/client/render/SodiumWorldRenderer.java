@@ -36,7 +36,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.BlockDestructionProgress;
 import net.minecraft.util.Mth;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -177,7 +176,7 @@ public class SodiumWorldRenderer {
             this.reload();
         }
 
-        ProfilerFiller profiler = Profiler.get();
+        ProfilerFiller profiler = this.client.getProfiler();
         profiler.push("camera_setup");
 
         LocalPlayer player = this.client.player;
