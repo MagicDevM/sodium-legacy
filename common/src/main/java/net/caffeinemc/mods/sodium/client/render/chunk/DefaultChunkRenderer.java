@@ -1,6 +1,5 @@
 package net.caffeinemc.mods.sodium.client.render.chunk;
 
-import com.mojang.blaze3d.textures.GpuSampler;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.gl.buffer.GlBuffer;
 import net.caffeinemc.mods.sodium.client.gl.device.CommandList;
@@ -50,9 +49,8 @@ public class DefaultChunkRenderer extends ShaderChunkRenderer {
                        TerrainRenderPass renderPass,
                        CameraTransform camera,
                        FogParameters parameters,
-                       boolean indexedRenderingEnabled,
-                       GpuSampler terrainSampler) {
-        super.begin(renderPass, parameters, terrainSampler);
+                       boolean indexedRenderingEnabled) {
+        super.begin(renderPass, parameters);
 
         final boolean useBlockFaceCulling = SodiumClientMod.options().performance.useBlockFaceCulling;
         final boolean useIndexedTessellation = renderPass.isTranslucent() && indexedRenderingEnabled;
