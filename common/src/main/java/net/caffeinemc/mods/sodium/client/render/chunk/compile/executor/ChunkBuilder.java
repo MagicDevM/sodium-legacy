@@ -1,7 +1,5 @@
 package net.caffeinemc.mods.sodium.client.render.chunk.compile.executor;
 
-import com.mojang.jtracy.TracyClient;
-import com.mojang.jtracy.Zone;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.render.chunk.compile.BuilderTaskOutput;
 import net.caffeinemc.mods.sodium.client.render.chunk.compile.ChunkBuildContext;
@@ -186,8 +184,6 @@ public class ChunkBuilder {
 
                 ChunkBuilder.this.busyThreadCount.getAndIncrement();
 
-                Zone zone = TracyClient.beginZone(name, SharedConstants.IS_RUNNING_IN_IDE);
-
                 try {
                     job.execute(this.context);
                 } finally {
@@ -195,8 +191,6 @@ public class ChunkBuilder {
 
                     ChunkBuilder.this.busyThreadCount.decrementAndGet();
                 }
-
-                zone.close();
             }
         }
     }
