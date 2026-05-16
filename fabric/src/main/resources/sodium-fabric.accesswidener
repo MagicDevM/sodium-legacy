@@ -10,7 +10,7 @@ accessible class net/minecraft/world/level/chunk/PalettedContainer$Data
 accessible class net/minecraft/client/renderer/texture/Stitcher$Holder
 accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
 
-accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$EffectInstance
+accessible class net/minecraft/client/gui/font/glyphs/BakedGlyph$Effect
 
 
 accessible field net/minecraft/world/level/GrassColor pixels [I
@@ -18,7 +18,6 @@ accessible field net/minecraft/world/level/FoliageColor pixels [I
 
 accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MIN_Z F
 accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MAX_Z F
-accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator TEXTURE_SLOTS Lnet/minecraft/client/renderer/block/model/TextureSlots$Data;
 
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection isHorizontal ()Z
