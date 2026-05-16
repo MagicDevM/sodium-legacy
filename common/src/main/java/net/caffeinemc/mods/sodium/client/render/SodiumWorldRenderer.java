@@ -26,7 +26,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -351,14 +350,14 @@ public class SodiumWorldRenderer {
     private void extractBlockEntity(BlockEntity blockEntity, PoseStack poseStack, Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression) {
         BlockPos blockPos = blockEntity.getBlockPos();
         SortedSet<BlockDestructionProgress> sortedSet = progression.get(blockPos.asLong());
-        ModelFeatureRenderer.CrumblingOverlay crumblingOverlay;
+        int crumblingOverlay;
         if (sortedSet != null && !sortedSet.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(blockPos.getX() - camera.position().x, blockPos.getY() - camera.position().y, blockPos.getZ() - camera.position().z);
-            crumblingOverlay = new ModelFeatureRenderer.CrumblingOverlay(sortedSet.last().getProgress(), poseStack.last());
+            crumblingOverlay = sortedSet.last().getProgress();
             poseStack.popPose();
         } else {
-            crumblingOverlay = null;
+            crumblingOverlay = -1;
         }
 
         /* BlockEntityRenderState blockEntityRenderState = Minecraft.getInstance().getBlockEntityRenderDispatcher().tryExtractRenderState(blockEntity, tickDelta, crumblingOverlay);
