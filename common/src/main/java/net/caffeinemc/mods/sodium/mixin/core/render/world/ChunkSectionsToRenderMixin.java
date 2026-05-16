@@ -4,7 +4,7 @@ import net.caffeinemc.mods.sodium.client.gl.device.RenderDevice;
 import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.caffeinemc.mods.sodium.client.render.chunk.ChunkRenderMatrices;
 import net.caffeinemc.mods.sodium.client.util.SodiumChunkSection;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayerGroup;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.chunk.ChunkSectionsToRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,14 +30,14 @@ public class ChunkSectionsToRenderMixin implements SodiumChunkSection {
     private double z;
 
     @Inject(method = "renderGroup", at = @At("HEAD"), cancellable = true)
-    private void sodium$renderGroup(ChunkSectionLayerGroup chunkSectionLayerGroup, CallbackInfo ci) {
+    private void sodium$renderGroup(RenderType renderType, CallbackInfo ci) {
         if (renderer != null) {
             ci.cancel();
 
             RenderDevice.enterManagedCode();
 
             try {
-                renderer.drawChunkLayer(chunkSectionLayerGroup, matrices, x, y, z);
+                renderer.drawChunkLayer(renderType, matrices, x, y, z);
             } finally {
                 RenderDevice.exitManagedCode();
             }
