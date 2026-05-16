@@ -22,7 +22,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.ModelHelper;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -89,7 +89,7 @@ public final class EncodingFormat {
     private static final int DIRECTION_COUNT = Direction.values().length;
     private static final int NULLABLE_DIRECTION_COUNT = DIRECTION_COUNT + 1;
 
-    private static final @Nullable ChunkSectionLayer[] NULLABLE_BLOCK_RENDER_LAYERS = ArrayUtils.add(ChunkSectionLayer.values(), null);
+    private static final @Nullable RenderType[] NULLABLE_BLOCK_RENDER_LAYERS = ArrayUtils.add(RenderType.values(), null);
     private static final int NULLABLE_BLOCK_RENDER_LAYER_COUNT = NULLABLE_BLOCK_RENDER_LAYERS.length;
     private static final TriState[] TRI_STATES = TriState.values();
     private static final int TRI_STATE_COUNT = TRI_STATES.length;
@@ -194,11 +194,11 @@ public final class EncodingFormat {
     }
 
     @Nullable
-    static ChunkSectionLayer renderLayer(int bits) {
+    static RenderType renderLayer(int bits) {
         return NULLABLE_BLOCK_RENDER_LAYERS[(bits & RENDER_LAYER_MASK) >>> RENDER_LAYER_BIT_OFFSET];
     }
 
-    static int renderLayer(int bits, @Nullable ChunkSectionLayer renderLayer) {
+    static int renderLayer(int bits, @Nullable RenderType renderLayer) {
         int index = renderLayer == null ? NULL_RENDER_LAYER_INDEX : renderLayer.ordinal();
         return (bits & ~RENDER_LAYER_MASK) | (index << RENDER_LAYER_BIT_OFFSET);
     }

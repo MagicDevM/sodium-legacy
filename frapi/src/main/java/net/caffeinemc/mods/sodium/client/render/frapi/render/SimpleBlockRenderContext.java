@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -52,7 +51,7 @@ public class SimpleBlockRenderContext extends AbstractBlockRenderContext {
     private int light;
 
     @Nullable
-    private ChunkSectionLayer lastRenderLayer;
+    private RenderType lastRenderLayer;
     @Nullable
     private VertexConsumer lastVertexConsumer;
     private PoseStack.Pose matrices;
@@ -60,8 +59,8 @@ public class SimpleBlockRenderContext extends AbstractBlockRenderContext {
 
     @Override
     protected void processQuad(MutableQuadViewImpl quad) {
-        final ChunkSectionLayer quadRenderLayer = quad.getRenderType();
-        final ChunkSectionLayer renderLayer = quadRenderLayer == null ? defaultRenderType : quadRenderLayer;
+        final RenderType quadRenderLayer = quad.getRenderType();
+        final RenderType renderLayer = quadRenderLayer == null ? defaultRenderType : quadRenderLayer;
         final VertexConsumer vertexConsumer;
 
         if (renderLayer == lastRenderLayer) {

@@ -29,7 +29,7 @@ import net.caffeinemc.mods.sodium.client.services.PlatformModelEmitter;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.TriState;
@@ -115,7 +115,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
         }
         final boolean emissive = quad.emissive();
 
-        final ChunkSectionLayer blendMode = quad.getRenderType();
+        final RenderType blendMode = quad.getRenderType();
         final Material material = DefaultMaterials.forChunkLayer(blendMode == null ? defaultRenderType : blendMode);
 
         this.tintQuad(quad);

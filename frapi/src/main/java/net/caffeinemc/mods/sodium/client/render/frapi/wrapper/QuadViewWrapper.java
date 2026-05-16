@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadAtlas;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.ShadeMode;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.NonNull;
@@ -123,7 +123,7 @@ public class QuadViewWrapper implements QuadView {
     }
 
     @Override
-    public @Nullable ChunkSectionLayer renderLayer() {
+    public @Nullable RenderType renderLayer() {
         return quad.getRenderType();
     }
 

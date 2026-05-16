@@ -36,7 +36,6 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -107,7 +106,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
         bufferQuad(quad, vertexConsumer);
     }
 
-    private VertexConsumer getVertexConsumer(ChunkSectionLayer blendMode) {
+    private VertexConsumer getVertexConsumer(RenderType blendMode) {
         return vertexConsumer.getBuffer(blendMode == null ? defaultRenderType : blendMode);
     }
 

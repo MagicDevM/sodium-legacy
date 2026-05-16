@@ -24,7 +24,7 @@ import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFlags;
 import net.caffeinemc.mods.sodium.client.render.helper.ColorHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.NormalHelper;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.ChunkSectionLayer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -103,7 +103,7 @@ public class QuadViewImpl implements ModelQuadView {
     }
 
     @Nullable
-    public ChunkSectionLayer getRenderType() {
+    public RenderType getRenderType() {
         return EncodingFormat.renderLayer(data[baseIndex + HEADER_BITS]);
     }
 

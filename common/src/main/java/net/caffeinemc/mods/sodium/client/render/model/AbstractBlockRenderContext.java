@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -78,7 +78,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
      */
     protected BlockPos pos;
 
-    protected ChunkSectionLayer defaultRenderType;
+    protected RenderType defaultRenderType;
 
     protected boolean allowDowngrade;
 
@@ -229,8 +229,8 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
         MutableQuadViewImpl editorQuad = this.editorQuad;
         this.prepareAoInfo(part.useAmbientOcclusion());
 
-        ChunkSectionLayer renderType = PlatformModelAccess.getInstance().getPartRenderType(part, state, this.defaultRenderType);
-        ChunkSectionLayer defaultType = this.defaultRenderType;
+        RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(part, state, this.defaultRenderType);
+        RenderType defaultType = this.defaultRenderType;
         this.defaultRenderType = renderType;
 
         for (int i = 0; i <= ModelHelper.NULL_FACE_ID; i++) {

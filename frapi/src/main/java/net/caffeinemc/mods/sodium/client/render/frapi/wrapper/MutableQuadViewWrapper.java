@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.client.render.model.SodiumShadeMode;
 import net.fabricmc.fabric.api.renderer.v1.mesh.*;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -85,7 +85,7 @@ public class MutableQuadViewWrapper extends QuadViewWrapper implements QuadEmitt
     }
 
     @Override
-    public QuadEmitter renderLayer(@Nullable ChunkSectionLayer renderLayer) {
+    public QuadEmitter renderLayer(@Nullable RenderType renderLayer) {
         mutableQuad.setRenderType(renderLayer);
         return this;
     }

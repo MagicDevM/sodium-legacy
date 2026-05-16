@@ -3,7 +3,7 @@ package net.caffeinemc.mods.sodium.client.render.chunk.terrain.material;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.DefaultTerrainRenderPasses;
 import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.parameters.AlphaCutoffParameter;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 
@@ -21,7 +21,7 @@ public class DefaultMaterials {
         return forChunkLayer(ItemBlockRenderTypes.getRenderLayer(state));
     }
 
-    public static Material forChunkLayer(ChunkSectionLayer layer) {
+    public static Material forChunkLayer(RenderType layer) {
         return switch (layer) {
             case SOLID -> SOLID;
             case CUTOUT -> CUTOUT_MIPPED;

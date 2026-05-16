@@ -5,7 +5,7 @@ import net.caffeinemc.mods.sodium.client.render.model.MutableQuadViewImpl;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -22,7 +22,7 @@ public class DefaultModelEmitter implements PlatformModelEmitter {
         List<BlockModelPart> parts = PlatformModelAccess.getInstance().collectPartsOf(model, blockView, pos, state, random, quad);
 
         if (quad instanceof AbstractBlockRenderContext.BlockEmitter emitter) {
-            ChunkSectionLayer type = ItemBlockRenderTypes.getChunkRenderType(state);
+            RenderType type = ItemBlockRenderTypes.getChunkRenderType(state);
 
             for (int i = 0; i < parts.size(); ++i) {
                 if (PlatformModelAccess.getInstance().getPartRenderType(parts.get(i), state, type) != type) {

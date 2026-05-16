@@ -38,7 +38,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.util.RandomSource;
@@ -198,7 +197,7 @@ public class ItemRenderContext extends AbstractRenderContext {
      * in {@code RenderLayers.getEntityBlockLayer}. Layers other than
      * translucent are mapped to cutout.
      */
-    private VertexConsumer getVertexConsumer(SodiumQuadAtlas quadAtlas, @Nullable ChunkSectionLayer quadRenderLayer, ItemStackRenderState.@Nullable FoilType quadGlint) {
+    private VertexConsumer getVertexConsumer(SodiumQuadAtlas quadAtlas, @Nullable RenderType quadRenderLayer, ItemStackRenderState.@Nullable FoilType quadGlint) {
         RenderType layer;
         ItemStackRenderState.FoilType glint;
 

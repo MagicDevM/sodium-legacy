@@ -5,17 +5,16 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 
 public class TerrainRenderPass {
     @Deprecated(forRemoval = true)
-    private final ChunkSectionLayer renderType;
+    private final RenderType renderType;
 
     private final boolean isTranslucent;
     private final boolean fragmentDiscard;
 
-    public TerrainRenderPass(ChunkSectionLayer renderType, boolean isTranslucent, boolean allowFragmentDiscard) {
+    public TerrainRenderPass(RenderType renderType, boolean isTranslucent, boolean allowFragmentDiscard) {
         this.renderType = renderType;
 
         this.isTranslucent = isTranslucent;

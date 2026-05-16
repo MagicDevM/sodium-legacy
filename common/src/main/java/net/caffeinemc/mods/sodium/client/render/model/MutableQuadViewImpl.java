@@ -26,7 +26,7 @@ import net.caffeinemc.mods.sodium.client.render.texture.SodiumSpriteFinder;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -198,7 +198,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         return this;
     }
 
-    public MutableQuadViewImpl setRenderType(@Nullable ChunkSectionLayer renderLayer) {
+    public MutableQuadViewImpl setRenderType(@Nullable RenderType renderLayer) {
         data[baseIndex + HEADER_BITS] = EncodingFormat.renderLayer(data[baseIndex + HEADER_BITS], renderLayer);
         return this;
     }
