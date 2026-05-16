@@ -19,5 +19,5 @@ accessible field net/minecraft/world/level/FoliageColor pixels [I
 accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MIN_Z F
 accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MAX_Z F
 
-accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection
-accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SideDirection isHorizontal ()Z
+accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
+accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
