@@ -25,12 +25,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.BlockDestructionProgress;
@@ -306,7 +303,7 @@ public class SodiumWorldRenderer {
         ChunkTracker.forEachChunk(tracker.getReadyChunks(), this.renderSectionManager::onChunkAdded);
     }
 
-    public void extractBlockEntities(Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression, LevelRenderState levelRenderState) {
+    public void extractBlockEntities(Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression) {
         PoseStack stack = new PoseStack();
 
         SortedRenderLists renderLists = this.renderSectionManager.getRenderLists();
@@ -333,7 +330,7 @@ public class SodiumWorldRenderer {
                 }
 
                 for (BlockEntity blockEntity : blockEntities) {
-                    extractBlockEntity(blockEntity, stack, camera, tickDelta, progression, levelRenderState);
+                    extractBlockEntity(blockEntity, stack, camera, tickDelta, progression);
                 }
             }
         }
@@ -346,12 +343,12 @@ public class SodiumWorldRenderer {
             }
 
             for (var blockEntity : blockEntities) {
-                extractBlockEntity(blockEntity, stack, camera, tickDelta, progression, levelRenderState);
+                extractBlockEntity(blockEntity, stack, camera, tickDelta, progression);
             }
         }
     }
 
-    private void extractBlockEntity(BlockEntity blockEntity, PoseStack poseStack, Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression, LevelRenderState levelRenderState) {
+    private void extractBlockEntity(BlockEntity blockEntity, PoseStack poseStack, Camera camera, float tickDelta, Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression) {
         BlockPos blockPos = blockEntity.getBlockPos();
         SortedSet<BlockDestructionProgress> sortedSet = progression.get(blockPos.asLong());
         ModelFeatureRenderer.CrumblingOverlay crumblingOverlay;
@@ -364,10 +361,10 @@ public class SodiumWorldRenderer {
             crumblingOverlay = null;
         }
 
-        BlockEntityRenderState blockEntityRenderState = Minecraft.getInstance().getBlockEntityRenderDispatcher().tryExtractRenderState(blockEntity, tickDelta, crumblingOverlay);
+        /* BlockEntityRenderState blockEntityRenderState = Minecraft.getInstance().getBlockEntityRenderDispatcher().tryExtractRenderState(blockEntity, tickDelta, crumblingOverlay);
         if (blockEntityRenderState != null) {
             levelRenderState.blockEntityRenderStates.add(blockEntityRenderState);
-        }
+        } */
     }
 
     public void iterateVisibleBlockEntities(Consumer<BlockEntity> blockEntityConsumer) {
@@ -420,7 +417,7 @@ public class SodiumWorldRenderer {
      * Returns whether the entity intersects with any visible chunks in the graph.
      * @return True if the entity is visible, otherwise false
      */
-    public <T extends Entity, S extends EntityRenderState> boolean isEntityVisible(EntityRenderer<T, S> renderer, T entity) {
+    public boolean isEntityVisible(Entity entity) {
         if (!this.useEntityCulling) {
             return true;
         }

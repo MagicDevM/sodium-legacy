@@ -1,18 +1,23 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.entity.shadows;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.EntityVertex;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.feature.ShadowFeatureRenderer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.phys.AABB;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.phys.AABB;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 import org.spongepowered.asm.mixin.Final;
@@ -26,23 +31,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ShadowFeatureRenderer.class)
 public class ShadowFeatureRendererMixin {
     @Unique
-    private static final int DEFAULT_NORMAL = NormI8.pack(0.0f, 1.0f, 0.0f);
-
-    @Shadow
-    @Final
-    private static RenderType SHADOW_RENDER_TYPE;
-
-    @Unique
     private static final int SHADOW_COLOR = ColorABGR.pack(1.0f, 1.0f, 1.0f);
 
     /**
      * @author JellySquid
      * @reason Reduce vertex assembly overhead for shadow rendering
      */
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private static void renderShadowPartFast(SubmitNodeCollection submitNodeCollection, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
-        VertexConsumer vertices = bufferSource.getBuffer(SHADOW_RENDER_TYPE);
-
+    @Inject(method = "renderShadowPart", at = @At("HEAD"), cancellable = true)
+    private static void renderShadowPartFast(PoseStack.Pose entry, VertexConsumer vertices, ChunkAccess chunk, LevelReader world, BlockPos pos, double x, double y, double z, float radius, float opacity, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertices);
 
         if (writer == null) {
@@ -51,35 +47,49 @@ public class ShadowFeatureRendererMixin {
 
         ci.cancel();
 
-        for (SubmitNodeStorage.ShadowSubmit shadows : submitNodeCollection.getShadowSubmits()) {
-            Matrix4f matrices = shadows.pose();
+        BlockPos blockPos = pos.down();
+        BlockState blockState = world.getBlockState(blockPos);
 
-            for (int i = 0; i < shadows.pieces().size(); i++) {
-                EntityRenderState.ShadowPiece shadowPiece = shadows.pieces().get(i);
+        if (blockState.getRenderType() == RenderShape.INVISIBLE || !blockState.isFullCube(world, blockPos)) {
+            return;
+        }
 
-                float alpha = shadowPiece.alpha();
+        var light = world.getLightLevel(pos);
 
-                if (alpha >= 0.0F) {
-                    if (alpha > 1.0F) {
-                        alpha = 1.0F;
-                    }
+        if (light <= 3) {
+            return;
+        }
 
-                    AABB box = shadowPiece.shapeBelow().bounds();
+        VoxelShape voxelShape = blockState.getOutlineShape(world, blockPos);
 
-                    float minX = (float) (shadowPiece.relativeX() + box.minX);
-                    float maxX = (float) (shadowPiece.relativeX() + box.maxX);
-                    float minY = (float) (shadowPiece.relativeY() + box.minY);
-                    float minZ = (float) (shadowPiece.relativeZ() + box.minZ);
-                    float maxZ = (float) (shadowPiece.relativeZ() + box.maxZ);
+        if (voxelShape.isEmpty()) {
+            return;
+        }
 
-                    renderShadowPart(matrices, writer, shadows.radius(), alpha, minX, maxX, minY, minZ, maxZ);
-                }
+        float brightness = LightTexture.getBrightness(world.getDimension(), light);
+        float alpha = (float) (((double) opacity - ((y - (double) pos.getY()) / 2.0)) * 0.5 * (double) brightness);
+
+        if (alpha >= 0.0F) {
+            if (alpha > 1.0F) {
+                alpha = 1.0F;
             }
+
+            Box box = voxelShape.getBoundingBox();
+
+            float minX = (float) ((pos.getX() + box.minX) - x);
+            float maxX = (float) ((pos.getX() + box.maxX) - x);
+
+            float minY = (float) ((pos.getY() + box.minY) - y);
+
+            float minZ = (float) ((pos.getZ() + box.minZ) - z);
+            float maxZ = (float) ((pos.getZ() + box.maxZ) - z);
+
+            renderShadowPart(entry, writer, radius, alpha, minX, maxX, minY, minZ, maxZ);
         }
     }
 
     @Unique
-    private static void renderShadowPart(Matrix4f matPosition, VertexBufferWriter writer, float radius, float alpha, float minX, float maxX, float minY, float minZ, float maxZ) {
+    private static void renderShadowPart(PoseStack.Pose matrices, VertexBufferWriter writer, float radius, float alpha, float minX, float maxX, float minY, float minZ, float maxZ) {
         float size = 0.5F * (1.0F / radius);
 
         float u1 = (-minX * size) + 0.5F;
@@ -88,9 +98,11 @@ public class ShadowFeatureRendererMixin {
         float v1 = (-minZ * size) + 0.5F;
         float v2 = (-maxZ * size) + 0.5F;
 
+        var matNormal = matrices.getNormalMatrix();
+        var matPosition = matrices.getPositionMatrix();
 
         var color = ColorABGR.withAlpha(SHADOW_COLOR, alpha);
-        var normal = DEFAULT_NORMAL; // This seems wrong, but it is identical to Vanilla's handling.
+        var normal = MatrixHelper.transformNormal(matNormal, true, Direction.UP);
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             long buffer = stack.nmalloc(4 * EntityVertex.STRIDE);
@@ -119,6 +131,6 @@ public class ShadowFeatureRendererMixin {
         float yt = MatrixHelper.transformPositionY(matPosition, x, y, z);
         float zt = MatrixHelper.transformPositionZ(matPosition, x, y, z);
 
-        EntityVertex.write(ptr, xt, yt, zt, color, u, v, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, normal);
+        EntityVertex.write(ptr, xt, yt, zt, color, u, v, LightTexture.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, normal);
     }
 }

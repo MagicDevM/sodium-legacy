@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.chunk.ChunkSectionsToRender;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
-import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -88,9 +87,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     @Shadow
     @Final
     private SubmitNodeStorage submitNodeStorage;
-    @Shadow
-    @Final
-    private LevelRenderState levelRenderState;
+
     @Unique
     private SodiumWorldRenderer renderer;
 
@@ -109,7 +106,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(Minecraft client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityRenderDispatcher, RenderBuffers renderBuffers, LevelRenderState levelRenderState, FeatureRenderDispatcher featureRenderDispatcher, CallbackInfo ci) {
+    private void init(Minecraft client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityRenderDispatcher, RenderBuffers renderBuffers, FeatureRenderDispatcher featureRenderDispatcher, CallbackInfo ci) {
         this.renderer = new SodiumWorldRenderer(client);
     }
 
@@ -246,13 +243,6 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
         } finally {
             RenderDevice.exitManagedCode();
         }
-    }
-
-    @Inject(method = "extractVisibleBlockEntities(Lnet/minecraft/client/Camera;FLnet/minecraft/client/renderer/state/LevelRenderState;)V", at = @At("HEAD"), cancellable = true, require = 1)
-    private void extractVisibleBlockEntities(Camera camera, float f, LevelRenderState levelRenderState, CallbackInfo ci) {
-        ci.cancel();
-
-        this.renderer.extractBlockEntities(camera, f, this.destructionProgress, levelRenderState);
     }
 
     // Exclusive to NeoForge, allow to fail.
