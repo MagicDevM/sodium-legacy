@@ -9,7 +9,7 @@ import java.util.Set;
 public interface DependentValue<V> {
     V get(Config state);
 
-    default Collection<Identifier> getDependencies() {
+    default Collection<ResourceLocation> getDependencies() {
         return Set.of();
     }
 }

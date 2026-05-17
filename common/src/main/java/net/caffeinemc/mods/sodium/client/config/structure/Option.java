@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public abstract class Option {
-    final Identifier id;
-    final Collection<Identifier> dependencies;
+    final ResourceLocation id;
+    final Collection<ResourceLocation> dependencies;
 
     final Component name;
     final DependentValue<Boolean> enabled;
@@ -23,8 +23,8 @@ public abstract class Option {
     Control control;
 
     Option(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled) {
         if (dependencies.contains(id)) {
@@ -93,7 +93,7 @@ public abstract class Option {
 
     public abstract Component getTooltip();
 
-    public Set<Identifier> getFlags() {
+    public Set<ResourceLocation> getFlags() {
         return Set.of();
     }
 

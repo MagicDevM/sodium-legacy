@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.function.Function;
 
 public abstract class OptionBuilderImpl<O extends Option> implements OptionBuilder {
-    final Identifier id;
+    final ResourceLocation id;
 
     private O baseOption;
 
     private Component name;
     private DependentValue<Boolean> enabled;
 
-    OptionBuilderImpl(Identifier id) {
+    OptionBuilderImpl(ResourceLocation id) {
         this.id = id;
     }
 
@@ -53,8 +53,8 @@ public abstract class OptionBuilderImpl<O extends Option> implements OptionBuild
         }
     }
 
-    Collection<Identifier> getDependencies() {
-        var dependencies = new ObjectLinkedOpenHashSet<Identifier>();
+    Collection<ResourceLocation> getDependencies() {
+        var dependencies = new ObjectLinkedOpenHashSet<ResourceLocation>();
         dependencies.addAll(this.getEnabled().getDependencies());
         return dependencies;
     }
@@ -92,7 +92,7 @@ public abstract class OptionBuilderImpl<O extends Option> implements OptionBuild
     }
 
     @Override
-    public OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies) {
+    public OptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies) {
         Validate.notNull(provider, "Argument must not be null");
 
         this.enabled = new DynamicValue<>(provider, dependencies);

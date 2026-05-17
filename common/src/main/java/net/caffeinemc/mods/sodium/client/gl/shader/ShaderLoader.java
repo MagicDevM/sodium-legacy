@@ -27,7 +27,7 @@ public class ShaderLoader {
      * @param constants A list of constants for shader specialization
      * @return An OpenGL shader object compiled with the given user defines
      */
-    public static GlShader loadShader(ShaderType type, Identifier name, ShaderConstants constants) {
+    public static GlShader loadShader(ShaderType type, ResourceLocation name, ShaderConstants constants) {
         var parsedShader = ShaderParser.parseShader(getShaderSource(name), constants);
 
         if (OPTION_DEBUG_SHADERS) {
@@ -38,8 +38,8 @@ public class ShaderLoader {
         return new GlShader(type, name, parsedShader);
     }
 
-    public static String getShaderSource(Identifier name) {
-        String path = String.format("/assets/%s/shaders/%s", name.getNamespace(), name.getPath());
+    public static String getShaderSource(ResourceLocation name) {
+        String path = String.format("/assets/%s/shaders/%s", name.getNamespace(), new name("sodium").getPath());
 
         try (InputStream in = ShaderLoader.class.getResourceAsStream(path)) {
             if (in == null) {

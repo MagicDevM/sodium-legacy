@@ -68,22 +68,22 @@ public class ConfigBuilderImpl implements ConfigBuilder {
     }
 
     @Override
-    public BooleanOptionBuilder createBooleanOption(Identifier id) {
+    public BooleanOptionBuilder createBooleanOption(ResourceLocation id) {
         return new BooleanOptionBuilderImpl(id);
     }
 
     @Override
-    public IntegerOptionBuilder createIntegerOption(Identifier id) {
+    public IntegerOptionBuilder createIntegerOption(ResourceLocation id) {
         return new IntegerOptionBuilderImpl(id);
     }
 
     @Override
-    public <E extends Enum<E>> EnumOptionBuilder<E> createEnumOption(Identifier id, Class<E> enumClass) {
+    public <E extends Enum<E>> EnumOptionBuilder<E> createEnumOption(ResourceLocation id, Class<E> enumClass) {
         return new EnumOptionBuilderImpl<>(id, enumClass);
     }
 
     @Override
-    public ExternalButtonOptionBuilder createExternalButtonOption(Identifier id) {
+    public ExternalButtonOptionBuilder createExternalButtonOption(ResourceLocation id) {
         return new ExternalButtonOptionBuilderImpl(id);
     }
 }

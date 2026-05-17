@@ -10,8 +10,8 @@ public abstract class StaticOption extends Option {
     final Component tooltip;
 
     StaticOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name, DependentValue<Boolean> enabled,
             Component tooltip
     ) {

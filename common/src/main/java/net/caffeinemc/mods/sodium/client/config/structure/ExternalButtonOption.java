@@ -14,8 +14,8 @@ public class ExternalButtonOption extends StaticOption {
     final Consumer<Screen> currentScreenConsumer;
 
     public ExternalButtonOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled,
             Component tooltip,

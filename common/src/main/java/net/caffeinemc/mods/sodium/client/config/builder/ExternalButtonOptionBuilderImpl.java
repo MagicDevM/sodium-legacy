@@ -14,7 +14,7 @@ import java.util.function.Function;
 class ExternalButtonOptionBuilderImpl extends StaticOptionBuilderImpl<ExternalButtonOption> implements ExternalButtonOptionBuilder {
     private Consumer<Screen> currentScreenConsumer;
 
-    ExternalButtonOptionBuilderImpl(Identifier id) {
+    ExternalButtonOptionBuilderImpl(ResourceLocation id) {
         super(id);
     }
 
@@ -54,7 +54,7 @@ class ExternalButtonOptionBuilderImpl extends StaticOptionBuilderImpl<ExternalBu
     }
 
     @Override
-    public ExternalButtonOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies) {
+    public ExternalButtonOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies) {
         super.setEnabledProvider(provider, dependencies);
         return this;
     }

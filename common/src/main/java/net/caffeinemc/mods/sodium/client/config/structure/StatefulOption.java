@@ -19,12 +19,12 @@ public abstract class StatefulOption<V> extends Option {
     final StorageEventHandler storage;
     final Function<V, Component> tooltipProvider;
     final OptionImpact impact;
-    final Set<Identifier> flags;
+    final Set<ResourceLocation> flags;
     final DependentValue<V> defaultValue;
     final Boolean controlHiddenWhenDisabled;
     final OptionBinding<V> binding;
     final Consumer<ConfigState> applyHook;
-    final Identifier applyHookId;
+    final ResourceLocation applyHookId;
 
     private final Collection<DynamicValue<?>> dependents = new ObjectOpenHashSet<>(0);
     private final Collection<DynamicValue<?>> applyDependents = new ObjectOpenHashSet<>(0);
@@ -33,14 +33,14 @@ public abstract class StatefulOption<V> extends Option {
     private V modifiedValue;
 
     StatefulOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled,
             StorageEventHandler storage,
             Function<V, Component> tooltipProvider,
             OptionImpact impact,
-            Set<Identifier> flags,
+            Set<ResourceLocation> flags,
             DependentValue<V> defaultValue,
             Boolean controlHiddenWhenDisabled,
             OptionBinding<V> binding,
@@ -57,7 +57,7 @@ public abstract class StatefulOption<V> extends Option {
         this.applyHook = applyHook;
 
         if (applyHook != null) {
-            this.applyHookId = Identifier.fromNamespaceAndPath("__meta__", "apply_hook_" + id.getNamespace() + "_" + id.getPath());
+            this.applyHookId = new ResourceLocation("sodium").fromNamespaceAndPath("__meta__", "apply_hook_" + id.getNamespace() + "_" + id.getPath());
         } else {
             this.applyHookId = null;
         }
@@ -158,7 +158,7 @@ public abstract class StatefulOption<V> extends Option {
     }
 
     @Override
-    public Set<Identifier> getFlags() {
+    public Set<ResourceLocation> getFlags() {
         return this.flags;
     }
 
@@ -196,7 +196,7 @@ public abstract class StatefulOption<V> extends Option {
         return this.applyHook;
     }
 
-    public Identifier getApplyHookId() {
+    public ResourceLocation getApplyHookId() {
         return this.applyHookId;
     }
 }

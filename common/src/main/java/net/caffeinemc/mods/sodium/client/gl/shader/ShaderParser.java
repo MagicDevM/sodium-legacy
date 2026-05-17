@@ -70,7 +70,7 @@ public class ShaderParser {
     }
 
     private void processImport(String line) {
-        Identifier name = parseImport(line);
+        ResourceLocation name = parseImport(line);
 
         // mark the start of the imported file
         var nameString = name.toString();
@@ -81,7 +81,7 @@ public class ShaderParser {
 
     private static final Pattern IMPORT_PATTERN = Pattern.compile("#import <(?<namespace>.*):(?<path>.*)>");
 
-    private Identifier parseImport(String line) {
+    private ResourceLocation parseImport(String line) {
         Matcher matcher = IMPORT_PATTERN.matcher(line);
 
         if (!matcher.matches()) {
@@ -91,7 +91,7 @@ public class ShaderParser {
         String namespace = matcher.group("namespace");
         String path = matcher.group("path");
 
-        return Identifier.fromNamespaceAndPath(namespace, path);
+        return new ResourceLocation("sodium").fromNamespaceAndPath(namespace, path);
     }
 
     private void prependDefineStrings(ShaderConstants constants) {

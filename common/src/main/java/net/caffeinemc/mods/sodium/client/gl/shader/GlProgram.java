@@ -33,7 +33,7 @@ public class GlProgram<T> extends GlObject implements ShaderBindingContext {
         return this.shaderInterface;
     }
 
-    public static Builder builder(Identifier name) {
+    public static Builder builder(ResourceLocation name) {
         return new Builder(name);
     }
 
@@ -100,10 +100,10 @@ public class GlProgram<T> extends GlObject implements ShaderBindingContext {
     }
 
     public static class Builder {
-        private final Identifier name;
+        private final ResourceLocation name;
         private final int program;
 
-        public Builder(Identifier name) {
+        public Builder(ResourceLocation name) {
             this.name = name;
             this.program = GL20C.glCreateProgram();
         }

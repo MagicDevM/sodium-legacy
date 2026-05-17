@@ -25,13 +25,13 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
     private StorageEventHandler storage;
     private Function<V, Component> tooltipProvider;
     private OptionImpact impact;
-    private Set<Identifier> flags;
+    private Set<ResourceLocation> flags;
     private DependentValue<V> defaultValue;
     private Boolean controlHiddenWhenDisabled;
     private OptionBinding<V> binding;
     private Consumer<ConfigState> applyHook;
 
-    StatefulOptionBuilderImpl(Identifier id) {
+    StatefulOptionBuilderImpl(ResourceLocation id) {
         super(id);
     }
 
@@ -46,7 +46,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
         Validate.notNull(this.getBinding(), "Binding must be set");
     }
 
-    Collection<Identifier> getDependencies() {
+    Collection<ResourceLocation> getDependencies() {
         var dependencies = super.getDependencies();
         dependencies.addAll(this.getDefaultValue().getDependencies());
         return dependencies;
@@ -64,7 +64,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
         return getFirstNotNull(this.impact, StatefulOption::getImpact);
     }
 
-    Set<Identifier> getFlags() {
+    Set<ResourceLocation> getFlags() {
         return getFirstNotNull(this.flags, StatefulOption::getFlags);
     }
 
@@ -119,7 +119,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
 
     @Override
     public StatefulOptionBuilder<V> setFlags(OptionFlag... flags) {
-        var idFlags = new Identifier[flags.length];
+        var idFlags = new ResourceLocation[flags.length];
         for (int i = 0; i < flags.length; i++) {
             idFlags[i] = flags[i].getId();
         }
@@ -127,7 +127,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
     }
 
     @Override
-    public StatefulOptionBuilder<V> setFlags(Identifier... flags) {
+    public StatefulOptionBuilder<V> setFlags(ResourceLocation... flags) {
         this.flags = Set.of(flags);
         return this;
     }
@@ -141,7 +141,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
     }
 
     @Override
-    public StatefulOptionBuilder<V> setDefaultProvider(Function<ConfigState, V> provider, Identifier... dependencies) {
+    public StatefulOptionBuilder<V> setDefaultProvider(Function<ConfigState, V> provider, ResourceLocation... dependencies) {
         Validate.notNull(provider, "Argument must not be null");
 
         this.defaultValue = new DynamicValue<>(provider, dependencies);
@@ -178,7 +178,7 @@ abstract class StatefulOptionBuilderImpl<O extends StatefulOption<V>, V> extends
     }
 
     @Override
-    public StatefulOptionBuilder<V> setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies) {
+    public StatefulOptionBuilder<V> setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies) {
         super.setEnabledProvider(provider, dependencies);
         return this;
     }

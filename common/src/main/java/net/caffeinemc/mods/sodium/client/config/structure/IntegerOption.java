@@ -22,14 +22,14 @@ public class IntegerOption extends StatefulOption<Integer> {
     private final ControlValueFormatter valueFormatter;
 
     public IntegerOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled,
             StorageEventHandler storage,
             Function<Integer, Component> tooltipProvider,
             OptionImpact impact,
-            Set<Identifier> flags,
+            Set<ResourceLocation> flags,
             DependentValue<Integer> defaultValue,
             Boolean controlHiddenWhenDisabled,
             OptionBinding<Integer> binding,

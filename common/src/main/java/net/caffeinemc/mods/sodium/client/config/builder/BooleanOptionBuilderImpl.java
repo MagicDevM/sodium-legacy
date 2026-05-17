@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 class BooleanOptionBuilderImpl extends StatefulOptionBuilderImpl<BooleanOption, Boolean> implements BooleanOptionBuilder {
-    BooleanOptionBuilderImpl(Identifier id) {
+    BooleanOptionBuilderImpl(ResourceLocation id) {
         super(id);
     }
 
@@ -80,7 +80,7 @@ class BooleanOptionBuilderImpl extends StatefulOptionBuilderImpl<BooleanOption, 
     }
 
     @Override
-    public BooleanOptionBuilder setFlags(Identifier... flags) {
+    public BooleanOptionBuilder setFlags(ResourceLocation... flags) {
         super.setFlags(flags);
         return this;
     }
@@ -92,7 +92,7 @@ class BooleanOptionBuilderImpl extends StatefulOptionBuilderImpl<BooleanOption, 
     }
 
     @Override
-    public BooleanOptionBuilder setDefaultProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies) {
+    public BooleanOptionBuilder setDefaultProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies) {
         super.setDefaultProvider(provider, dependencies);
         return this;
     }
@@ -104,7 +104,7 @@ class BooleanOptionBuilderImpl extends StatefulOptionBuilderImpl<BooleanOption, 
     }
 
     @Override
-    public BooleanOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, Identifier... dependencies) {
+    public BooleanOptionBuilder setEnabledProvider(Function<ConfigState, Boolean> provider, ResourceLocation... dependencies) {
         super.setEnabledProvider(provider, dependencies);
         return this;
     }

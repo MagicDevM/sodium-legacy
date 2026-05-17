@@ -9,7 +9,7 @@ import org.apache.commons.lang3.Validate;
 abstract class StaticOptionBuilderImpl<O extends StaticOption> extends OptionBuilderImpl<O> {
     private Component tooltip;
 
-    StaticOptionBuilderImpl(Identifier id) {
+    StaticOptionBuilderImpl(ResourceLocation id) {
         super(id);
     }
 

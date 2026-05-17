@@ -21,12 +21,12 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class Config implements ConfigState {
-    private final Map<Identifier, Option> options = new Object2ReferenceLinkedOpenHashMap<>();
+    private final Map<ResourceLocation, Option> options = new Object2ReferenceLinkedOpenHashMap<>();
     private final Set<StorageEventHandler> pendingStorageHandlers = new ObjectOpenHashSet<>();
     private final List<ModOptions> modOptions;
     private final SearchIndex searchIndex = new BigramSearchIndex(this::registerSearchIndex);
     private final Collection<DynamicValue<?>> globalRebuildDependents = new ObjectArrayList<>();
-    private final Map<Identifier, Collection<FlagHook>> flagHooks = new Object2ReferenceOpenHashMap<>();
+    private final Map<ResourceLocation, Collection<FlagHook>> flagHooks = new Object2ReferenceOpenHashMap<>();
     private final Set<FlagHook> triggeredHooks = new ObjectOpenHashSet<>();
 
     public Config(List<ModOptions> modOptions) {
@@ -80,8 +80,8 @@ public class Config implements ConfigState {
     }
 
     private void applyOptionChanges() {
-        var overrides = new Object2ReferenceOpenHashMap<Identifier, OptionOverride>();
-        var overlays = new Object2ReferenceOpenHashMap<Identifier, OptionOverlay>();
+        var overrides = new Object2ReferenceOpenHashMap<ResourceLocation, OptionOverride>();
+        var overlays = new Object2ReferenceOpenHashMap<ResourceLocation, OptionOverlay>();
 
         // collect overrides and overlays and validate them, also against each other
         for (var modConfig : this.modOptions) {
@@ -160,19 +160,19 @@ public class Config implements ConfigState {
         original.setParentConfig(null);
     }
 
-    private static final Set<Identifier> SPECIAL_DEPENDENCIES = Set.of(
+    private static final Set<ResourceLocation> SPECIAL_DEPENDENCIES = Set.of(
             ConfigState.UPDATE_ON_REBUILD,
             ConfigState.UPDATE_ON_APPLY
     );
 
-    private record ApplyHookFlagHook(Identifier applyHookId, Consumer<ConfigState> applyHook) implements FlagHook {
+    private record ApplyHookFlagHook(ResourceLocation applyHookId, Consumer<ConfigState> applyHook) implements FlagHook {
         @Override
-        public Collection<Identifier> getTriggers() {
+        public Collection<ResourceLocation> getTriggers() {
             return Set.of(this.applyHookId);
         }
 
         @Override
-        public void accept(Collection<Identifier> identifiers, ConfigState configState) {
+        public void accept(Collection<ResourceLocation> identifiers, ConfigState configState) {
             this.applyHook.accept(configState);
         }
     }
@@ -223,8 +223,8 @@ public class Config implements ConfigState {
         }
 
         // make sure there are no cycles
-        var stack = new ObjectOpenHashSet<Identifier>();
-        var finished = new ObjectOpenHashSet<Identifier>();
+        var stack = new ObjectOpenHashSet<ResourceLocation>();
+        var finished = new ObjectOpenHashSet<ResourceLocation>();
         for (var option : this.options.values()) {
             this.checkDependencyCycles(option, stack, finished);
         }
@@ -236,7 +236,7 @@ public class Config implements ConfigState {
         }
     }
 
-    private void checkDependencyCycles(Option option, ObjectOpenHashSet<Identifier> stack, ObjectOpenHashSet<Identifier> finished) {
+    private void checkDependencyCycles(Option option, ObjectOpenHashSet<ResourceLocation> stack, ObjectOpenHashSet<ResourceLocation> finished) {
         if (!stack.add(option.id)) {
             throw new IllegalArgumentException("Cycle detected in dependency graph starting from option " + option.id);
         }
@@ -262,7 +262,7 @@ public class Config implements ConfigState {
     }
 
     public void applyAllOptions() {
-        Set<Identifier> flags = null;
+        Set<ResourceLocation> flags = null;
 
         for (var option : this.options.values()) {
             if (option.applyChanges()) {
@@ -294,8 +294,8 @@ public class Config implements ConfigState {
         processFlags(flags);
     }
 
-    public void applyOption(Identifier id) {
-        Set<Identifier> flags = null;
+    public void applyOption(ResourceLocation id) {
+        Set<ResourceLocation> flags = null;
 
         var option = this.options.get(id);
         if (option != null && option.applyChanges()) {
@@ -335,7 +335,7 @@ public class Config implements ConfigState {
         this.pendingStorageHandlers.clear();
     }
 
-    public Option getOption(Identifier id) {
+    public Option getOption(ResourceLocation id) {
         return this.options.get(id);
     }
 
@@ -343,7 +343,7 @@ public class Config implements ConfigState {
         return this.modOptions;
     }
 
-    private void processFlags(Set<Identifier> flags) {
+    private void processFlags(Set<ResourceLocation> flags) {
         Minecraft client = Minecraft.getInstance();
 
         if (client.level != null) {
@@ -383,7 +383,7 @@ public class Config implements ConfigState {
         }
     }
 
-    public boolean readBooleanOption(Identifier id, boolean appliedValue) {
+    public boolean readBooleanOption(ResourceLocation id, boolean appliedValue) {
         var option = this.options.get(id);
         if (option instanceof BooleanOption booleanOption) {
             if (appliedValue) {
@@ -396,7 +396,7 @@ public class Config implements ConfigState {
         throw new IllegalArgumentException("Can't read boolean value from option with id " + id);
     }
 
-    public int readIntOption(Identifier id, boolean appliedValue) {
+    public int readIntOption(ResourceLocation id, boolean appliedValue) {
         var option = this.options.get(id);
         if (option instanceof IntegerOption intOption) {
             if (appliedValue) {
@@ -409,7 +409,7 @@ public class Config implements ConfigState {
         throw new IllegalArgumentException("Can't read int value from option with id " + id);
     }
 
-    public <E extends Enum<E>> E readEnumOption(Identifier id, Class<E> enumClass, boolean appliedValue) {
+    public <E extends Enum<E>> E readEnumOption(ResourceLocation id, Class<E> enumClass, boolean appliedValue) {
         var option = this.options.get(id);
         if (option instanceof EnumOption<?> enumOption) {
             if (enumOption.enumClass != enumClass) {
@@ -427,17 +427,17 @@ public class Config implements ConfigState {
     }
 
     @Override
-    public boolean readBooleanOption(Identifier id) {
+    public boolean readBooleanOption(ResourceLocation id) {
         return this.readBooleanOption(id, true);
     }
 
     @Override
-    public int readIntOption(Identifier id) {
+    public int readIntOption(ResourceLocation id) {
         return this.readIntOption(id, true);
     }
 
     @Override
-    public <E extends Enum<E>> E readEnumOption(Identifier id, Class<E> enumClass) {
+    public <E extends Enum<E>> E readEnumOption(ResourceLocation id, Class<E> enumClass) {
         return this.readEnumOption(id, enumClass, true);
     }
 }

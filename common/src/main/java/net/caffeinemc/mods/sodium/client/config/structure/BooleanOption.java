@@ -17,14 +17,14 @@ import java.util.function.Function;
 
 public class BooleanOption extends StatefulOption<Boolean> {
     public BooleanOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled,
             StorageEventHandler storage,
             Function<Boolean, Component> tooltipProvider,
             OptionImpact impact,
-            Set<Identifier> flags,
+            Set<ResourceLocation> flags,
             DependentValue<Boolean> defaultValue,
             Boolean controlHiddenWhenDisabled,
             OptionBinding<Boolean> binding,

@@ -15,9 +15,9 @@ import java.util.Arrays;
 public class GlShader extends GlObject {
     private static final Logger LOGGER = LogManager.getLogger(GlShader.class);
 
-    private final Identifier name;
+    private final ResourceLocation name;
 
-    public GlShader(ShaderType type, Identifier name, ShaderParser.ParsedShader parsedShader) {
+    public GlShader(ShaderType type, ResourceLocation name, ShaderParser.ParsedShader parsedShader) {
         this.name = name;
 
         int handle = GL20C.glCreateShader(type.id);
@@ -40,7 +40,7 @@ public class GlShader extends GlObject {
         this.setHandle(handle);
     }
 
-    public Identifier getName() {
+    public ResourceLocation getName() {
         return this.name;
     }
 

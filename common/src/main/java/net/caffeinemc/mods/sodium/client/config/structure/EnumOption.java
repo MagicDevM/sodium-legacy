@@ -22,14 +22,14 @@ public class EnumOption<E extends Enum<E>> extends StatefulOption<E> {
     private final Function<E, Component> elementNameProvider;
 
     public EnumOption(
-            Identifier id,
-            Collection<Identifier> dependencies,
+            ResourceLocation id,
+            Collection<ResourceLocation> dependencies,
             Component name,
             DependentValue<Boolean> enabled,
             StorageEventHandler storage,
             Function<E, Component> tooltipProvider,
             OptionImpact impact,
-            Set<Identifier> flags,
+            Set<ResourceLocation> flags,
             DependentValue<E> defaultValue,
             Boolean controlHiddenWhenDisabled,
             OptionBinding<E> binding,

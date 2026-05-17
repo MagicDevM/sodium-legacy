@@ -24,7 +24,7 @@ class ModOptionsBuilderImpl implements ModOptionsBuilder {
     private String name;
     private String version;
     private ColorTheme theme;
-    private Identifier icon;
+    private ResourceLocation icon;
     private boolean iconMonochrome = true;
     private final List<Page> pages = new ArrayList<>();
     private List<OptionOverride> optionOverrides;
@@ -81,13 +81,13 @@ class ModOptionsBuilderImpl implements ModOptionsBuilder {
     }
 
     @Override
-    public ModOptionsBuilder setIcon(Identifier texture) {
+    public ModOptionsBuilder setIcon(ResourceLocation texture) {
         this.icon = texture;
         return this;
     }
 
     @Override
-    public ModOptionsBuilder setNonTintedIcon(Identifier texture) {
+    public ModOptionsBuilder setNonTintedIcon(ResourceLocation texture) {
         this.icon = texture;
         this.iconMonochrome = false;
         return this;
@@ -100,7 +100,7 @@ class ModOptionsBuilderImpl implements ModOptionsBuilder {
     }
 
     @Override
-    public ModOptionsBuilder registerOptionReplacement(Identifier target, OptionBuilder replacement) {
+    public ModOptionsBuilder registerOptionReplacement(ResourceLocation target, OptionBuilder replacement) {
         var override = new OptionOverride(target, this.configId, ((OptionBuilderImpl<?>) replacement).build());
         if (this.optionOverrides == null) {
             this.optionOverrides = new ArrayList<>();
@@ -110,7 +110,7 @@ class ModOptionsBuilderImpl implements ModOptionsBuilder {
     }
 
     @Override
-    public ModOptionsBuilder registerOptionOverlay(Identifier target, OptionBuilder overlay) {
+    public ModOptionsBuilder registerOptionOverlay(ResourceLocation target, OptionBuilder overlay) {
         var optionOverlay = new OptionOverlay(target, this.configId, ((OptionBuilderImpl<?>) overlay));
         if (this.optionOverlays == null) {
             this.optionOverlays = new ArrayList<>();
@@ -120,7 +120,7 @@ class ModOptionsBuilderImpl implements ModOptionsBuilder {
     }
 
     @Override
-    public ModOptionsBuilder registerFlagHook(BiConsumer<Collection<Identifier>, ConfigState> hook, Identifier... triggers) {
+    public ModOptionsBuilder registerFlagHook(BiConsumer<Collection<ResourceLocation>, ConfigState> hook, ResourceLocation... triggers) {
         return this.registerFlagHook(new FlagHookImpl(hook, List.of(triggers)));
     }
 

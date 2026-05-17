@@ -9,13 +9,13 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class DynamicValue<V> implements DependentValue<V>, ConfigState {
-    private final Set<Identifier> dependencies;
-    private Identifier parentOption = null;
+    private final Set<ResourceLocation> dependencies;
+    private ResourceLocation parentOption = null;
     private final Function<ConfigState, V> provider;
     private Config state;
     private V valueCache;
 
-    public DynamicValue(Function<ConfigState, V> provider, Identifier[] dependencies) {
+    public DynamicValue(Function<ConfigState, V> provider, ResourceLocation[] dependencies) {
         this.provider = provider;
         this.dependencies = Set.of(dependencies);
     }
@@ -33,11 +33,11 @@ public class DynamicValue<V> implements DependentValue<V>, ConfigState {
     }
 
     @Override
-    public Collection<Identifier> getDependencies() {
+    public Collection<ResourceLocation> getDependencies() {
         return this.dependencies;
     }
 
-    public void allowReadingParentOption(Identifier id) {
+    public void allowReadingParentOption(ResourceLocation id) {
         this.parentOption = id;
     }
 
@@ -45,7 +45,7 @@ public class DynamicValue<V> implements DependentValue<V>, ConfigState {
         this.valueCache = null;
     }
 
-    private boolean getReadType(Identifier id) {
+    private boolean getReadType(ResourceLocation id) {
         if (!this.dependencies.contains(id)) {
             if (id.equals(this.parentOption)) {
                 return true;
@@ -57,19 +57,19 @@ public class DynamicValue<V> implements DependentValue<V>, ConfigState {
 
     // TODO: resolve dependencies with update tag here or within ConfigStateImpl?
     @Override
-    public boolean readBooleanOption(Identifier id) {
+    public boolean readBooleanOption(ResourceLocation id) {
         var readType = this.getReadType(id);
         return this.state.readBooleanOption(id, readType);
     }
 
     @Override
-    public int readIntOption(Identifier id) {
+    public int readIntOption(ResourceLocation id) {
         var readType = this.getReadType(id);
         return this.state.readIntOption(id, readType);
     }
 
     @Override
-    public <E extends Enum<E>> E readEnumOption(Identifier id, Class<E> enumClass) {
+    public <E extends Enum<E>> E readEnumOption(ResourceLocation id, Class<E> enumClass) {
         var readType = this.getReadType(id);
         return this.state.readEnumOption(id, enumClass, readType);
     }
