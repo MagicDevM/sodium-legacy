@@ -24,7 +24,7 @@ import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFlags;
 import net.caffeinemc.mods.sodium.client.render.helper.ColorHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.NormalHelper;
-import net.minecraft.client.renderer.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
