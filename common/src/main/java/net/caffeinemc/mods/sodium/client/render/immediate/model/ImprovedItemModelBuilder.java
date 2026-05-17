@@ -3,12 +3,10 @@ package net.caffeinemc.mods.sodium.client.render.immediate.model;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockElementFace;
 import net.minecraft.client.renderer.block.model.SimpleUnbakedGeometry;
-import net.minecraft.client.renderer.block.model.TextureSlots;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.QuadCollection;
@@ -32,11 +30,6 @@ import static net.minecraft.client.renderer.block.model.ItemModelGenerator.isTra
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
 	@Override
-	public TextureSlots.@NotNull Data textureSlots() {
-		return TEXTURE_SLOTS;
-	}
-
-	@Override
 	public UnbakedGeometry geometry() {
 		return ImprovedItemModelBuilder::bake;
 	}
@@ -47,8 +40,8 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 	}
 
 	private static QuadCollection bake(
-			TextureSlots textureSlots,
-			ModelBaker modelBaker,
+			Map<String, Material> textureSlots,
+			Function<Material, TextureAtlasSprite> spriteGetter,
 			ModelState modelState,
 			ModelDebugName debugName
 	) {
@@ -56,7 +49,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
 		for (var index = 0; index < LAYERS.size(); index ++) {
             var layer = LAYERS.get(index);
-			var material = textureSlots.getMaterial(layer);
+			var material = textureSlots.get(layer);
 
 			if (material == null) {
 				break;
@@ -64,7 +57,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
             bakeItemQuads(
                     blockElements,
-                    modelBaker.sprites().get(material, debugName).contents(),
+                    spriteGetter.apply(material),
                     layer,
                     index
             );
@@ -75,7 +68,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
 	private static void bakeItemQuads(
             List<BlockElement> blockElements,
-			SpriteContents sprite,
+			TextureAtlasSprite sprite,
             String layer,
             int index
 	) {
