@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.util.TriState;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +35,12 @@ import org.jetbrains.annotations.Nullable;
  * All of this is implementation-specific - that's why it isn't a "helper" class.
  */
 public final class EncodingFormat {
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
+
     private EncodingFormat() { }
 
     /** Count of integers in a conventional (un-modded) block or item vertex. */

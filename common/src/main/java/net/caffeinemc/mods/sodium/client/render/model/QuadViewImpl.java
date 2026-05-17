@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.ChunkSectionLayer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -40,6 +39,11 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * of maintaining and encoding the quad state.
  */
 public class QuadViewImpl implements ModelQuadView {
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
     @Nullable
     protected Direction nominalFace;
     /** True when face normal, light face, normal face, or geometry flags may not match geometry. */

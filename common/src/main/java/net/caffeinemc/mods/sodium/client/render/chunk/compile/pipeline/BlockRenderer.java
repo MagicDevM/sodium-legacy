@@ -32,7 +32,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.phys.Vec3;
@@ -40,6 +39,12 @@ import org.jspecify.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class BlockRenderer extends AbstractBlockRenderContext {
+    // Create TriState Object
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
     private final ColorProviderRegistry colorProviderRegistry;
     private final int[] vertexColors = new int[4];
     private final ChunkVertexEncoder.Vertex[] vertices = ChunkVertexEncoder.Vertex.uninitializedQuad();

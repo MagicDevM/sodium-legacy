@@ -30,7 +30,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.util.TriState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -50,6 +49,11 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * numbers. It also allows for a consistent interface for those transformations.
  */
 public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListStorage {
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
     @Nullable
     private TextureAtlasSprite cachedSprite;
 

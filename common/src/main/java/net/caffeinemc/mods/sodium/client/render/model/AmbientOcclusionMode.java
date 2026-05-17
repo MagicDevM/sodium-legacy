@@ -1,12 +1,16 @@
 package net.caffeinemc.mods.sodium.client.render.model;
 
-import net.minecraft.util.TriState;
-
 public enum AmbientOcclusionMode {
     ENABLED,
     DEFAULT,
     DISABLED;
 
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
+    
     private static final TriState[] TRISTATES = new TriState[] {
         TriState.TRUE,    // ENABLED
         TriState.DEFAULT, // DEFAULT

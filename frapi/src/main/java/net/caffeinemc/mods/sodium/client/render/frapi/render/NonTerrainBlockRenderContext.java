@@ -37,7 +37,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
@@ -45,6 +44,12 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
+    public enum TriState {
+        TRUE,
+        FALSE,
+        DEFAULT
+    };
+    
     public static final ThreadLocal<NonTerrainBlockRenderContext> POOL = ThreadLocal.withInitial(NonTerrainBlockRenderContext::new);
 
     private BlockColors colorMap;
