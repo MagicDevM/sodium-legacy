@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
 
 public class SliderControl implements Control {
@@ -142,15 +141,15 @@ public class SliderControl implements Control {
         }
 
         @Override
-        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
             this.sliderHeld = false;
 
-            if (super.mouseClicked(event, doubleClick)) return true;
+            if (super.mouseClicked(mouseX, mouseY, button)) return true;
             if (this.isResetOverlayActive()) return false;
 
-            if (this.option.isEnabled() && event.button() == 0 && this.isMouseOver(event.x(), event.y())) {
-                if (this.isMouseOverSlider(event.x(), event.y())) {
-                    this.setValueFromMouse(event.x());
+            if (this.option.isEnabled() && button == 0 && this.isMouseOver(mouseX, mouseY)) {
+                if (this.isMouseOverSlider(mouseX, mouseY)) {
+                    this.setValueFromMouse(mouseX);
                     this.sliderHeld = true;
                 }
 
@@ -161,8 +160,8 @@ public class SliderControl implements Control {
         }
 
         @Override
-        public boolean mouseReleased(MouseButtonEvent event) {
-            if (this.option.isEnabled() && event.button() == 0 && this.sliderHeld) {
+        public boolean mouseReleased(double mouseX, double mouseY, int button) {
+            if (this.option.isEnabled() && button == 0 && this.sliderHeld) {
                 this.sliderHeld = false;
                 playClickSound();
                 return true;
@@ -172,10 +171,10 @@ public class SliderControl implements Control {
         }
 
         @Override
-        public boolean mouseDragged(MouseButtonEvent event, double deltaX, double deltaY) {
-            if (this.option.isEnabled() && event.button() == 0) {
+        public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+            if (this.option.isEnabled() && button == 0) {
                 if (this.sliderHeld) {
-                    this.setValueFromMouse(event.x());
+                    this.setValueFromMouse(mouseX);
                 }
 
                 return true;

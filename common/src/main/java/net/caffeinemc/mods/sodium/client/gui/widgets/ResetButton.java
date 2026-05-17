@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import org.jspecify.annotations.Nullable;
@@ -67,12 +66,12 @@ public class ResetButton extends AbstractWidget {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (!isShiftHeld() || event.button() != 0) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!isShiftHeld() || button != 0) {
             return false;
         }
 
-        if (!this.parent.isMouseOver(event.x(), event.y()) || !this.isMouseOver(event.x(), event.y())) {
+        if (!this.parent.isMouseOver(mouseX, mouseY) || !this.isMouseOver(mouseX, mouseY)) {
             return false;
         }
 

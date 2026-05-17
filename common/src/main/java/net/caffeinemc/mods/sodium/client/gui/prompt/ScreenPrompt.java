@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import org.jspecify.annotations.NonNull;
@@ -111,9 +110,9 @@ public class ScreenPrompt implements GuiEventListener, Renderable {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (var widget : this.getWidgets()) {
-            if (widget.mouseClicked(event, doubleClick)) {
+            if (widget.mouseClicked(mouseX, mouseY, button)) {
                 return true;
             }
         }

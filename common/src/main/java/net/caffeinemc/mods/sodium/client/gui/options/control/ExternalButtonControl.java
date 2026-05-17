@@ -11,7 +11,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
@@ -94,8 +93,8 @@ public class ExternalButtonControl implements Control {
         }
 
         @Override
-        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-            if (this.option.isEnabled() && event.button() == 0 && this.isMouseOver(event.x(), event.y())) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (this.option.isEnabled() && button == 0 && this.isMouseOver(mouseX, mouseY) {
                 this.openScreen(this.screen);
                 this.playClickSound();
 

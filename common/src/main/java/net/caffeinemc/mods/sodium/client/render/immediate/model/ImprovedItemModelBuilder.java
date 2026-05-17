@@ -1,6 +1,5 @@
 package net.caffeinemc.mods.sodium.client.render.immediate.model;
 
-import com.mojang.math.Quadrant;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockElementFace;
 import net.minecraft.client.renderer.block.model.SimpleUnbakedGeometry;
@@ -84,8 +83,8 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                 new Vector3f(0.0F, 0.0F, 7.5F),
                 new Vector3f(16.0F, 16.0F, 8.5F),
                 Map.of(
-                        Direction.SOUTH, new BlockElementFace(null, index, layer, SOUTH_FACE_UVS, Quadrant.R0),
-                        Direction.NORTH, new BlockElementFace(null, index, layer, NORTH_FACE_UVS, Quadrant.R0)
+                        Direction.SOUTH, new BlockElementFace(null, index, layer, SOUTH_FACE_UVS, 0),
+                        Direction.NORTH, new BlockElementFace(null, index, layer, NORTH_FACE_UVS, 0)
                 )
         ));
 
@@ -188,7 +187,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                                     u1 * xScale,
                                     v1 * yScale
                             ),
-                            Quadrant.R0
+                            0
                     ))
             ));
 		}

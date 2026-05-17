@@ -17,7 +17,6 @@ import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jspecify.annotations.NonNull;
@@ -271,8 +270,8 @@ public class OptionListWidget extends AbstractOptionList {
         }
 
         @Override
-        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-            return this.resetButton != null && this.resetButton.mouseClicked(event, doubleClick);
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            return this.resetButton != null && this.resetButton.mouseClicked(mouseX, mouseY, button);
         }
 
         @Override
@@ -376,8 +375,8 @@ public class OptionListWidget extends AbstractOptionList {
         }
 
         @Override
-        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-            if (event.button() == 0 && this.isMouseOver(event.x(), event.y())) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (button == 0 && this.isMouseOver(mouseX, mouseY)) {
                 this.page.currentScreenConsumer().accept(this.screen);
                 this.playClickSound();
                 return true;

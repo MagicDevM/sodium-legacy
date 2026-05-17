@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
 
@@ -94,12 +93,12 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.enabled || !this.visible) {
             return false;
         }
 
-        if (event.button() == 0 && this.isMouseOver(event.x(), event.y())) {
+        if (button == 0 && this.isMouseOver(mouseX, mouseY) {
             doAction();
 
             return true;

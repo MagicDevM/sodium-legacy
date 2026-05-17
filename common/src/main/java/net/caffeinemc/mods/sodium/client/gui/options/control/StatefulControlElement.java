@@ -6,7 +6,6 @@ import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.gui.widgets.ResetButton;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.MouseButtonEvent;
 
 public abstract class StatefulControlElement extends ControlElement {
     protected final ResetButton resetButton;
@@ -33,8 +32,8 @@ public abstract class StatefulControlElement extends ControlElement {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        return this.resetButton.mouseClicked(event, doubleClick);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return this.resetButton.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

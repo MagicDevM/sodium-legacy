@@ -21,7 +21,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -430,12 +429,12 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.prompt != null) {
-            return this.prompt.mouseClicked(event, doubleClick);
+            return this.prompt.mouseClicked(mouseX, mouseY, button);
         }
 
-        if (!super.mouseClicked(event, doubleClick)) {
+        if (!super.mouseClicked(mouseX, mouseY, button)) {
             // Clicking in empty space, focus the search bar
             if (!this.searchWidget.isFocused()) {
                 this.setFocused(this.searchWidget);
