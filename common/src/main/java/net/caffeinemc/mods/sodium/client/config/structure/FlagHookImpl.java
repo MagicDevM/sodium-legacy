@@ -8,21 +8,21 @@ import java.util.Collection;
 import java.util.function.BiConsumer;
 
 public class FlagHookImpl implements FlagHook {
-    private final BiConsumer<Collection<Identifier>, ConfigState> hook;
-    private final Collection<Identifier> triggers;
+    private final BiConsumer<Collection<ResourceLocation>, ConfigState> hook;
+    private final Collection<ResourceLocation> triggers;
 
-    public FlagHookImpl(BiConsumer<Collection<Identifier>, ConfigState> hook, Collection<Identifier> triggers) {
+    public FlagHookImpl(BiConsumer<Collection<ResourceLocation>, ConfigState> hook, Collection<ResourceLocation> triggers) {
         this.hook = hook;
         this.triggers = triggers;
     }
 
     @Override
-    public Collection<Identifier> getTriggers() {
+    public Collection<ResourceLocation> getTriggers() {
         return this.triggers;
     }
 
     @Override
-    public void accept(Collection<Identifier> flags, ConfigState state) {
+    public void accept(Collection<ResourceLocation> flags, ConfigState state) {
         this.hook.accept(flags, state);
     }
 }

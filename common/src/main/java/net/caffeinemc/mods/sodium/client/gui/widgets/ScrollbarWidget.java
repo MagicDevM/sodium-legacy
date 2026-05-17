@@ -6,7 +6,6 @@ import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
