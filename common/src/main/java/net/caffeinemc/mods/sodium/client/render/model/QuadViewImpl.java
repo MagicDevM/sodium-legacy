@@ -25,7 +25,6 @@ import net.caffeinemc.mods.sodium.client.render.helper.ColorHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.NormalHelper;
 import net.minecraft.client.renderer.ChunkSectionLayer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -123,7 +122,7 @@ public class QuadViewImpl implements ModelQuadView {
         return EncodingFormat.ambientOcclusion(data[baseIndex + HEADER_BITS]);
     }
 
-    public ItemStackRenderState.@Nullable FoilType glint() {
+    public @Nullable boolean FoilType glint() {
         return EncodingFormat.glint(data[baseIndex + HEADER_BITS]);
     }
 

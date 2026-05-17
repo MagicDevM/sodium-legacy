@@ -35,7 +35,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.RenderShape;
@@ -85,7 +85,7 @@ public class SodiumRenderer implements Renderer {
 
     @Override
     public void setLayerRenderTypeGetter(
-            ItemStackRenderState.LayerRenderState layer,
+            RenderType layer,
             ItemRenderTypeGetter renderTypeGetter
     ) {
         ((AccessLayerRenderState) layer).fabric_setRenderTypeGetter(renderTypeGetter);

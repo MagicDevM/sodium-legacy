@@ -39,7 +39,6 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
@@ -57,7 +56,7 @@ import java.util.function.Supplier;
 public class ItemRenderContext extends AbstractRenderContext {
     /** Value vanilla uses for item rendering.  The only sensible choice, of course.  */
     private static final long ITEM_RANDOM_SEED = 42L;
-    private static final int GLINT_COUNT = ItemStackRenderState.FoilType.values().length;
+    private static final int GLINT_COUNT = 2;
     private @Nullable ItemRenderTypeGetter renderTypeGetter;
 
     public class ItemEmitter extends MutableQuadViewImpl {
@@ -95,7 +94,7 @@ public class ItemRenderContext extends AbstractRenderContext {
     private boolean ignoreQuadGlint;
 
     private RenderType defaultLayer;
-    private ItemStackRenderState.FoilType defaultGlint;
+    private boolean defaultGlint;
 
     private PoseStack.Pose specialGlintEntry;
     private final VertexConsumer[] vertexConsumerCache = new VertexConsumer[3 * GLINT_COUNT];
@@ -106,7 +105,7 @@ public class ItemRenderContext extends AbstractRenderContext {
         return editorQuad;
     }
 
-    public void renderItem(ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int lightmap, int overlay, int[] colors, List<BakedQuad> vanillaQuads, MeshView mesh, RenderType layer, ItemStackRenderState.FoilType glint, @Nullable ItemRenderTypeGetter renderTypeGetter, boolean ignoreQuadGlint) {
+    public void renderItem(ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int lightmap, int overlay, int[] colors, List<BakedQuad> vanillaQuads, MeshView mesh, RenderType layer, boolean glint, @Nullable ItemRenderTypeGetter renderTypeGetter, boolean ignoreQuadGlint) {
         this.transformMode = displayContext;
         matPosition = poseStack.last().pose();
         this.poseStack = poseStack;
@@ -197,9 +196,9 @@ public class ItemRenderContext extends AbstractRenderContext {
      * in {@code RenderLayers.getEntityBlockLayer}. Layers other than
      * translucent are mapped to cutout.
      */
-    private VertexConsumer getVertexConsumer(SodiumQuadAtlas quadAtlas, @Nullable RenderType quadRenderLayer, ItemStackRenderState.@Nullable FoilType quadGlint) {
+    private VertexConsumer getVertexConsumer(SodiumQuadAtlas quadAtlas, @Nullable RenderType quadRenderLayer, boolean quadGlint) {
         RenderType layer;
-        ItemStackRenderState.FoilType glint;
+        boolean glint;
 
         if (renderTypeGetter != null) {
             layer = renderTypeGetter.renderType(quadAtlas == SodiumQuadAtlas.BLOCK ? QuadAtlas.BLOCK : QuadAtlas.ITEM, quadRenderLayer);
@@ -240,8 +239,8 @@ public class ItemRenderContext extends AbstractRenderContext {
         return vertexConsumer;
     }
 
-    private VertexConsumer createVertexConsumer(RenderType type, ItemStackRenderState.FoilType glint) {
-        if (glint == ItemStackRenderState.FoilType.SPECIAL) {
+    private VertexConsumer createVertexConsumer(RenderType type, boolean glint) {
+        /* if (glint == ItemStackRenderState.FoilType.SPECIAL) {
             if (specialGlintEntry == null) {
                 specialGlintEntry = poseStack.last().copy();
 
@@ -253,9 +252,9 @@ public class ItemRenderContext extends AbstractRenderContext {
             }
 
             return ItemRendererAccessor.sodium$getSpecialFoilBuffer(bufferSource, type, specialGlintEntry);
-        }
+        } */
 
-        return ItemRenderer.getFoilBuffer(bufferSource, type, true, glint != ItemStackRenderState.FoilType.NONE);
+        return ItemRenderer.getFoilBuffer(bufferSource, type, true, glint != false);
     }
 
     /** used to accept a method reference from the ItemRenderer. */

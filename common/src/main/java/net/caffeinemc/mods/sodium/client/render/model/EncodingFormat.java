@@ -23,7 +23,6 @@ import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.ModelHelper;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.ArrayUtils;
@@ -98,7 +97,7 @@ public final class EncodingFormat {
     private static final int NULLABLE_BLOCK_RENDER_LAYER_COUNT = NULLABLE_BLOCK_RENDER_LAYERS.length;
     private static final TriState[] TRI_STATES = TriState.values();
     private static final int TRI_STATE_COUNT = TRI_STATES.length;
-    private static final @Nullable ItemStackRenderState.FoilType[] NULLABLE_GLINTS = ArrayUtils.add(ItemStackRenderState.FoilType.values(), null);
+    private static final @Nullable Boolean[] NULLABLE_GLINTS = new Boolean(true, false, null);
     private static final int NULLABLE_GLINT_COUNT = NULLABLE_GLINTS.length;
     private static final SodiumShadeMode[] SHADE_MODES = SodiumShadeMode.values();
     private static final int SHADE_MODE_COUNT = SHADE_MODES.length;
@@ -233,11 +232,11 @@ public final class EncodingFormat {
     }
 
     @Nullable
-    static ItemStackRenderState.FoilType glint(int bits) {
+    static boolean glint(int bits) {
         return NULLABLE_GLINTS[(bits & GLINT_MASK) >>> GLINT_BIT_OFFSET];
     }
 
-    static int glint(int bits, @Nullable ItemStackRenderState.FoilType glint) {
+    static int glint(int bits, @Nullable boolean glint) {
         int index = glint == null ? NULL_GLINT_INDEX : glint.ordinal();
         return (bits & ~GLINT_MASK) | (index << GLINT_BIT_OFFSET);
     }

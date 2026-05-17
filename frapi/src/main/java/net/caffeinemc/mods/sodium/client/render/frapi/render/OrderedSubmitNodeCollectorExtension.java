@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MeshView;
 import net.fabricmc.fabric.api.renderer.v1.render.ItemRenderTypeGetter;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.item.ItemDisplayContext;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public interface OrderedSubmitNodeCollectorExtension {
             int[] tintLayers,
             List<BakedQuad> quads,
             RenderType renderLayer,
-            ItemStackRenderState.FoilType glintType,
+            boolean glintType,
             MeshView mesh,
             ItemRenderTypeGetter renderTypeGetter
     );

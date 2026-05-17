@@ -27,7 +27,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -223,7 +222,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         return this;
     }
 
-    public MutableQuadViewImpl setGlint(@Nullable ItemStackRenderState.FoilType glint) {
+    public MutableQuadViewImpl setGlint(@Nullable boolean glint) {
         data[baseIndex + HEADER_BITS] = EncodingFormat.glint(data[baseIndex + HEADER_BITS], glint);
         return this;
     }

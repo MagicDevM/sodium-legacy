@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +35,7 @@ public class ItemFeatureRendererMixin {
 
             if (itemCommand.outlineColor() != 0) {
                 outlineBufferSource.setColor(itemCommand.outlineColor());
-                itemRenderContext.renderItem(itemCommand.displayContext(), poseStack, outlineBufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), ItemStackRenderState.FoilType.NONE, itemCommand.renderTypeGetter(), true);
+                itemRenderContext.renderItem(itemCommand.displayContext(), poseStack, outlineBufferSource, itemCommand.lightCoords(), itemCommand.overlayCoords(), itemCommand.tintLayers(), itemCommand.quads(), itemCommand.mesh(), itemCommand.renderType(), false, itemCommand.renderTypeGetter(), true);
             }
 
             poseStack.popPose();

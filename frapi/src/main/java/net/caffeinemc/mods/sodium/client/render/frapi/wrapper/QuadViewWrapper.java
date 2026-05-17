@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.ShadeMode;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -143,7 +142,7 @@ public class QuadViewWrapper implements QuadView {
     }
 
     @Override
-    public ItemStackRenderState.@Nullable FoilType glint() {
+    public @Nullable Boolean glint() {
         return quad.glint();
     }
 
