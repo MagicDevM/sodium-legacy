@@ -1,4 +1,4 @@
-package net.caffeinemc.mods.sodium.client.util.backports.CompactVectorArray;
+package net.caffeinemc.mods.sodium.client.util.backports;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
