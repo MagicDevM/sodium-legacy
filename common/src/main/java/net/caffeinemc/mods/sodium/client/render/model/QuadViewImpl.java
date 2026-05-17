@@ -122,7 +122,7 @@ public class QuadViewImpl implements ModelQuadView {
         return EncodingFormat.ambientOcclusion(data[baseIndex + HEADER_BITS]);
     }
 
-    public @Nullable boolean FoilType glint() {
+    public @Nullable boolean glint() {
         return EncodingFormat.glint(data[baseIndex + HEADER_BITS]);
     }
 
