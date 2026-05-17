@@ -37,7 +37,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.util.RandomSource;
@@ -261,6 +261,6 @@ public class ItemRenderContext extends AbstractRenderContext {
     /** used to accept a method reference from the ItemRenderer. */
     @FunctionalInterface
     public interface VanillaModelBufferer {
-        void accept(BlockStateModel model, int[] colirs, int color, int overlay, PoseStack matrixStack, VertexConsumer buffer);
+        void accept(BakedModel model, int[] colirs, int color, int overlay, PoseStack matrixStack, VertexConsumer buffer);
     }
 }

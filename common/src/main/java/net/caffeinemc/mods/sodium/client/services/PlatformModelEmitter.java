@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.services;
 
 import net.caffeinemc.mods.sodium.client.render.model.MutableQuadViewImpl;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -21,7 +21,7 @@ public interface PlatformModelEmitter {
         return INSTANCE;
     }
 
-    void emitModel(BlockStateModel model, Predicate<Direction> cullTest, MutableQuadViewImpl quad, RandomSource random, BlockAndTintGetter blockView, BlockPos pos, BlockState state, Bufferer defaultBuffer);
+    void emitModel(BakedModel model, Predicate<Direction> cullTest, MutableQuadViewImpl quad, RandomSource random, BlockAndTintGetter blockView, BlockPos pos, BlockState state, Bufferer defaultBuffer);
 
     @FunctionalInterface
     public interface Bufferer {

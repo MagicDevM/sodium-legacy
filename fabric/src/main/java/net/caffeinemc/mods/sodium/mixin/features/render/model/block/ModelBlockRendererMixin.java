@@ -13,7 +13,7 @@ import net.caffeinemc.mods.sodium.client.util.DirectionUtil;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -58,7 +58,7 @@ public class ModelBlockRendererMixin {
      * @author JellySquid
      */
     @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
-    private static void renderFast(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
+    private static void renderFast(PoseStack.Pose entry, VertexConsumer vertexConsumer, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
         if (writer == null) {
             return;

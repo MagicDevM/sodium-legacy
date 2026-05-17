@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -61,8 +61,8 @@ public class ModelBlockRendererMixin {
      * @reason Use optimized vertex writer intrinsics, avoid allocations
      * @author JellySquid
      */
-    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/renderer/block/model/BlockStateModel;FFFIILnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
-    private static void renderFast(PoseStack.Pose entry, MultiBufferSource bufferSource, BlockStateModel bakedModel, float red, float green, float blue, int light, int overlay, BlockAndTintGetter level, BlockPos pos, BlockState state, CallbackInfo ci) {
+    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/resources/model/BakedModel;FFFIILnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
+    private static void renderFast(PoseStack.Pose entry, MultiBufferSource bufferSource, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, BlockAndTintGetter level, BlockPos pos, BlockState state, CallbackInfo ci) {
         RandomSource random = RANDOM.get();
 
         // Clamp color ranges

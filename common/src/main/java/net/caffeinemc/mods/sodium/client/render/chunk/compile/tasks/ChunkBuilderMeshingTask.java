@@ -30,7 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.core.BlockPos;
@@ -117,7 +117,7 @@ public class ChunkBuilderMeshingTask extends ChunkBuilderTask<ChunkBuildOutput> 
                         modelOffset.set(x & 15, y & 15, z & 15);
 
                         if (blockState.getRenderShape() == RenderShape.MODEL) {
-                            BlockStateModel model = cache.getBlockModels()
+                            BakedModel model = cache.getBlockModels()
                                     .getBlockModel(blockState);
                             blockRenderer.renderModel(model, blockState, blockPos, modelOffset);
                         }

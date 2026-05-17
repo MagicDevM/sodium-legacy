@@ -34,7 +34,7 @@ import net.fabricmc.fabric.api.renderer.v1.render.RenderLayerHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -59,12 +59,12 @@ public class SodiumRenderer implements Renderer {
 
 
     @Override
-    public void render(ModelBlockRenderer modelBlockRenderer, BlockAndTintGetter blockView, BlockStateModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider multiBufferSource, boolean cull, long seed, int overlay) {
+    public void render(ModelBlockRenderer modelBlockRenderer, BlockAndTintGetter blockView, BakedModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider multiBufferSource, boolean cull, long seed, int overlay) {
         NonTerrainBlockRenderContext.POOL.get().renderModel(blockView, ((ModelBlockRendererAccessor) modelBlockRenderer).sodium$getBlockColors(), model, state, pos, poseStack, multiBufferSource, cull, seed, overlay);
     }
 
     @Override
-    public void render(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public void render(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BakedModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
         SimpleBlockRenderContext.POOL.get().bufferModel(entry, vertexConsumers, model, red, green, blue, light, overlay, blockView, pos, state);
     }
 
@@ -73,7 +73,7 @@ public class SodiumRenderer implements Renderer {
         RenderShape renderShape = state.getRenderShape();
 
         if (renderShape != RenderShape.INVISIBLE) {
-            BlockStateModel model = renderManager.getBlockModel(state);
+            BakedModel model = renderManager.getBlockModel(state);
             int tint = ((ModelBlockRendererAccessor) renderManager.getModelRenderer()).sodium$getBlockColors().getColor(state, null, null, 0);
             float red = (tint >> 16 & 255) / 255.0F;
             float green = (tint >> 8 & 255) / 255.0F;

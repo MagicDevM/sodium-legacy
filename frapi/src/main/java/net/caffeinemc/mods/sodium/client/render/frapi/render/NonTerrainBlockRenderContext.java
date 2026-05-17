@@ -35,7 +35,7 @@ import net.fabricmc.fabric.api.renderer.v1.render.BlockVertexConsumerProvider;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -61,7 +61,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
         this.random = new SingleThreadedRandomSource(42L);
     }
 
-    public void renderModel(BlockAndTintGetter blockView, BlockColors blockColors, BlockStateModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider buffer, boolean cull, long seed, int overlay) {
+    public void renderModel(BlockAndTintGetter blockView, BlockColors blockColors, BakedModel model, BlockState state, BlockPos pos, PoseStack poseStack, BlockVertexConsumerProvider buffer, boolean cull, long seed, int overlay) {
         this.level = blockView;
         this.state = state;
         this.pos = pos;

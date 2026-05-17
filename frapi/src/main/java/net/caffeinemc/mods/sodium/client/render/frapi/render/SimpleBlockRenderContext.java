@@ -30,7 +30,7 @@ import net.fabricmc.fabric.api.renderer.v1.render.BlockVertexConsumerProvider;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -97,7 +97,7 @@ public class SimpleBlockRenderContext extends AbstractBlockRenderContext {
         SpriteUtil.INSTANCE.markSpriteActive(quad.sprite(SpriteFinderCache.forBlockAtlas()));
     }
 
-    public void bufferModel(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BlockStateModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
+    public void bufferModel(PoseStack.Pose entry, BlockVertexConsumerProvider vertexConsumers, BakedModel model, float red, float green, float blue, int light, int overlay, BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
         matrices = entry;
         this.overlay = overlay;
 

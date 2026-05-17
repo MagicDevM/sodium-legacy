@@ -4,7 +4,7 @@ import net.caffeinemc.mods.sodium.client.render.helper.ListStorage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
@@ -54,5 +54,5 @@ public interface PlatformModelAccess {
 
     RenderType getPartRenderType(BlockModelPart part, BlockState state, RenderType defaultType);
 
-    List<BlockModelPart> collectPartsOf(BlockStateModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, @Nullable ListStorage emitter);
+    List<BlockModelPart> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, @Nullable ListStorage emitter);
 }

@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockModelPart;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,11 +21,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.util.List;
 import java.util.function.Predicate;
 
-@Mixin(BlockStateModel.class)
+@Mixin(BakedModel.class)
 public interface BakedModelMixin extends FabricBlockStateModel {
     @Override
     default void emitQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, Predicate<@Nullable Direction> cullTest) {
-        List<BlockModelPart> parts = PlatformModelAccess.getInstance().collectPartsOf((BlockStateModel) this, blockView, pos, state, random, emitter instanceof ListStorage ls ? ls : null);
+        List<BlockModelPart> parts = PlatformModelAccess.getInstance().collectPartsOf((BakedModel) this, blockView, pos, state, random, emitter instanceof ListStorage ls ? ls : null);
         int partCount = parts.size();
 
         if (emitter instanceof AbstractBlockRenderContext.BlockEmitter be) {

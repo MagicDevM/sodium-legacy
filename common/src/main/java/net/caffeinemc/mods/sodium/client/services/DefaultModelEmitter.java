@@ -4,7 +4,7 @@ import net.caffeinemc.mods.sodium.client.render.model.AbstractBlockRenderContext
 import net.caffeinemc.mods.sodium.client.render.model.MutableQuadViewImpl;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 public class DefaultModelEmitter implements PlatformModelEmitter {
     @Override
-    public void emitModel(BlockStateModel model, Predicate<Direction> cullTest, MutableQuadViewImpl quad, RandomSource random, BlockAndTintGetter blockView, BlockPos pos, BlockState state, Bufferer defaultBuffer) {
+    public void emitModel(BakedModel model, Predicate<Direction> cullTest, MutableQuadViewImpl quad, RandomSource random, BlockAndTintGetter blockView, BlockPos pos, BlockState state, Bufferer defaultBuffer) {
         List<BlockModelPart> parts = PlatformModelAccess.getInstance().collectPartsOf(model, blockView, pos, state, random, quad);
 
         if (quad instanceof AbstractBlockRenderContext.BlockEmitter emitter) {

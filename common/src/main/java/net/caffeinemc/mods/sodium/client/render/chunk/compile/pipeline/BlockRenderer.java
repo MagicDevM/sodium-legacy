@@ -28,7 +28,7 @@ import net.caffeinemc.mods.sodium.client.render.texture.SpriteFinderCache;
 import net.caffeinemc.mods.sodium.client.services.PlatformModelEmitter;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -73,7 +73,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
         this.slice = null;
     }
 
-    public void renderModel(BlockStateModel model, BlockState state, BlockPos pos, BlockPos origin) {
+    public void renderModel(BakedModel model, BlockState state, BlockPos pos, BlockPos origin) {
         this.state = state;
         this.pos = pos;
 
