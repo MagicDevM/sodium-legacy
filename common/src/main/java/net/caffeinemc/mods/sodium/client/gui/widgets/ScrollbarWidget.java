@@ -135,31 +135,31 @@ public class ScrollbarWidget extends AbstractWidget {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (!this.isMouseOver(event.x(), event.y()) || !this.canScroll()) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!this.isMouseOver(mouseX, mouseY) || !this.canScroll()) {
             return false;
         }
-        if (this.isMouseOverHighlight(event.x(), event.y())) {
+        if (this.isMouseOverHighlight(mouseX, mouseY)) {
             this.dragging = true;
         } else {
             if (this.horizontal) {
-                this.scroll(event.x() > this.getHighlightStart(this.getWidth()) ? this.getWidth() : -this.getWidth());
+                this.scroll(mouseX > this.getHighlightStart(this.getWidth()) ? this.getWidth() : -this.getWidth());
             } else {
-                this.scroll(event.y() > this.getHighlightStart(this.getHeight()) ? this.getHeight() : -this.getHeight());
+                this.scroll(mouseY > this.getHighlightStart(this.getHeight()) ? this.getHeight() : -this.getHeight());
             }
         }
         return true;
     }
 
     @Override
-    public boolean mouseReleased(MouseButtonEvent event) {
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
         this.dragging = false;
         this.lastScrollTime = Math.max(this.lastScrollTime, System.currentTimeMillis() - 500);
         return false;
     }
 
     @Override
-    public boolean mouseDragged(MouseButtonEvent event, double deltaX, double deltaY) {
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (this.dragging) {
             this.scroll((int) Math.round(this.horizontal ? deltaX : deltaY * ((double) this.total / this.visible)));
             return true;
