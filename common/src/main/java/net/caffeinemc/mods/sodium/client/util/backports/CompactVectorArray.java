@@ -1,4 +1,4 @@
-package com.mojang.blaze3d.vertex.CompactVectorArray;
+package net.caffeinemc.mods.sodium.client.util.backports.CompactVectorArray;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;

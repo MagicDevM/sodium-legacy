@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.mixin.core.render;
 
-import com.mojang.blaze3d.vertex.CompactVectorArray;
+import net.caffeinemc.mods.sodium.client.util.backports.CompactVectorArray;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
