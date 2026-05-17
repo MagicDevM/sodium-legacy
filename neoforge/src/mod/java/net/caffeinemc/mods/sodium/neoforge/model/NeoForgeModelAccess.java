@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.client.services.PlatformModelAccess;
 import net.caffeinemc.mods.sodium.client.services.SodiumModelData;
 import net.caffeinemc.mods.sodium.client.services.SodiumModelDataContainer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -26,7 +26,7 @@ import java.util.Set;
 
 public class NeoForgeModelAccess implements PlatformModelAccess {
     @Override
-    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModelPart model, BlockState state, Direction face, RandomSource random, RenderType renderType) {
+    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType) {
         return model.getQuads(face);
     }
 
@@ -43,8 +43,8 @@ public class NeoForgeModelAccess implements PlatformModelAccess {
     }
 
     @Override
-    public List<BlockModelPart> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, ListStorage emitter) {
-        List<BlockModelPart> parts = emitter == null ? new ArrayList<>() : emitter.clearAndGet();
+    public List<BlockModel> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, ListStorage emitter) {
+        List<BlockModel> parts = emitter == null ? new ArrayList<>() : emitter.clearAndGet();
         blockStateModel.collectParts(blockView, pos, state, random, parts);
         return parts;
     }
@@ -55,7 +55,7 @@ public class NeoForgeModelAccess implements PlatformModelAccess {
     }
 
     @Override
-    public RenderType getPartRenderType(BlockModelPart part, BlockState state, RenderType defaultType) {
+    public RenderType getPartRenderType(BlockModel part, BlockState state, RenderType defaultType) {
         return part.getRenderType(state);
     }
 }

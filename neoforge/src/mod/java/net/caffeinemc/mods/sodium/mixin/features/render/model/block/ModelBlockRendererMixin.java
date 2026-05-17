@@ -13,7 +13,7 @@ import net.caffeinemc.mods.sodium.client.util.DirectionUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +37,7 @@ public class ModelBlockRendererMixin {
     private static final ThreadLocal<RandomSource> RANDOM = ThreadLocal.withInitial(() -> new SingleThreadedRandomSource(42L));
 
     @Unique
-    private static final ThreadLocal<List<BlockModelPart>> LIST = ThreadLocal.withInitial(() -> new ObjectArrayList<>());
+    private static final ThreadLocal<List<BlockModel>> LIST = ThreadLocal.withInitial(() -> new ObjectArrayList<>());
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
@@ -73,13 +73,13 @@ public class ModelBlockRendererMixin {
         int defaultColor = ColorABGR.pack(red, green, blue, 1.0F);
         random.setSeed(42L);
 
-        List<BlockModelPart> list = LIST.get();
+        List<BlockModel> list = LIST.get();
 
         list.clear();
 
         bakedModel.collectParts(level, pos, state, random, list);
 
-        for (BlockModelPart part : list) {
+        for (BlockModel part : list) {
             var writer = VertexBufferWriter.of(bufferSource.getBuffer(RenderTypeHelper.getEntityRenderType(part.getRenderType(state))));
 
             if (writer == null) {

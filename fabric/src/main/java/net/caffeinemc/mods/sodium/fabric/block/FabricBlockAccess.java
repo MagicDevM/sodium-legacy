@@ -6,7 +6,7 @@ import net.caffeinemc.mods.sodium.client.render.model.AmbientOcclusionMode;
 import net.caffeinemc.mods.sodium.client.services.PlatformBlockAccess;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -80,8 +80,8 @@ public class FabricBlockAccess implements PlatformBlockAccess {
     }
 
     @Override
-    public AmbientOcclusionMode usesAmbientOcclusion(BlockModelPart model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
-        return model.useAmbientOcclusion() ? AmbientOcclusionMode.DEFAULT : AmbientOcclusionMode.DISABLED;
+    public AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
+        return model.ambientOcclusion() ? AmbientOcclusionMode.DEFAULT : AmbientOcclusionMode.DISABLED;
     }
 
     @Override

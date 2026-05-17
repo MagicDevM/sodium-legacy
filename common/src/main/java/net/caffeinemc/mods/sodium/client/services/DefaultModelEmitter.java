@@ -3,7 +3,7 @@ package net.caffeinemc.mods.sodium.client.services;
 import net.caffeinemc.mods.sodium.client.render.model.AbstractBlockRenderContext;
 import net.caffeinemc.mods.sodium.client.render.model.MutableQuadViewImpl;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 public class DefaultModelEmitter implements PlatformModelEmitter {
     @Override
     public void emitModel(BakedModel model, Predicate<Direction> cullTest, MutableQuadViewImpl quad, RandomSource random, BlockAndTintGetter blockView, BlockPos pos, BlockState state, Bufferer defaultBuffer) {
-        List<BlockModelPart> parts = PlatformModelAccess.getInstance().collectPartsOf(model, blockView, pos, state, random, quad);
+        List<BlockModel> parts = PlatformModelAccess.getInstance().collectPartsOf(model, blockView, pos, state, random, quad);
 
         if (quad instanceof AbstractBlockRenderContext.BlockEmitter emitter) {
             RenderType type = ItemBlockRenderTypes.getChunkRenderType(state);
@@ -33,7 +33,7 @@ public class DefaultModelEmitter implements PlatformModelEmitter {
         }
 
         for (int i = 0; i < parts.size(); i++) {
-            BlockModelPart part = parts.get(i);
+            BlockModel part = parts.get(i);
             defaultBuffer.emit(part, cullTest, MutableQuadViewImpl::emitDirectly);
         }
     }

@@ -6,7 +6,7 @@ import net.caffeinemc.mods.sodium.client.render.model.AmbientOcclusionMode;
 import net.caffeinemc.mods.sodium.client.services.PlatformBlockAccess;
 import net.caffeinemc.mods.sodium.client.util.DirectionUtil;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,7 +43,7 @@ public class NeoForgeBlockAccess implements PlatformBlockAccess {
     }
 
     @Override
-    public AmbientOcclusionMode usesAmbientOcclusion(BlockModelPart model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
+    public AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
         return switch (model.ambientOcclusion()) {
             case TRUE -> AmbientOcclusionMode.ENABLED;
             case FALSE -> AmbientOcclusionMode.DISABLED;

@@ -3,7 +3,7 @@ package net.caffeinemc.mods.sodium.client.services;
 import net.caffeinemc.mods.sodium.client.render.helper.ListStorage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +35,7 @@ public interface PlatformModelAccess {
      * @param renderType The current render type being drawn.
      * @return The list of quads used by the model.
      */
-    List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModelPart model, BlockState state, Direction face, RandomSource random, RenderType renderType);
+    List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType);
 
     /**
      * Gets the container holding model data for this chunk. <b>This operation is not thread safe.</b>
@@ -52,7 +52,7 @@ public interface PlatformModelAccess {
     @ApiStatus.Internal
     SodiumModelData getEmptyModelData();
 
-    RenderType getPartRenderType(BlockModelPart part, BlockState state, RenderType defaultType);
+    RenderType getPartRenderType(BlockModel part, BlockState state, RenderType defaultType);
 
-    List<BlockModelPart> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, @Nullable ListStorage emitter);
+    List<BlockModel> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, @Nullable ListStorage emitter);
 }

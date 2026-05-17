@@ -16,7 +16,7 @@ import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -52,7 +52,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
             AbstractBlockRenderContext.this.allowDowngrade = false;
         }
 
-        public void emitPart(BlockModelPart part, Predicate<@Nullable Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
+        public void emitPart(BlockModel part, Predicate<@Nullable Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
             AbstractBlockRenderContext.this.bufferDefaultModel(part, cullTest, emitter);
         }
     }
@@ -222,14 +222,14 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
         }
     }
 
-    private List<BlockModelPart> parts = new ObjectArrayList<>();
+    private List<BlockModel> parts = new ObjectArrayList<>();
 
     /* Handling of vanilla models - this is the hot path for non-modded models */
-    public void bufferDefaultModel(BlockModelPart part, Predicate<Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
+    public void bufferDefaultModel(BlockModel part, Predicate<Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
         MutableQuadViewImpl editorQuad = this.editorQuad;
-        this.prepareAoInfo(part.useAmbientOcclusion());
+        this.prepareAoInfo(part.ambientOcclusion());
 
-        RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(part, state, this.defaultRenderType);
+        RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(state, this.defaultRenderType);
         RenderType defaultType = this.defaultRenderType;
         this.defaultRenderType = renderType;
 
@@ -243,7 +243,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
             // TODO NeoForge 1.21.5
             AmbientOcclusionMode ao = PlatformBlockAccess.getInstance().usesAmbientOcclusion(part, state, renderType, slice, pos);
 
-            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, part, state, cullFace, random, renderType);
+            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, state, cullFace, random, renderType);
             final int count = quads.size();
 
             for (int j = 0; j < count; j++) {

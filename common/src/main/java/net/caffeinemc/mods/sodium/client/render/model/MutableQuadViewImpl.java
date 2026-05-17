@@ -25,7 +25,7 @@ import net.caffeinemc.mods.sodium.client.render.helper.TextureHelper;
 import net.caffeinemc.mods.sodium.client.render.texture.SodiumSpriteFinder;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -57,10 +57,10 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
     @Nullable
     private TextureAtlasSprite cachedSprite;
 
-    private List<BlockModelPart> cachedList;
+    private List<BlockModel> cachedList;
 
     @Override
-    public List<BlockModelPart> clearAndGet() {
+    public List<BlockModel> clearAndGet() {
         if (cachedList == null) {
             cachedList = new ArrayList<>();
             return cachedList;
