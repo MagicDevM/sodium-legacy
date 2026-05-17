@@ -97,7 +97,7 @@ public abstract class CenteredFlatWidget extends AbstractWidget {
             return false;
         }
 
-        if (button == 0 && this.isMouseOver(mouseX, mouseY) {
+        if (button == 0 && this.isMouseOver(mouseX, mouseY)) {
             doAction();
 
             return true;

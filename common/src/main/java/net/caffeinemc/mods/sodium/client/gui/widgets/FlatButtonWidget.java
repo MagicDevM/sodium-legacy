@@ -98,7 +98,7 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
             return false;
         }
 
-        if (button == 0 && this.isMouseOver(mouseX, mouseY) {
+        if (button == 0 && this.isMouseOver(mouseX, mouseY)) {
             doAction();
 
             return true;
