@@ -12,6 +12,7 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.model.BlockModel.GuiLight
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import org.jetbrains.annotations.NotNull;
@@ -29,11 +30,6 @@ import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SideD
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.isTransparent;
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
-	@Override
-	public GuiLight getGuiLight() {
-		return GuiLight.FRONT;
-	}
-
 	private static List<BakedQuad> bake(ModelBekar modelBekar,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
@@ -61,7 +57,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		        blockElements,
 		        textures,
 		        false,
-		        this.getGuiLight(),
+		        guiLight.FRONT,
 		        generated.transform(),
 		        Collections.emptyList()
 		  );
