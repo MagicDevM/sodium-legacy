@@ -11,7 +11,6 @@ import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.impl.Compact
 import net.caffeinemc.mods.sodium.client.util.FogParameters;
 import net.caffeinemc.mods.sodium.mixin.core.render.texture.TextureAtlasAccessor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.TextureFilteringMethod;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import org.joml.Matrix4fc;
 import org.lwjgl.opengl.GL32C;
@@ -31,7 +30,6 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
     private final GlUniformFloat3v uniformRegionOffset;
     private final GlUniformFloat2v uniformTexCoordShrink;
     private final GlUniformFloat2v uniformTexelSize;
-    private final GlUniformBool uniformRGSS;
     private final GlUniformInt uniformCurrentTime;
     private final GlUniformFloat uniformFadePeriod;
 
@@ -86,8 +84,6 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
         );
 
         uniformFadePeriod.setFloat((float) (1.0 / (Minecraft.getInstance().options.chunkSectionFadeInTime().get() * 1000.0))); // this is in seconds!
-
-        this.uniformRGSS.setBool(Minecraft.getInstance().options.textureFiltering().get() == TextureFilteringMethod.RGSS);
 
         this.fogShader.setup(parameters);
     }
