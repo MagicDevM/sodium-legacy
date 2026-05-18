@@ -2,15 +2,15 @@ package net.caffeinemc.mods.sodium.client.render.immediate.model;
 
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockElementFace;
-import net.minecraft.client.renderer.block.model.SimpleUnbakedGeometry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.QuadCollection;
-import net.minecraft.client.resources.model.UnbakedGeometry;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
@@ -30,40 +30,43 @@ import static net.minecraft.client.renderer.block.model.ItemModelGenerator.isTra
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
 	@Override
-	public UnbakedGeometry geometry() {
-		return ImprovedItemModelBuilder::bake;
-	}
-
-	@Override
-	public GuiLight guiLight() {
+	public GuiLight getGuiLight() {
 		return GuiLight.FRONT;
 	}
 
-	private static QuadCollection bake(
-			Map<String, Material> textureSlots,
-			Function<Material, TextureAtlasSprite> spriteGetter,
+	private static QuadCollection bake(ModelBekar modelBekar,
+			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
-			ModelDebugName debugName
+			ResourceLocation, identifier
 	) {
         var blockElements = new ArrayList<BlockElement>();
 
 		for (var index = 0; index < LAYERS.size(); index ++) {
             var layer = LAYERS.get(index);
-			var material = textureSlots.get(layer);
-
-			if (material == null) {
-				break;
-			}
 
             bakeItemQuads(
                     blockElements,
-                    spriteGetter.apply(material),
+                    textures,
                     layer,
                     index
             );
 		}
-
-		return SimpleUnbakedGeometry.bake(blockElements, textureSlots, modelBaker, modelState, debugName);
+		
+		// Extract correct transforms
+		UnbakedModel generated = modelBekar.getModel(new ResourceLocation("minecraft:item/generated"));
+		
+		// Setup Bekar
+		BlockModel model = new BlockModel(
+		        null,
+		        blockElements,
+		        textures,
+		        false,
+		        this.getGuiLight(),
+		        generated.transform(),
+		        Collections.emptyList()
+		  )
+		  
+		  return model.bake(modelBekar, textures, modelState, identifier)
 	}
 
 	private static void bakeItemQuads(
@@ -83,7 +86,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
 		bakeSideQuads(
 				blockElements,
-				sprite,
+				sprite.contents(),
 				layer,
 				index
 		);
