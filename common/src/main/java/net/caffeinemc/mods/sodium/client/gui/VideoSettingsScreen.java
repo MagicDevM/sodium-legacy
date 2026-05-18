@@ -21,7 +21,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
@@ -544,9 +543,9 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
         x = x + margin;
         y = y + height / 2 - iconSize / 2;
         if (iconMonochrome) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h, color);
+            graphics.blit(ResourceLocation, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h, color);
         } else {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h);
+            graphics.blit(ResourceLocation, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h);
         }
 
         return margin * 2 + iconSize;

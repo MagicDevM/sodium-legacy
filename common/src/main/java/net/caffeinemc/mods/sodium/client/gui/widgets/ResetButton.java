@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import org.jspecify.annotations.Nullable;
 
@@ -61,7 +60,7 @@ public class ResetButton extends AbstractWidget {
         int x = this.getCenterX() - ICON_SIZE / 2;
         int y = this.getCenterY() - ICON_SIZE / 2;
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE, COLOR);
+        graphics.blit(ResourceLocation, ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE, COLOR);
         graphics.requestCursor(CursorTypes.POINTING_HAND);
     }
 
