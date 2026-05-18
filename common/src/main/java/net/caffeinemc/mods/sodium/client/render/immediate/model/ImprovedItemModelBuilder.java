@@ -37,7 +37,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 	private static QuadCollection bake(ModelBekar modelBekar,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
-			ResourceLocation, identifier
+			ResourceLocation identifier
 	) {
         var blockElements = new ArrayList<BlockElement>();
 
@@ -64,9 +64,9 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		        this.getGuiLight(),
 		        generated.transform(),
 		        Collections.emptyList()
-		  )
+		  );
 		  
-		  return model.bake(modelBekar, textures, modelState, identifier)
+		  return model.bake(modelBekar, textures, modelState, identifier);
 	}
 
 	private static void bakeItemQuads(
