@@ -10,7 +10,7 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.resources.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
