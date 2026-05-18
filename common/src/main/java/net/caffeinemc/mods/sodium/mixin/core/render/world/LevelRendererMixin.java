@@ -3,7 +3,6 @@ package net.caffeinemc.mods.sodium.mixin.core.render.world;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.systems.RenderPass;
-import com.mojang.blaze3d.textures.FilterMode;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.gl.device.RenderDevice;
@@ -252,18 +251,6 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
         ci.cancel();
 
         this.renderer.iterateVisibleBlockEntities(blockEntityConsumer);
-    }
-
-    /**
-     * @reason Allow control of the texture filtering mode
-     * @author pajic
-     */
-    @Redirect(method = {
-            "method_62214",
-            "lambda$addMainPass$1"
-    }, require = 1, at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/textures/FilterMode;LINEAR:Lcom/mojang/blaze3d/textures/FilterMode;", opcode = Opcodes.GETSTATIC))
-    private FilterMode setFilterMode() {
-        return SodiumClientMod.options().quality.pixelFilteringMode;
     }
 
     /**

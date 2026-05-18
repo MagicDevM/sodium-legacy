@@ -2,7 +2,7 @@ package net.caffeinemc.mods.sodium.client.render.chunk.shader;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import org.lwjgl.opengl.GL11;
 import net.caffeinemc.mods.sodium.client.gl.buffer.GlBuffer;
 import net.caffeinemc.mods.sodium.client.gl.device.GLRenderDevice;
 import net.caffeinemc.mods.sodium.client.gl.shader.uniform.*;
@@ -63,7 +63,7 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
     @Override // the shader interface should not modify pipeline state
     public void setupState(TerrainRenderPass pass, FogParameters parameters) {
         this.bindTexture(ChunkShaderTextureSlot.BLOCK, pass.getAtlas());
-        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().getTextureView(), RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR));
+        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().getTextureView(), RenderSystem.getSamplerCache().getClampToEdge(GL11.LINEAR));
 
         var textureAtlas = (TextureAtlasAccessor) Minecraft.getInstance()
                 .getTextureManager()
