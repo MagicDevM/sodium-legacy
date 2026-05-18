@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.QuadCollection;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.ResourceLocation;
@@ -34,7 +34,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		return GuiLight.FRONT;
 	}
 
-	private static QuadCollection bake(ModelBekar modelBekar,
+	private static List<BakedQuad> bake(ModelBekar modelBekar,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
 			ResourceLocation identifier
