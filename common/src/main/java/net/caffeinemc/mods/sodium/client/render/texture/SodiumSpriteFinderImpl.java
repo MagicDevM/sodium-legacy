@@ -43,7 +43,7 @@ public class SodiumSpriteFinderImpl implements SodiumSpriteFinder {
     private final SodiumQuadAtlas atlas;
     private int badSpriteCount = 0;
 
-    public SodiumSpriteFinderImpl(Map<Identifier, TextureAtlasSprite> sprites, TextureAtlasSprite missingSprite, SodiumQuadAtlas atlas) {
+    public SodiumSpriteFinderImpl(Map<ResourceLocation, TextureAtlasSprite> sprites, TextureAtlasSprite missingSprite, SodiumQuadAtlas atlas) {
         root = new Node(0.5f, 0.5f, 0.25f);
         this.missingSprite = missingSprite;
         this.atlas = atlas;
