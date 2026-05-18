@@ -12,7 +12,11 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.client.renderer.block.model.BlockModel.GuiLight
+import net.minecraft.client.renderer.block.model.BlockModel.GuiLight;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import org.jetbrains.annotations.NotNull;
@@ -20,16 +24,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.LAYERS;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.TEXTURE_SLOTS;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SOUTH_FACE_UVS;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.NORTH_FACE_UVS;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MIN_Z;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MAX_Z;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.UV_SHRINK;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SideDirection;
+import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SpanFacing;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.isTransparent;
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
+  
+  private static final BlockFaceUV SOUTH_FACE_UVS =
+    new BlockFaceUV(new float[] { 0.0F, 0.0F, 16.0F, 16.0F }, 0);
+  private static final BlockFaceUV NORTH_FACE_UVS =
+    new BlockFaceUV(new float[] { 16.0F, 0.0F, 0.0F, 16.0F }, 0);
+  private static final float UV_SHRINK = 0.1F;
+  
 	private static List<BakedQuad> bake(ModelBekar modelBekar,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
@@ -219,7 +226,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
       |
     (0, height)
 
-    For SideDirection.UP/DOWN (plane horizontal)
+    For SpanFacing.UP/DOWN (plane horizontal)
 
        min(x) max(x)
          |      |
@@ -235,7 +242,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
     The coordinate of the end point of the quad (B) is (max, anchor).
     Side quad AB is on the plane of anchor y.
 
-    For SideDirection.LEFT/RIGHT (plane vertical):
+    For SpanFacing.LEFT/RIGHT (plane vertical):
 
     anchor(x)
     /     \
@@ -295,10 +302,10 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
             if (opaque) {
                 // Try insert per-pixel side quads for each side of the pixel.
-                tryInsertFace(up, SideDirection.UP, sprite, frame, pixelX, pixelY, width, height);
-                tryInsertFace(down, SideDirection.DOWN, sprite, frame, pixelX, pixelY, width, height);
-                tryInsertFace(left, SideDirection.LEFT, sprite, frame, pixelX, pixelY, width, height);
-                tryInsertFace(right, SideDirection.RIGHT, sprite, frame, pixelX, pixelY, width, height);
+                tryInsertFace(up, SpanFacing.UP, sprite, frame, pixelX, pixelY, width, height);
+                tryInsertFace(down, SpanFacing.DOWN, sprite, frame, pixelX, pixelY, width, height);
+                tryInsertFace(left, SpanFacing.LEFT, sprite, frame, pixelX, pixelY, width, height);
+                tryInsertFace(right, SpanFacing.RIGHT, sprite, frame, pixelX, pixelY, width, height);
             }
         }
 
@@ -306,17 +313,17 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
             var output = new ReferenceArrayList<SideFace>();
 
             // Merges and collects all faces from different directions.
-            buildMergedFaces(output, up, SideDirection.UP);
-            buildMergedFaces(output, down, SideDirection.DOWN);
-            buildMergedFaces(output, left, SideDirection.LEFT);
-            buildMergedFaces(output, right, SideDirection.RIGHT);
+            buildMergedFaces(output, up, SpanFacing.UP);
+            buildMergedFaces(output, down, SpanFacing.DOWN);
+            buildMergedFaces(output, left, SpanFacing.LEFT);
+            buildMergedFaces(output, right, SpanFacing.RIGHT);
 
             return output;
         }
 
         private static void tryInsertFace(
                 Int2ObjectMap<BitSet> storage,
-                SideDirection faceFacing,
+                SpanFacing faceFacing,
                 SpriteContents sprite,
                 int frame,
                 int pixelX,
@@ -358,7 +365,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
         private static void buildMergedFaces(
                 Collection<SideFace> faceOutput,
                 Int2ObjectMap<BitSet> storage,
-                SideDirection faceFacing
+                SpanFacing faceFacing
         ) {
             // Merge all planes (anchors) in the map.
             for (int anchor : storage.keySet()) {
@@ -398,7 +405,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
     }
 
 	public record SideFace(
-			SideDirection facing,
+			SpanFacing facing,
 			int min,
 			int max,
 			int anchor
