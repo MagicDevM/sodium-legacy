@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.client.renderer.block.model.BlockModel.GuiLight;
-import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -22,6 +21,7 @@ import org.joml.Vector3f;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.LAYERS;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MIN_Z;
@@ -37,7 +37,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
     new BlockFaceUV(new float[] { 16.0F, 0.0F, 0.0F, 16.0F }, 0);
   private static final float UV_SHRINK = 0.1F;
   
-	private static List<BakedQuad> bake(ModelBekar modelBekar,
+	private static List<BakedQuad> bake(ModelBaker modelBaker,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
 			ResourceLocation identifier
@@ -56,7 +56,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		}
 		
 		// Extract correct transforms
-		UnbakedModel generated = modelBekar.getModel(new ResourceLocation("minecraft:item/generated"));
+		UnbakedModel generated = modelBaker.getModel(new ResourceLocation("minecraft:item/generated"));
 		
 		// Setup Bekar
 		BlockModel model = new BlockModel(
@@ -69,7 +69,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		        Collections.emptyList()
 		  );
 		  
-		  return model.bake(modelBekar, textures, modelState, identifier);
+		  return model.bake(modelBaker, textures, modelState, identifier);
 	}
 
 	private static void bakeItemQuads(
