@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.options.control;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import org.lwjgl.glfw.GLFW;
 import net.caffeinemc.mods.sodium.client.config.structure.ExternalButtonOption;
 import net.caffeinemc.mods.sodium.client.config.structure.Option;
 import net.caffeinemc.mods.sodium.client.gui.ColorTheme;
@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
@@ -84,7 +85,10 @@ public class ExternalButtonControl implements Control {
                     Colors.FOREGROUND);
 
             if (this.isHovered()) {
-                graphics.requestCursor(CursorTypes.POINTING_HAND);
+                GLFW.glfwSetCursor(
+                  Minecraft.getInstance().getWindow().getWindow(),
+                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
+              );
             }
         }
 

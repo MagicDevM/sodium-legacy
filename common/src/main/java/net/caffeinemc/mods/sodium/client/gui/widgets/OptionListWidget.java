@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import org.lwjgl.glfw.GLFW;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.caffeinemc.mods.sodium.client.config.ConfigManager;
@@ -12,6 +12,7 @@ import net.caffeinemc.mods.sodium.client.gui.VideoSettingsScreen;
 import net.caffeinemc.mods.sodium.client.gui.options.control.AbstractOptionList;
 import net.caffeinemc.mods.sodium.client.gui.options.control.ExternalButtonControl;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
+import net.minecraft.client.Minecraft;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
@@ -370,7 +371,10 @@ public class OptionListWidget extends AbstractOptionList {
                     Colors.FOREGROUND);
 
             if (this.isHovered()) {
-                graphics.requestCursor(CursorTypes.POINTING_HAND);
+                GLFW.glfwSetCursor(
+                  Minecraft.getInstance().getWindow().getWindow(),
+                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
+              );
             }
         }
 

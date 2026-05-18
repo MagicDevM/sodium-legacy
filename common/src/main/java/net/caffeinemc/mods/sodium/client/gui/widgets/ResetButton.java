@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import org.lwjgl.glfw.GLFW;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.Minecraft;
@@ -61,7 +61,10 @@ public class ResetButton extends AbstractWidget {
         int y = this.getCenterY() - ICON_SIZE / 2;
 
         graphics.blit(ResourceLocation, ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE, COLOR);
-        graphics.requestCursor(CursorTypes.POINTING_HAND);
+        GLFW.glfwSetCursor(
+          Minecraft.getInstance().getWindow().getWindow(),
+          GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
+      );
     }
 
     @Override

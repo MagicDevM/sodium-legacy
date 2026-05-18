@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.options.control;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import org.lwjgl.glfw.GLFW;
 import net.caffeinemc.mods.sodium.client.config.structure.BooleanOption;
 import net.caffeinemc.mods.sodium.client.config.structure.StatefulOption;
 import net.caffeinemc.mods.sodium.client.gui.ColorTheme;
@@ -8,6 +8,7 @@ import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 
@@ -93,7 +94,10 @@ public class TickBoxControl implements Control {
             }
 
             if (this.isHovered()) {
-                graphics.requestCursor(CursorTypes.POINTING_HAND);
+                GLFW.glfwSetCursor(
+                  Minecraft.getInstance().getWindow().getWindow(),
+                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
+              );
             }
         }
 

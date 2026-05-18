@@ -1,6 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import org.lwjgl.glfw.GLFW;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.caffeinemc.mods.sodium.client.config.ConfigManager;
@@ -18,6 +18,7 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
 
 public class PageListWidget extends AbstractScrollable {
@@ -157,7 +158,10 @@ public class PageListWidget extends AbstractScrollable {
             super.render(graphics, mouseX, mouseY, delta);
 
             if (this.isHovered()) {
-                graphics.requestCursor(CursorTypes.POINTING_HAND);
+                GLFW.glfwSetCursor(
+                  Minecraft.getInstance().getWindow().getWindow(),
+                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
+              );
             }
         }
     }
