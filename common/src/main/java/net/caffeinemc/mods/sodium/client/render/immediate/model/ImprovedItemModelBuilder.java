@@ -27,9 +27,12 @@ import static net.minecraft.client.renderer.block.model.ItemModelGenerator.LAYER
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MIN_Z;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MAX_Z;
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SpanFacing;
-import static net.minecraft.client.renderer.block.model.ItemModelGenerator.isTransparent;
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
+  
+  private static boolean isTransparent(SpriteContents sprite, int frame, int x, int y, int width, int height) {
+      return x >= 0 && y >= 0 && x < width && y < height ? sprite.isTransparent(frame, x, y) : true;
+   }
   
   private static final BlockFaceUV SOUTH_FACE_UVS =
     new BlockFaceUV(new float[] { 0.0F, 0.0F, 16.0F, 16.0F }, 0);
