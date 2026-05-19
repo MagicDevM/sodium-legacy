@@ -19,25 +19,6 @@ public class MultiBufferSourceMixin {
     @Unique
     private static final int VERTICES_PER_QUAD = 6;
 
-    @WrapOperation(
-            method = "endBatch(Lnet/minecraft/client/renderer/rendertype/RenderType;Lcom/mojang/blaze3d/vertex/BufferBuilder;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/MeshData;sortQuads(Lcom/mojang/blaze3d/vertex/ByteBufferBuilder;Lcom/mojang/blaze3d/vertex/VertexSorting;)Lcom/mojang/blaze3d/vertex/MeshData$SortState;"
-            )
-    )
-    private MeshData.SortState redirectSortQuads(MeshData meshData, ByteBufferBuilder bufferBuilder, VertexSorting sorting, Operation<MeshData.SortState> original) {
-        if (sorting instanceof VertexSortingExtended sortingExtended) {
-            // Replace the vertex sorting algorithm when it implements our accelerated sort.
-            acceleratedSort(meshData, bufferBuilder, sortingExtended);
-        } else {
-            return original.call(meshData, bufferBuilder, sorting);
-        }
-
-        // The caller never uses the return value.
-        return null;
-    }
-
     @Unique
     private static void acceleratedSort(MeshData meshData, ByteBufferBuilder bufferBuilder, VertexSortingExtended sorting) {
         final var drawState = meshData.drawState();
