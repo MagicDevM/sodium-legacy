@@ -1,9 +1,9 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -53,8 +53,8 @@ public class KeyBoundButtonWidget extends FlatButtonWidget {
         return this.isEnabled() && Minecraft.getInstance().hasAltDown() ? this.underlinedLabel : super.getRenderedLabel();
     }
 
-    public boolean tryActivateShortcut(KeyEvent event) {
-        if (this.isEnabled() && this.isVisible() && event.hasAltDown() && event.key() == this.shortcutKey) {
+    public boolean tryActivateShortcut(int keyCode, int scanCode, int modifiers) {
+        if (this.isEnabled() && this.isVisible() && Screen.hasAltDown() && keyCode == this.shortcutKey) {
             this.doAction();
             return true;
         }

@@ -8,8 +8,9 @@ import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screens.Screen;
+import org.lwjgl.glfw.GLFW;
 import org.jspecify.annotations.Nullable;
 
 public class FlatButtonWidget extends AbstractWidget implements Renderable {
@@ -108,11 +109,11 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.isFocused())
             return false;
 
-        if (event.isSelection()) {
+        if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
             doAction();
             return true;
         }

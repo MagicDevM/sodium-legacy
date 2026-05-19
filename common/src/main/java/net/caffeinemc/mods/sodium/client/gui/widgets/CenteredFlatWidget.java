@@ -8,7 +8,7 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
 
@@ -107,11 +107,11 @@ public abstract class CenteredFlatWidget extends AbstractWidget {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.isFocused())
             return false;
 
-        if (event.isSelection()) {
+        if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
             doAction();
             return true;
         }

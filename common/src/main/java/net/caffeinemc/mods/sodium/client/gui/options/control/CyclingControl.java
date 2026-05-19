@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.Validate;
 
@@ -92,10 +91,10 @@ public class CyclingControl<T extends Enum<T>> implements Control {
         }
 
         @Override
-        public boolean keyPressed(KeyEvent event) {
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!isFocused()) return false;
 
-            if (event.isSelection()) {
+            if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
                 cycleControl(Minecraft.getInstance().hasShiftDown());
                 return true;
             }

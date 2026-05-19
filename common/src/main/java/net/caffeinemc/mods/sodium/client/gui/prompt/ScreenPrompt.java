@@ -1,5 +1,6 @@
 package net.caffeinemc.mods.sodium.client.gui.prompt;
 
+import org.lwjgl.glfw.GLFW;
 import net.caffeinemc.mods.sodium.client.gui.ButtonTheme;
 import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
@@ -10,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import org.jspecify.annotations.NonNull;
@@ -121,8 +121,8 @@ public class ScreenPrompt implements GuiEventListener, Renderable {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (event.isEscape()) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
             this.close();
             return true;
         }

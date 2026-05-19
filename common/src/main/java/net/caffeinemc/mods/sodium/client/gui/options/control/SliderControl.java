@@ -10,7 +10,7 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Mth;
 
 public class SliderControl implements Control {
@@ -203,12 +203,12 @@ public class SliderControl implements Control {
         }
 
         @Override
-        public boolean keyPressed(KeyEvent event) {
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!isFocused()) return false;
 
             var range = this.option.getSteppedValidator();
-            var isLeft = event.isLeft();
-            var isRight = event.isRight();
+            var isLeft = (keyCode == InputUtil.GLFW_KEY_LEFT);
+            var isRight = (keyCode == InputUtil.GLFW_KEY_RIGHT);
             if (isLeft || isRight) {
                 var validatedValue = this.option.getValidatedValue();
                 var step = range.step();

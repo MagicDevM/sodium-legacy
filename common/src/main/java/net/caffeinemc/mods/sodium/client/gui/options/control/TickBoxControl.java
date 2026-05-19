@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 
 public class TickBoxControl implements Control {
     private final BooleanOption option;
@@ -115,10 +114,10 @@ public class TickBoxControl implements Control {
         }
 
         @Override
-        public boolean keyPressed(KeyEvent event) {
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!isFocused()) return false;
 
-            if (event.isSelection()) {
+            if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
                 toggleControl();
                 return true;
             }

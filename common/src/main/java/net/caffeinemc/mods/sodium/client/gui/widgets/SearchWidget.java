@@ -11,11 +11,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.jspecify.annotations.NonNull;
 
+import org.lwjgl.glfw.GLFW;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -177,13 +177,13 @@ public class SearchWidget extends AbstractParentWidget {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (event.isEscape() && this.getFocused() == this.searchBox) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.getFocused() == this.searchBox) {
             this.clearSearch();
             return true;
         }
 
-        return super.keyPressed(event);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

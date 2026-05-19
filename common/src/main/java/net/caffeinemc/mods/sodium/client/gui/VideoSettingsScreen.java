@@ -20,7 +20,6 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
@@ -380,29 +379,29 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (this.prompt != null && this.prompt.keyPressed(event)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.prompt != null && this.prompt.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
 
-        if (this.searchWidget.keyPressed(event)) {
+        if (this.searchWidget.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
 
-        return super.keyPressed(event);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public boolean keyReleased(KeyEvent event) {
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (this.prompt == null && !this.searchWidget.isSearching()) {
             // shift + P opens the vanilla video settings screen
-            if (event.key() == GLFW.GLFW_KEY_P && (event.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0) {
+            if (keyCode == GLFW.GLFW_KEY_P && (modifiers & GLFW.GLFW_MOD_SHIFT) != 0) {
                 Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.options.VideoSettingsScreen(this.prevScreen, Minecraft.getInstance(), Minecraft.getInstance().options));
                 return true;
             }
 
             // T starts search
-            if (event.key() == GLFW.GLFW_KEY_T) {
+            if (keyCode == GLFW.GLFW_KEY_T) {
                 this.setFocused(this.searchWidget);
                 return true;
             }

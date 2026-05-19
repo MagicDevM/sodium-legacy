@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -109,10 +108,10 @@ public class ExternalButtonControl implements Control {
         }
 
         @Override
-        public boolean keyPressed(KeyEvent event) {
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!isFocused()) return false;
 
-            if (event.isSelection()) {
+            if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
                 this.openScreen(this.screen);
                 this.playClickSound();
 
