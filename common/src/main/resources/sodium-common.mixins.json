@@ -69,7 +69,6 @@
     "features.textures.animations.tracking.GuiGraphicsMixin",
     "features.textures.animations.tracking.ModelBlockRendererMixin",
     "features.textures.animations.tracking.SpriteContentsMixin",
-    "features.textures.animations.tracking.SpriteContentsTickerMixin",
     "features.textures.animations.tracking.TextureAtlasMixin",
     "features.textures.animations.tracking.TextureAtlasSpriteMixin",
     "features.textures.animations.tracking.TextureSheetParticleMixin",
