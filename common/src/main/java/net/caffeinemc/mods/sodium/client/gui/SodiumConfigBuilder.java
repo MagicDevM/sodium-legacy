@@ -23,14 +23,12 @@ import net.caffeinemc.mods.sodium.client.gui.options.control.ControlValueFormatt
 import net.caffeinemc.mods.sodium.client.render.chunk.DeferMode;
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.QuadSplittingMode;
 import net.minecraft.client.*;
-import net.minecraft.client.renderer.texture.MipmapStrategy;
-import net.minecraft.client.renderer.texture.ReloadableTexture;
-import net.minecraft.client.renderer.texture.TextureContents;
+import com.mojang.blaze3d.platform.TextureUtil;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ParticleStatus;
+import net.minecraft.client.ParticleStatus;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.opengl.GL;
@@ -43,7 +41,7 @@ import java.util.Optional;
 
 // TODO: get initialValue from the vanilla options (it's private)
 public class SodiumConfigBuilder implements ConfigEntryPoint {
-    private static final Identifier SODIUM_ICON = Identifier.fromNamespaceAndPath("sodium", "textures/gui/config-icon.png");
+    private static final ResourceLocation SODIUM_ICON = new ResourceLocation("sodium").fromNamespaceAndPath("sodium", "textures/gui/config-icon.png");
     private static final SodiumOptions DEFAULTS = SodiumOptions.defaults();
 
     private final Options vanillaOpts;
@@ -87,15 +85,20 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         textureManager.registerAndLoad(SODIUM_ICON, new SodiumLogo());
     }
 
-    static class SodiumLogo extends ReloadableTexture {
+    static class SodiumLogo extends SimpleTexture {
         public SodiumLogo() {
             super(SODIUM_ICON);
         }
 
         @Override
-        public TextureContents loadContents(ResourceManager resourceManager) throws IOException {
+        public SimpleTexture load(ResourceManager resourceManager) throws IOException {
             try (InputStream inputStream = SodiumConfigBuilder.class.getResourceAsStream("/config-icon.png")) {
-                return new TextureContents(NativeImage.read(inputStream), new TextureMetadataSection(false, false, MipmapStrategy.AUTO, 0.1f));
+                NativeImage image = NativeImage.read(inputStream);
+                
+                TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
+                
+                this.bind();
+                image.upload(0, 0, 0, true);
             }
         }
     }
@@ -144,7 +147,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         generalPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
                         // TODO: make RD option respect Vanilla's >16 RD only allowed if memory >1GB constraint
-                        builder.createIntegerOption(Identifier.parse("sodium:general.render_distance"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.render_distance"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.renderDistance"))
                                 .setTooltip(Component.translatable("sodium.options.view_distance.tooltip"))
@@ -156,7 +159,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:general.simulation_distance"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.simulation_distance"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.simulationDistance"))
                                 .setTooltip(Component.translatable("sodium.options.simulation_distance.tooltip"))
@@ -168,7 +171,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:general.gamma"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.gamma"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.gamma"))
                                 .setTooltip(Component.translatable("sodium.options.brightness.tooltip"))
@@ -180,13 +183,13 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         );
         generalPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:general.gui_scale"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.gui_scale"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.guiScale"))
                                 .setTooltip(Component.translatable("sodium.options.gui_scale.tooltip"))
                                 .setValueFormatter(ControlValueFormatterImpls.guiScale())
                                 .setValidatorProvider((state) -> {
-                                    var savedValue = state.readIntOption(Identifier.parse("sodium:general.gui_scale"));
+                                    var savedValue = state.readIntOption(new ResourceLocation("sodium").parse("sodium:general.gui_scale"));
                                     var realMax = this.window.calculateScale(0, Minecraft.getInstance().isEnforceUnicode());
                                     var presentationMax = Math.max(savedValue, realMax);
                                     return new GUIScaleRange(presentationMax);
@@ -195,7 +198,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setBinding(this.vanillaOpts.guiScale()::set, this.vanillaOpts.guiScale()::get)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:general.fullscreen"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:general.fullscreen"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.fullscreen"))
                                 .setTooltip(Component.translatable("sodium.options.fullscreen.tooltip"))
@@ -212,7 +215,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 }, this.vanillaOpts.fullscreen()::get)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:general.fullscreen_resolution"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.fullscreen_resolution"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.fullscreen.resolution"))
                                 .setTooltip(Component.translatable("sodium.options.fullscreen_resolution.tooltip"))
@@ -242,13 +245,13 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                             }
                                             var os = OsUtils.getOs();
                                             return (os == OsUtils.OperatingSystem.WIN || os == OsUtils.OperatingSystem.MAC) &&
-                                                    state.readBooleanOption(Identifier.parse("sodium:general.fullscreen"));
+                                                    state.readBooleanOption(new ResourceLocation("sodium").parse("sodium:general.fullscreen"));
                                         },
-                                        Identifier.parse("sodium:general.fullscreen"))
+                                        new ResourceLocation("sodium").parse("sodium:general.fullscreen"))
                                 .setFlags(OptionFlag.REQUIRES_VIDEOMODE_RELOAD)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:general.vsync"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:general.vsync"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.vsync"))
                                 .setTooltip(Component.translatable("sodium.options.v_sync.tooltip"))
@@ -256,7 +259,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setBinding(this.vanillaOpts.enableVsync()::set, this.vanillaOpts.enableVsync()::get)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:general.framerate_limit"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:general.framerate_limit"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.framerateLimit"))
                                 .setTooltip(Component.translatable("sodium.options.fps_limit.tooltip"))
@@ -268,7 +271,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         );
         generalPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:general.attack_indicator"), AttackIndicatorStatus.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:general.attack_indicator"), AttackIndicatorStatus.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.attackIndicator"))
                                 .setTooltip(Component.translatable("sodium.options.attack_indicator.tooltip"))
@@ -277,7 +280,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setBinding(this.vanillaOpts.attackIndicator()::set, this.vanillaOpts.attackIndicator()::get)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:general.autosave_indicator"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:general.autosave_indicator"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.autosaveIndicator"))
                                 .setTooltip(Component.translatable("sodium.options.autosave_indicator.tooltip"))
@@ -293,7 +296,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.graphics"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.graphics"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.improvedTransparency"))
                                 .setTooltip(Component.translatable("options.improvedTransparency.tooltip"))
@@ -306,7 +309,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:quality.clouds"), CloudStatus.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:quality.clouds"), CloudStatus.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.renderClouds"))
                                 .setTooltip(Component.translatable("sodium.options.clouds_quality.tooltip"))
@@ -328,7 +331,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.LOW)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.render_cloud_distance"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.render_cloud_distance"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.renderCloudsDistance"))
                                 .setTooltip(Component.translatable("sodium.options.clouds_distance.tooltip"))
@@ -343,7 +346,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setValueFormatter(ControlValueFormatterImpls.translateVariable("options.chunks"))
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.weather"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.weather"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.weatherRadius"))
                                 .setTooltip(Component.translatable("options.weatherRadius.tooltip"))
@@ -354,7 +357,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.LOW)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.leaves"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.leaves"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.cutoutLeaves"))
                                 .setTooltip(Component.translatable("options.cutoutLeaves.tooltip"))
@@ -364,7 +367,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:quality.particles"), ParticleStatus.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:quality.particles"), ParticleStatus.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.particles"))
                                 .setTooltip(Component.translatable("sodium.options.particle_quality.tooltip"))
@@ -378,7 +381,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.MEDIUM)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.ao"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.ao"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.ao"))
                                 .setTooltip(Component.translatable("sodium.options.smooth_lighting.tooltip"))
@@ -388,7 +391,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.biome_blend"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.biome_blend"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.biomeBlendRadius"))
                                 .setValueFormatter(ControlValueFormatterImpls.biomeBlend())
@@ -400,7 +403,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.entity_distance"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.entity_distance"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.entityDistanceScaling"))
                                 .setValueFormatter(ControlValueFormatterImpls.percentage())
@@ -411,7 +414,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.HIGH)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.entity_shadows"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.entity_shadows"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.entityShadows"))
                                 .setTooltip(Component.translatable("sodium.options.entity_shadows.tooltip"))
@@ -420,7 +423,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.MEDIUM)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.vignette"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.vignette"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.vignette"))
                                 .setTooltip(Component.translatable("options.vignette.tooltip"))
@@ -428,7 +431,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setBinding(this.vanillaOpts.vignette()::set, this.vanillaOpts.vignette()::get)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.fade_time"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.fade_time"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.chunkFade"))
                                 .setTooltip(Component.translatable("options.chunkFade.tooltip"))
@@ -441,7 +444,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.mipmap_levels"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.mipmap_levels"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.mipmapLevels"))
                                 .setValueFormatter(ControlValueFormatterImpls.multiplier())
@@ -456,7 +459,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:quality.filtering_mode"), TextureFilteringMethod.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:quality.filtering_mode"), TextureFilteringMethod.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.textureFiltering"))
                                 .setTooltip(i -> Component.translatable("options.textureFiltering." + i.name().toLowerCase(Locale.ROOT) + ".tooltip"))
@@ -469,7 +472,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_ASSET_RELOAD)
                 )
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:quality.anisotropy_bit"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:quality.anisotropy_bit"))
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.maxAnisotropy"))
                                 .setRange(new Range(0, 3, 1))
@@ -480,11 +483,11 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.MEDIUM)
                                 .setFlags(OptionFlag.REQUIRES_ASSET_RELOAD)
                                 .setEnabledProvider(i -> {
-                                    return i.readEnumOption(Identifier.parse("sodium:quality.filtering_mode"), TextureFilteringMethod.class) == TextureFilteringMethod.ANISOTROPIC;
-                                }, Identifier.parse("sodium:quality.filtering_mode"))
+                                    return i.readEnumOption(new ResourceLocation("sodium").parse("sodium:quality.filtering_mode"), TextureFilteringMethod.class) == TextureFilteringMethod.ANISOTROPIC;
+                                }, new ResourceLocation("sodium").parse("sodium:quality.filtering_mode"))
                 )
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:quality.pixel_filtering_mode"), GL11.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:quality.pixel_filtering_mode"), GL11.class)
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.pixel_filtering_mode.name"))
                                 .setTooltip(Component.translatable("sodium.options.pixel_filtering_mode.tooltip"))
@@ -502,7 +505,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.hidden_fluid_culling"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.hidden_fluid_culling"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.hidden_fluid_culling.name"))
                                 .setTooltip(Component.translatable("sodium.options.hidden_fluid_culling.tooltip"))
@@ -512,7 +515,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.improved_fluid_shaping"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.improved_fluid_shaping"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.improved_fluid_shaping.name"))
                                 .setTooltip(Component.translatable("sodium.options.improved_fluid_shaping.tooltip"))
@@ -521,7 +524,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:quality.closest_point_entity_sort"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:quality.closest_point_entity_sort"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.closest_point_entity_sort.name"))
                                 .setTooltip(Component.translatable("sodium.options.closest_point_entity_sort.tooltip"))
@@ -538,7 +541,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         performancePage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:performance.chunk_update_threads"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:performance.chunk_update_threads"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.chunk_update_threads.name"))
                                 .setValueFormatter(ControlValueFormatterImpls.quantityOrDisabled(
@@ -553,7 +556,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:performance.always_defer_chunk_updates"), DeferMode.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:performance.always_defer_chunk_updates"), DeferMode.class)
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.defer_chunk_updates.name"))
                                 .setTooltip(Component.translatable("sodium.options.defer_chunk_updates.tooltip"))
@@ -566,7 +569,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         performancePage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:performance.use_block_face_culling"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:performance.use_block_face_culling"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.use_block_face_culling.name"))
                                 .setTooltip(Component.translatable("sodium.options.use_block_face_culling.tooltip"))
@@ -576,7 +579,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:performance.use_fog_occlusion"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:performance.use_fog_occlusion"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.use_fog_occlusion.name"))
                                 .setTooltip(Component.translatable("sodium.options.use_fog_occlusion.tooltip"))
@@ -586,7 +589,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_UPDATE)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:performance.use_entity_culling"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:performance.use_entity_culling"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.use_entity_culling.name"))
                                 .setTooltip(Component.translatable("sodium.options.use_entity_culling.tooltip"))
@@ -595,7 +598,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setImpact(OptionImpact.MEDIUM)
                 )
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:performance.animate_only_visible_textures"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:performance.animate_only_visible_textures"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.animate_only_visible_textures.name"))
                                 .setTooltip(Component.translatable("sodium.options.animate_only_visible_textures.tooltip"))
@@ -608,7 +611,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                         this.buildNoErrorContextOption(builder)
                 )
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:performance.inactivity_fps_limit"), InactivityFpsLimit.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:performance.inactivity_fps_limit"), InactivityFpsLimit.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.inactivityFpsLimit"))
                                 .setElementNameProvider(InactivityFpsLimit::caption)
@@ -622,7 +625,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         performancePage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(Identifier.parse("sodium:performance.quad_splitting"), QuadSplittingMode.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").parse("sodium:performance.quad_splitting"), QuadSplittingMode.class)
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.quad_splitting.name"))
                                 .setTooltip(Component.translatable("sodium.options.quad_splitting.tooltip"))
@@ -638,7 +641,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
     }
 
     private OptionBuilder buildNoErrorContextOption(ConfigBuilder builder) {
-        return builder.createBooleanOption(Identifier.parse("sodium:performance.use_no_error_context"))
+        return builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:performance.use_no_error_context"))
                 .setStorageHandler(this.sodiumStorage)
                 .setName(Component.translatable("sodium.options.use_no_error_context.name"))
                 .setTooltip(Component.translatable("sodium.options.use_no_error_context.tooltip"))
@@ -660,7 +663,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         advancedPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createBooleanOption(Identifier.parse("sodium:advanced.use_persistent_mapping"))
+                        builder.createBooleanOption(new ResourceLocation("sodium").parse("sodium:advanced.use_persistent_mapping"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.use_persistent_mapping.name"))
                                 .setTooltip(Component.translatable("sodium.options.use_persistent_mapping.tooltip"))
@@ -674,7 +677,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         advancedPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createIntegerOption(Identifier.parse("sodium:advanced.cpu_render_ahead_limit"))
+                        builder.createIntegerOption(new ResourceLocation("sodium").parse("sodium:advanced.cpu_render_ahead_limit"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.cpu_render_ahead_limit.name"))
                                 .setValueFormatter(ControlValueFormatterImpls.translateVariable("sodium.options.cpu_render_ahead_limit.value"))
