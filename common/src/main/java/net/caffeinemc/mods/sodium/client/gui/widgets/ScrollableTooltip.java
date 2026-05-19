@@ -23,7 +23,7 @@ import java.util.List;
 
 // TODO: is narration of the tooltip already handled by the screen or is there no narration at all?
 public class ScrollableTooltip {
-    private static final Identifier ARROW_TEXTURE = Identifier.fromNamespaceAndPath("sodium", "textures/gui/tooltip_arrows.png");
+    private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation("sodium").fromNamespaceAndPath("sodium", "textures/gui/tooltip_arrows.png");
     private static final int ARROW_WIDTH = 5;
     private static final int SPRITE_WIDTH = 10;
     private static final int ARROW_HEIGHT = 9;
