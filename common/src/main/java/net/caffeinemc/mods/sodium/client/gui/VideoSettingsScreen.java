@@ -449,7 +449,7 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     public boolean mouseScrolled(double x, double y, double f, double amount) {
         // change the gui scale with scrolling if the control key is held
         if (Minecraft.getInstance().hasControlDown()) {
-            var location = Identifier.parse("sodium:general.gui_scale");
+            var location = new ResourceLocation("sodium").parse("sodium:general.gui_scale");
             var option = ConfigManager.CONFIG.getOption(location);
             if (option instanceof IntegerOption guiScaleOption) {
                 if (guiScaleOption.getValidatedValue() instanceof Integer intValue) {
@@ -532,7 +532,7 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
         return this.dim;
     }
 
-    public static int renderIconWithSpacing(GuiGraphics graphics, Identifier icon, int color, boolean iconMonochrome, int x, int y, int height, int margin) {
+    public static int renderIconWithSpacing(GuiGraphics graphics, ResourceLocation icon, int color, boolean iconMonochrome, int x, int y, int height, int margin) {
         int iconSize = height - margin * 2;
 
         var texture = Minecraft.getInstance().getTextureManager().getTexture(icon);
