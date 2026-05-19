@@ -44,7 +44,7 @@ public abstract class BillboardParticleMixin extends Particle {
      * @reason Optimize function
      * @author JellySquid
      */
-    @Inject(method = "buildGeometry", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta, CallbackInfo ci) {
         final var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
