@@ -10,7 +10,6 @@ import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.jspecify.annotations.NonNull;
@@ -187,8 +186,8 @@ public class SearchWidget extends AbstractParentWidget {
     }
 
     @Override
-    public boolean charTyped(CharacterEvent event) {
-        return this.searchBox.charTyped(event);
+    public boolean charTyped(char codePoint, int modifiers) {
+        return this.searchBox.charTyped(codePoint, modifiers);
     }
 
     public boolean isSearching() {
