@@ -168,7 +168,7 @@ public class PageListWidget extends AbstractScrollable {
 
     private class HeaderEntryWidget extends ClickableEntryWidget {
         private final ModOptions modOptions;
-        private final Identifier icon;
+        private final ResourceLocation icon;
         private final boolean iconMonochrome;
 
         HeaderEntryWidget(Dim2i dim, ModOptions modOptions, ColorTheme theme) {

@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
  * It derives is positioning from the parent so it tracks the parent's scroll position automatically.
  */
 public class ResetButton extends AbstractWidget {
-    private static final Identifier ICON = Identifier.fromNamespaceAndPath("sodium", "textures/gui/reset_button.png");
+    private static final ResourceLocation ICON = ResourceLocation("sodium").fromNamespaceAndPath("sodium", "textures/gui/reset_button.png");
     private static final int ICON_SIZE = Layout.CONTROL_ICON_SIZE;
     private static final int COLOR = 0xFFFF8C30;
 

@@ -287,7 +287,7 @@ public class OptionListWidget extends AbstractOptionList {
     }
 
     private static class ModHeaderWidget extends HeaderWidget {
-        final Identifier icon;
+        final ResourceLocation icon;
         final boolean iconMonochrome;
 
         public ModHeaderWidget(AbstractOptionList list, Dim2i dim, ModOptions modOptions, ColorTheme theme) {
