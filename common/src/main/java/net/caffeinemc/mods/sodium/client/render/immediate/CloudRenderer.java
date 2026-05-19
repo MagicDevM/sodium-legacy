@@ -15,6 +15,7 @@ import net.minecraft.client.CloudStatus;
 import net.minecraft.client.renderer.*;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -51,7 +52,7 @@ public class CloudRenderer {
     private VertexBuffer vertexBuffer;
     private CloudEdges edges;
     private ShaderInstance shader;
-    private final BackgroundRenderer.FogData fogData = new BackgroundRenderer.FogData(BackgroundRenderer.FogType.FOG_TERRAIN);
+    private final FogRenderer.FogData fogData = new FogRenderer.FogData(FogRenderer.FogMode.FOG_TERRAIN);
 
     private int prevCenterCellX, prevCenterCellY, cachedRenderDistance;
     private CloudStatus cloudRenderMode;
@@ -179,56 +180,56 @@ public class CloudRenderer {
         RenderSystem.setShaderFogStart(previousStart);
     }
 
-    private void applyFogModifiers(ClientLevel world, BackgroundRenderer.FogData fogData, LocalPlayer player, int cloudDistance, float tickDelta) {
+    private void applyFogModifiers(ClientLevel world, FogRenderer.FogData fogData, LocalPlayer player, int cloudDistance, float tickDelta) {
         GameRenderer renderer = Minecraft.getInstance().gameRenderer;
         Camera camera = renderer.getCamera();
         CameraSubmersionType fogType = camera.getSubmersionType();
 
         if (fogType == CameraSubmersionType.LAVA) {
             if (player.isSpectator()) {
-                fogData.fogStart = -8.0f;
-                fogData.fogEnd = (cloudDistance) * 0.5f;
+                fogData.start = -8.0f;
+                fogData.end = (cloudDistance) * 0.5f;
             } else if (player.hasStatusEffect(MobEffects.FIRE_RESISTANCE)) {
-                fogData.fogStart = 0.0f;
-                fogData.fogEnd = 3.0f;
+                fogData.start = 0.0f;
+                fogData.end = 3.0f;
             } else {
-                fogData.fogStart = 0.25f;
-                fogData.fogEnd = 1.0f;
+                fogData.start = 0.25f;
+                fogData.end = 1.0f;
             }
         } else if (fogType == CameraSubmersionType.POWDER_SNOW) {
             if (player.isSpectator()) {
-                fogData.fogStart = -8.0f;
-                fogData.fogEnd = (cloudDistance) * 0.5f;
+                fogData.start = -8.0f;
+                fogData.end = (cloudDistance) * 0.5f;
             } else {
-                fogData.fogStart = 0.0f;
-                fogData.fogEnd = 2.0f;
+                fogData.start = 0.0f;
+                fogData.end = 2.0f;
             }
         } else if (fogType == CameraSubmersionType.WATER) {
-            fogData.fogStart = -8.0f;
-            fogData.fogEnd = 96.0f;
-            fogData.fogEnd *= Math.max(0.25f, player.getUnderwaterVisibility());
+            fogData.start = -8.0f;
+            fogData.end = 96.0f;
+            fogData.end *= Math.max(0.25f, player.getUnderwaterVisibility());
 
-            if (fogData.fogEnd > cloudDistance) {
-                fogData.fogEnd = cloudDistance;
-                fogData.fogShape = FogShape.CYLINDER;
+            if (fogData.end > cloudDistance) {
+                fogData.end = cloudDistance;
+                fogData.shape = FogShape.CYLINDER;
             }
         } else {
             Vec3 position = camera.getPos();
 
             if (world.getDimensionEffects().useThickFog(Mth.floor(position.x), Mth.floor(position.z)) ||
                     Minecraft.getInstance().inGameHud.getBossBarHud().shouldThickenFog()) {
-                fogData.fogStart = (cloudDistance) * 0.05f;
-                fogData.fogEnd = Math.min((cloudDistance), 192.0f) * 0.5f;
+                fogData.start = (cloudDistance) * 0.05f;
+                fogData.end = Math.min((cloudDistance), 192.0f) * 0.5f;
             }
         }
 
-        BackgroundRenderer.StatusEffectFogModifier fogModifier = BackgroundRenderer.getFogModifier(player, tickDelta);
+        FogRenderer.MobEffectFogFunction fogModifier = FogRenderer.getPriorityFogFunction(player, tickDelta);
 
         if (fogModifier != null) {
-            MobEffectInstance statusEffectInstance = player.getStatusEffect(fogModifier.getStatusEffect());
+            MobEffectInstance statusEffectInstance = player.getMobEffect(fogModifier.getMobEffect());
 
             if (statusEffectInstance != null) {
-                fogModifier.applyStartEndModifier(fogData, player, statusEffectInstance, (cloudDistance * 8), tickDelta);
+                fogModifier.setupFog(fogData, player, statusEffectInstance, (cloudDistance * 8), tickDelta);
             }
         }
     }

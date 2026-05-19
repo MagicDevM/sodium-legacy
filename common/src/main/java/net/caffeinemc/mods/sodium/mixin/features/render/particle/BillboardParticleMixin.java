@@ -1,6 +1,6 @@
 package net.caffienemc.mods.sodium.mixin.features.render.particle;
 
-import net.caffienemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
+import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.ParticleVertex;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.minecraft.client.particle.SingleQuadParticle;
