@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -71,13 +70,9 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     @Shadow
     private int lastCameraSectionZ;
 
-    @Shadow
-    @Final
-    private WorldBorderRenderer worldBorderRenderer;
-
-    @Shadow
-    @Final
-    private SubmitNodeStorage submitNodeStorage;
+//     @Shadow
+//     @Final
+//     private WorldBorderRenderer worldBorderRenderer;
 
     @Unique
     private SodiumWorldRenderer renderer;
@@ -99,7 +94,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(Minecraft client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityRenderDispatcher, RenderBuffers renderBuffers, FeatureRenderDispatcher featureRenderDispatcher, CallbackInfo ci) {
+    private void init(Minecraft client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityRenderDispatcher, RenderBuffers renderBuffers, CallbackInfo ci) {
         this.renderer = new SodiumWorldRenderer(client);
     }
 
