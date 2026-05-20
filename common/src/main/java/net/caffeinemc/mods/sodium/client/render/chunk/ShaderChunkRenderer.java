@@ -86,8 +86,6 @@ public abstract class ShaderChunkRenderer implements ChunkRenderer {
 
         GlStateManager._viewport(0, 0, target.width, target.height);
         GlStateManager._glBindFramebuffer(GL30C.GL_FRAMEBUFFER, target.frameBufferId);
-        ((GlCommandEncoderAccessor) RenderSystem.getDevice().createCommandEncoder()).sodium$applyPipelineState(pass.getPipeline());
-        ((GlCommandEncoderAccessor) RenderSystem.getDevice().createCommandEncoder()).sodium$setLastProgram(null);
 
         ChunkShaderOptions options = new ChunkShaderOptions(ChunkFogMode.SMOOTH, pass, this.vertexType);
 
