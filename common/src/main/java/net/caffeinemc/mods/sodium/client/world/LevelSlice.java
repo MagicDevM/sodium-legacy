@@ -367,11 +367,6 @@ public final class LevelSlice implements BlockAndTintGetter {
         return this.level.getHeight();
     }
 
-    @Override
-    public int getMinBuildHeight() {
-        return this.level.getMinBuildHeight();
-    }
-
 
     public SodiumModelData getPlatformModelData(BlockPos pos) {
         if (!this.volume.isInside(pos.getX(), pos.getY(), pos.getZ())) {
