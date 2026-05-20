@@ -180,10 +180,10 @@ public class SodiumWorldRenderer {
             throw new IllegalStateException("Client instance has no active player entity");
         }
 
-        Vec3 posRaw = camera.position();
+        Vec3 posRaw = camera.getPosition();
         Vector3d pos = new Vector3d(posRaw.x(), posRaw.y(), posRaw.z());
-        float pitch = camera.xRot();
-        float yaw = camera.yRot();
+        float pitch = camera.getXRot();
+        float yaw = camera.getYRot();
 
         if (this.lastCameraPos == null) {
             this.lastCameraPos = pos;
@@ -353,7 +353,7 @@ public class SodiumWorldRenderer {
         int crumblingOverlay;
         if (sortedSet != null && !sortedSet.isEmpty()) {
             poseStack.pushPose();
-            poseStack.translate(blockPos.getX() - camera.position().x, blockPos.getY() - camera.position().y, blockPos.getZ() - camera.position().z);
+            poseStack.translate(blockPos.getX() - camera.getPosition().x, blockPos.getY() - camera.getPosition().y, blockPos.getZ() - camera.getPosition().z);
             crumblingOverlay = sortedSet.last().getProgress();
             poseStack.popPose();
         } else {
@@ -416,7 +416,7 @@ public class SodiumWorldRenderer {
      * Returns whether the entity intersects with any visible chunks in the graph.
      * @return True if the entity is visible, otherwise false
      */
-    public boolean isEntityVisible(Entity entity) {
+    public boolean isEntityVisible(EntityRenderer renderer, Entity entity) {
         if (!this.useEntityCulling) {
             return true;
         }
@@ -441,7 +441,7 @@ public class SodiumWorldRenderer {
     public boolean isBoxVisible(double x1, double y1, double z1, double x2, double y2, double z2) {
         // Boxes outside the valid level height will never map to a rendered chunk
         // Always render these boxes, or they'll be culled incorrectly!
-        if (y2 < this.level.getMinY() + 0.5D || y1 > this.level.getMaxY() - 0.5D) {
+        if (y2 < this.level.getMinBuildHeight() + 0.5D || y1 > this.level.getMaxBuildHeight() - 0.5D) {
             return true;
         }
 
