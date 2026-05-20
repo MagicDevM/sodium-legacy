@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ShadowFeatureRenderer.class)
+@Mixin(EntityRenderDispatcher.class)
 public class ShadowFeatureRendererMixin {
     @Unique
     private static final int SHADOW_COLOR = ColorABGR.pack(1.0f, 1.0f, 1.0f);

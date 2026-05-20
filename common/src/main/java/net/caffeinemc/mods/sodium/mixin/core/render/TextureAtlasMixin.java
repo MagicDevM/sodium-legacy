@@ -24,10 +24,10 @@ import java.util.Map;
 public class TextureAtlasMixin implements ExtendedTextureAtlas {
     @Shadow
     @Final
-    private Identifier location;
+    private ResourceLocation location;
 
     @Shadow
-    private Map<Identifier, TextureAtlasSprite> texturesByName;
+    private Map<ResourceLocation, TextureAtlasSprite> texturesByName;
 
     @Shadow
     @Nullable
