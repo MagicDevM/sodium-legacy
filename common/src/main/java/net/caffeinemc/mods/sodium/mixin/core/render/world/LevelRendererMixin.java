@@ -1,7 +1,5 @@
 package net.caffeinemc.mods.sodium.mixin.core.render.world;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
-import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.systems.RenderPass;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
@@ -47,9 +45,6 @@ import java.util.function.Consumer;
 
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererMixin implements LevelRendererExtension {
-    @Unique
-    private static final EnumMap<RenderType, List<RenderPass.Draw<GpuBufferSlice[]>>> STATIC_MAP = new EnumMap<>(RenderType.class);
-
     @Shadow
     @Final
     private RenderBuffers renderBuffers;
@@ -96,7 +91,9 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     public SodiumWorldRenderer sodium$getWorldRenderer() {
         return this.renderer;
     }
-
+    
+    // TODO: Implement missing functions
+    
     @Redirect(method = "allChanged()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;getEffectiveRenderDistance()I", ordinal = 1))
     private int nullifyBuiltChunkStorage(Options options) {
         // Do not allow any resources to be allocated
@@ -147,22 +144,22 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
      * @author IMS
      */
     @Overwrite
-    private ChunkSectionsToRender prepareChunkRenders(Matrix4fc matrix4fc, double x, double y, double z) {
-        ChunkSectionsToRender chunkSectionsToRender = new ChunkSectionsToRender(this.minecraft.getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).getTextureView(), STATIC_MAP, -1, new GpuBufferSlice[0]);
-        ((SodiumChunkSection) (Object) chunkSectionsToRender).sodium$setRendering(renderer, matrices, x, y, z);
-        return chunkSectionsToRender;
+    public int getCompletedChunkCount() {
+        return this.renderer.getVisibleChunkCount();
     }
-
-    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;cullTerrain(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Z)V"))
+    
+    // TODO: Implement terrain culling maybe? if more culling doesnt do it
+    
+/*     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;cullTerrain(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Z)V"))
     private void sodium$setMatrices(GraphicsResourceAllocator graphicsResourceAllocator, float tickDelta, long startTime, boolean tick, Camera camera, Matrix4f matrix4f, Matrix4f matrix4f2, Matrix4f matrix4f3, GpuBufferSlice gpuBufferSlice, Vector4f vector4f, boolean bl2, CallbackInfo ci) {
         matrices = new ChunkRenderMatrices(matrix4f2, matrix4f);
-    }
+    } */
 
     /**
      * @reason Redirect the terrain setup phase to our renderer
      * @author JellySquid
      */
-    @Overwrite
+/*     @Overwrite
     private void cullTerrain(Camera camera, Frustum frustum, boolean spectator) {
         var viewport = ((ViewportProvider) frustum).sodium$createViewport();
         var updateChunksImmediately = FlawlessFrames.isActive();
@@ -185,7 +182,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
         } finally {
             RenderDevice.exitManagedCode();
         }
-    }
+    } */
 
     /**
      * @reason Redirect chunk updates to our renderer
