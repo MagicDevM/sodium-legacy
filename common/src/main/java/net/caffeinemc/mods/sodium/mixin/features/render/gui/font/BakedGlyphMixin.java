@@ -7,7 +7,6 @@ import net.caffeinemc.mods.sodium.api.vertex.format.common.GlyphVertex;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
-import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 import org.spongepowered.asm.mixin.*;
@@ -15,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(BakedSheetGlyph.class)
+@Mixin(BakedGlyph.class)
 public class BakedGlyphMixin {
     @Shadow
     @Final
@@ -53,7 +52,7 @@ public class BakedGlyphMixin {
      * @reason Use intrinsics
      * @author JellySquid
      */
-    @Inject(method = "render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void drawFast(boolean italic, float x, float y, float z, Matrix4f matrix, VertexConsumer vertexConsumer, int c, boolean bl2, int light, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
@@ -97,8 +96,8 @@ public class BakedGlyphMixin {
      * @reason Use intrinsics
      * @author JellySquid
      */
-    @Inject(method = "buildEffect", at = @At("HEAD"), cancellable = true)
-    private void drawEffectFast(BakedSheetGlyph.EffectInstance effect, float offset, float depthOffset, int c, VertexConsumer vertexConsumer, int light, Matrix4f matrix, CallbackInfo ci) {
+    @Inject(method = "renderEffect", at = @At("HEAD"), cancellable = true)
+    private void drawEffectFast(BakedGlyph.Effect effect, float offset, float depthOffset, int c, VertexConsumer vertexConsumer, int light, Matrix4f matrix, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
         if (writer == null) {
