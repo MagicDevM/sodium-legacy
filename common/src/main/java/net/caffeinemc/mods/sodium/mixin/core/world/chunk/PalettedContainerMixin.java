@@ -18,7 +18,7 @@ public abstract class PalettedContainerMixin<T> implements PalettedContainerROEx
 
     @Shadow
     @Final
-    private PalettedContainer.Strategy<T> strategy;
+    private PalettedContainer.Strategy strategy;
 
     @Shadow
     public abstract PalettedContainer<T> copy();
