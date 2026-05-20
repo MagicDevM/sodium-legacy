@@ -80,11 +80,16 @@ public final class LevelSlice implements BlockAndTintGetter {
 
     // (Local Section -> Block States) table.
     private final BlockState[][] blockArrays;
-
+    
+    @Override
+    public int getMinBuildHeight() {
+        return this.level.getMinBuildHeight();
+    }
+    
     // (Local Section -> Light Manager) table.
     @SuppressWarnings("MismatchedReadAndWriteOfArray")
     private final SodiumAuxiliaryLightManager[] auxLightManager;
-
+    
     // (Local Section -> Light Arrays) table.
     private final @Nullable DataLayer[][] lightArrays;
 
@@ -363,8 +368,8 @@ public final class LevelSlice implements BlockAndTintGetter {
     }
 
     @Override
-    public int getMinY() {
-        return this.level.getMinY();
+    public int getMinBuildHeight() {
+        return this.level.getMinBuildHeight();
     }
 
 
