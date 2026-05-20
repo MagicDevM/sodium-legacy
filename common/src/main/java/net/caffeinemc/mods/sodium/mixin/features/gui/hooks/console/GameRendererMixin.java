@@ -3,7 +3,6 @@ package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.console;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.caffeinemc.mods.sodium.client.gui.console.ConsoleHooks;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.render.state.GuiRenderState;
@@ -35,8 +34,8 @@ public class GameRendererMixin {
     @Unique
     private static boolean HAS_RENDERED_OVERLAY_ONCE = false;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/GuiRenderer;render(Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V"))
-    private void onRender(DeltaTracker deltaTracker, boolean bl, CallbackInfo ci) {
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;flush()V"))
+    private void onRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         // Do not start updating the console overlay until the font renderer is ready
         // This prevents the console from using tofu boxes for everything during early startup
         if (Minecraft.getInstance().getOverlay() != null) {

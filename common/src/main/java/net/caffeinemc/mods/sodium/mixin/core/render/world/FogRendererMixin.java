@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.caffeinemc.mods.sodium.client.util.FogParameters;
 import net.caffeinemc.mods.sodium.client.util.FogStorage;
 import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.FogRenderer;
@@ -26,7 +25,7 @@ public class FogRendererMixin implements FogStorage {
     }
 
     @Inject(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/fog/FogRenderer;updateBuffer(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;FFFFFF)V"))
-    private void sodium$storeFogParameters(Camera camera, int i, DeltaTracker deltaTracker, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir, @Local FogData data, @Local Vector4f fogColor) {
+    private void sodium$storeFogParameters(Camera camera, int i, float tickDelta, long startTime, float f, ClientLevel clientLevel, CallbackInfoReturnable<Vector4f> cir, @Local FogData data, @Local Vector4f fogColor) {
         parameters = new FogParameters(fogColor.x, fogColor.y, fogColor.z, fogColor.w, data.environmentalStart, data.environmentalEnd, data.renderDistanceStart, data.renderDistanceEnd);
     }
 }
