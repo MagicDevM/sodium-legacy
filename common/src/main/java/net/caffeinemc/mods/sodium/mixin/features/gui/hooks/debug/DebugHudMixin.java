@@ -3,8 +3,8 @@ package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.debug;
 import com.google.common.collect.Lists;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
-import net.caffienemc.mods.sodium.client.util.MathUtil;
-import net.caffienemc.mods.sodium.client.util.NativeBuffer;
+import net.caffeinemc.mods.sodium.client.util.MathUtil;
+import net.caffeinemc.mods.sodium.client.util.NativeBuffer;
 import net.caffeinemc.mods.sodium.client.util.FrameTimeStatistics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.client.Minecraft;
@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(DebugScreenOverlay.class)
 public abstract class DebugHudMixin {
