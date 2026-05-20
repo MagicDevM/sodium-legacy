@@ -1,6 +1,5 @@
 package net.caffeinemc.mods.sodium.mixin.workarounds.context_creation;
 
-import com.mojang.blaze3d.TracyFrameCapture;
 import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.ScreenManager;
 import com.mojang.blaze3d.platform.Window;
@@ -58,7 +57,7 @@ public class RenderSystemMixin {
     }
 
     @Inject(method = "flipFrame", at = @At(value = "RETURN"))
-    private static void preSwapBuffers(Window window, TracyFrameCapture tracyFrameCapture, CallbackInfo ci) {
+    private static void preSwapBuffers(Window window, CallbackInfo ci) {
         if (wglPrevContext == MemoryUtil.NULL) {
             // There is no prior recorded context.
             return;
