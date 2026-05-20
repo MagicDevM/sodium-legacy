@@ -159,7 +159,10 @@ public class RenderSectionManager {
         } else {
             this.averageFrameDuration = MathUtil.exponentialMovingAverage(this.averageFrameDuration, this.lastFrameDuration, FRAME_DURATION_UPDATE_RATIO);
         }
-        this.averageFrameDuration = Mth.clamp(this.averageFrameDuration, 1_000_100, 100_000_000);
+        this.averageFrameDuration = Math.max(
+            1_000_100L,
+            Math.min(this.averageFrameDuration, 100_000_000L)
+        );
 
         this.frame += 1;
 
@@ -213,7 +216,7 @@ public class RenderSectionManager {
 
     private boolean isOutOfGraph(SectionPos pos) {
         var sectionY = pos.getY();
-        return this.level.getMinSectionY() <= sectionY && sectionY <= this.level.getMaxSectionY() && !this.sectionByPosition.containsKey(pos.asLong());
+        return this.level.getMinSection() <= sectionY && sectionY <= this.level.getMaxSection() && !this.sectionByPosition.containsKey(pos.asLong());
     }
 
     private float getSearchDistance(FogParameters fogParameters) {
@@ -230,10 +233,10 @@ public class RenderSectionManager {
 
     private boolean shouldUseOcclusionCulling(Camera camera, boolean spectator) {
         final boolean useOcclusionCulling;
-        BlockPos origin = camera.blockPosition();
+        BlockPos origin = camera.getBlockPosition();
 
         if (spectator && this.level.getBlockState(origin)
-                .isSolidRender()) {
+                .isSolidRender(this.level, origin)) {
             useOcclusionCulling = false;
         } else {
             useOcclusionCulling = Minecraft.getInstance().smartCull;
@@ -946,13 +949,13 @@ public class RenderSectionManager {
     }
 
     public void onChunkAdded(int x, int z) {
-        for (int y = this.level.getMinSectionY(); y <= this.level.getMaxSectionY(); y++) {
+        for (int y = this.level.getMinSection(); y <= this.level.getMaxSection(); y++) {
             this.onSectionAdded(x, y, z);
         }
     }
 
     public void onChunkRemoved(int x, int z) {
-        for (int y = this.level.getMinSectionY(); y <= this.level.getMaxSectionY(); y++) {
+        for (int y = this.level.getMinSection(); y <= this.level.getMaxSection(); y++) {
             this.onSectionRemoved(x, y, z);
         }
     }
