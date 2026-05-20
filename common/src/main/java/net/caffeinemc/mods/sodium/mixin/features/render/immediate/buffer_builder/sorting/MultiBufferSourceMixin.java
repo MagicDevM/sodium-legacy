@@ -1,9 +1,9 @@
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.buffer_builder.sorting;
 
+import java.nio.ByteBuffer;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
-import com.mojang.blaze3d.vertex.MeshData;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import net.caffeinemc.mods.sodium.client.util.sorting.VertexSorters;
@@ -18,60 +18,68 @@ import org.spongepowered.asm.mixin.injection.At;
 public class MultiBufferSourceMixin {
     @Unique
     private static final int VERTICES_PER_QUAD = 6;
+    
+    @WrapOperation(
+        method = "endBatch(Lnet/minecraft/client/renderer/rendertype/RenderType;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/blaze3d/vertex/BufferBuilder;getSortState()Lcom/mojang/blaze3d/vertex/BufferBuilder$SortState;"
+        )
+    )
+    private BufferBuilder.SortState redirectSortQuads(BufferBuilder bufferBuilder, VertexSorting sorting, Operation<BufferBuilder.SortState> original) {
+        if (sorting instanceof VertexSortingExtended sortingExtended) {
+            // Replace the vertex sorting algorithm when it implements our accelerated sort.
+            acceleratedSort(bufferBuilder, sortingExtended);
+        } else {
+            return original.call(bufferBuilder, sorting);
+        }
 
+        // The caller never uses the return value.
+        return null;
+    }
+    
     @Unique
-    private static void acceleratedSort(MeshData meshData, ByteBufferBuilder bufferBuilder, VertexSortingExtended sorting) {
-        final var drawState = meshData.drawState();
-
-        if (drawState.mode() != VertexFormat.Mode.QUADS) {
+    private static void acceleratedSort(BufferBuilder bufferBuilder, VertexSortingExtended sorting) {
+        if (bufferBuilder.mode != VertexFormat.Mode.QUADS) {
             // Only quad lists can be sorted.
             return;
         }
 
-        var sortedPrimitiveIds = VertexSorters.sort(meshData.vertexBuffer(), drawState.vertexCount(), drawState.format().getVertexSize(), sorting);
-        var sortedIndexBuffer = buildSortedIndexBuffer(meshData, bufferBuilder, sortedPrimitiveIds);
-        ((MeshDataAccessor) meshData).sodium$setIndexBuffer(sortedIndexBuffer);
+        var sortedPrimitiveIds = VertexSorters.sort(bufferBuilder.buffer, bufferBuilder.vertices, bufferBuilder.format.getVertexSize(), sorting);
+        
+        reorderQuadVertices(
+            bufferBuilder.buffer,
+            sortedPrimitiveIds,
+            bufferBuilder.format.getVertexSize()
+          );
     }
-
+    
+    // Reorder Quad vertices to free up memory
     @Unique
-    private static ByteBufferBuilder.Result buildSortedIndexBuffer(MeshData meshData, ByteBufferBuilder bufferBuilder, int[] primitiveIds) {
-        final var indexType = meshData.drawState().indexType();
-        final var ptr = bufferBuilder.reserve((primitiveIds.length * VERTICES_PER_QUAD) * indexType.bytes);
+    private static BufferBuilder.RenderedBuffer reorderQuadVertices(ByteBuffer buffer, int[] primitiveIds, int vertexSize) {
+        int quadSize = vertexSize * 4;
+        
+        ByteBuffer copy = MemoryUtil.memAlloc(buffer.capacity());
+        
+        for (int dstQuad = 0; dstQuad < primitiveIds.length; dstQuad++) {
+        int srcQuad = primitiveIds[dstQuad];
 
-        if (indexType == VertexFormat.IndexType.SHORT) {
-            writeIndexBufferShort(ptr, primitiveIds);
-        } else if (indexType == VertexFormat.IndexType.INT) {
-            writeIndexBufferInt(ptr, primitiveIds);
-        } else {
-            throw new UnsupportedOperationException();
+        int srcOffset = srcQuad * quadSize;
+        int dstOffset = dstQuad * quadSize;
+
+        MemoryUtil.memCopy(
+            MemoryUtil.memAddress(buffer) + srcOffset,
+            MemoryUtil.memAddress(copy) + dstOffset,
+            quadSize
+          );
         }
-
-        return bufferBuilder.build();
-    }
-
-    @Unique
-    private static void writeIndexBufferInt(long ptr, int[] primitiveIds) {
-        for (int primitiveId : primitiveIds) {
-            MemoryUtil.memPutInt(ptr +  0L, (primitiveId * 4) + 0);
-            MemoryUtil.memPutInt(ptr +  4L, (primitiveId * 4) + 1);
-            MemoryUtil.memPutInt(ptr +  8L, (primitiveId * 4) + 2);
-            MemoryUtil.memPutInt(ptr + 12L, (primitiveId * 4) + 2);
-            MemoryUtil.memPutInt(ptr + 16L, (primitiveId * 4) + 3);
-            MemoryUtil.memPutInt(ptr + 20L, (primitiveId * 4) + 0);
-            ptr += 24L;
-        }
-    }
-
-    @Unique
-    private static void writeIndexBufferShort(long ptr, int[] primitiveIds) {
-        for (int primitiveId : primitiveIds) {
-            MemoryUtil.memPutShort(ptr +  0L, (short) ((primitiveId * 4) + 0));
-            MemoryUtil.memPutShort(ptr +  2L, (short) ((primitiveId * 4) + 1));
-            MemoryUtil.memPutShort(ptr +  4L, (short) ((primitiveId * 4) + 2));
-            MemoryUtil.memPutShort(ptr +  6L, (short) ((primitiveId * 4) + 2));
-            MemoryUtil.memPutShort(ptr +  8L, (short) ((primitiveId * 4) + 3));
-            MemoryUtil.memPutShort(ptr + 10L, (short) ((primitiveId * 4) + 0));
-            ptr += 12L;
-        }
+    
+        MemoryUtil.memCopy(
+            MemoryUtil.memAddress(copy),
+            MemoryUtil.memAddress(buffer),
+            (long) primitiveIds.length * quadSize
+        );
+    
+        MemoryUtil.memFree(copy);
     }
 }

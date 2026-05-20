@@ -1,12 +1,12 @@
 package net.caffeinemc.mods.sodium.mixin.core.render.immediate.consumer;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.api.memory.MemoryIntrinsics;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.serializer.VertexSerializerRegistry;
 import net.caffeinemc.mods.sodium.client.render.vertex.buffer.BufferBuilderExtension;
+import java.nio.ByteBuffer;
 import org.lwjgl.system.MemoryStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +27,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
 
     @Shadow
     @Final
-    private ByteBufferBuilder buffer;
+    private ByteBuffer buffer;
 
     @Shadow
     private int elementsToFill;
@@ -42,8 +42,15 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
             return;
         }
 
-        long head = this.buffer.reserve(this.vertexSize);
-        MemoryIntrinsics.copyMemory(head - this.vertexSize, head, this.vertexSize);
+        int writeOffset = this.nextElementByte;
+
+        MemoryUtil.memCopy(
+            MemoryUtil.memAddress(this.buffer) + writeOffset - this.vertexSize,
+            MemoryUtil.memAddress(this.buffer) + writeOffset,
+            this.vertexSize
+        );
+    
+        this.nextElementByte += this.vertexSize;
 
         this.vertices++;
     }
@@ -54,7 +61,8 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
 
         // The buffer may change in the even, so we need to make sure that the
         // pointer is retrieved *after* the resize
-        var dst = this.buffer.reserve(length);
+        this.ensureCapacity(length);
+        long dst = MemoryUtil.memAddress(this.buffer) + this.nextElementByte;
 
         if (format == this.format) {
             // The layout is the same, so we can just perform a memory copy
