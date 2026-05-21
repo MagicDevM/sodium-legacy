@@ -65,8 +65,8 @@ public abstract class LightDataAccess {
         BlockState state = level.getBlockState(pos);
 
         boolean em = state.emissiveRendering(level, pos);
-        boolean op = state.isViewBlocking(level, pos) && state.getLightBlock() != 0;
-        boolean fo = state.isSolidRender();
+        boolean op = state.isViewBlocking(level, pos) && state.getLightBlock(level, pos) != 0;
+        boolean fo = state.isSolidRender(level, pos);
         boolean fc = state.isCollisionShapeFullBlock(level, pos);
 
         int lu = PlatformBlockAccess.getInstance().getLightEmission(state, level, pos);
@@ -82,7 +82,7 @@ public abstract class LightDataAccess {
                 bl = level.getBrightness(LightLayer.BLOCK, pos);
                 sl = level.getBrightness(LightLayer.SKY, pos);
             } else {
-                int light = LevelRenderer.getLightColor(LevelRenderer.BrightnessGetter.DEFAULT, level, state, pos);
+                int light = LevelRenderer.getLightColor(level, state, pos);
                 bl = LightTexture.block(light);
                 sl = LightTexture.sky(light);
             }
