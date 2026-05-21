@@ -48,11 +48,7 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * numbers. It also allows for a consistent interface for those transformations.
  */
 public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListStorage {
-    public enum TriState {
-        TRUE,
-        FALSE,
-        DEFAULT
-    };
+    private EncodingFormat.TriState TriState = EncodingFormat.TriState;
     @Nullable
     private TextureAtlasSprite cachedSprite;
 
@@ -92,7 +88,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         quad.setDiffuseShade(true);
         quad.setQuadAtlas(SodiumQuadAtlas.BLOCK);
         quad.setAmbientOcclusion(TriState.DEFAULT);
-        quad.setGlint(null);
+        quad.setGlint(false);
         quad.setTintIndex(-1);
     }
 
@@ -287,12 +283,14 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
 
     public final MutableQuadViewImpl fromBakedQuad(BakedQuad quad) {
         fromVanillaInternal(((BakedQuadView) (Object) quad));
-        setNominalFace(quad.direction());
-        setDiffuseShade(quad.shade());
-        setTintIndex(quad.tintIndex());
+        setNominalFace(quad.getDirection());
+        setDiffuseShade(quad.isShade());
+        setTintIndex(quad.getTintIndex());
         setAmbientOcclusion(((BakedQuadView) (Object) quad).hasAO() ? TriState.DEFAULT : TriState.FALSE); // TODO: TRUE, or DEFAULT?
-
-        setEmissive(quad.lightEmission() == 15);
+        
+        // TODO: Implement lightEmission method
+        
+        //setEmissive(quad.lightEmission() == 15);
 
         // Copy geometry cached inside the quad
         BakedQuadView bakedView = (BakedQuadView) (Object) quad;
@@ -303,7 +301,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         data[baseIndex + HEADER_BITS] = EncodingFormat.geometryFlags(headerBits, bakedView.getFlags());
         isGeometryInvalid = false;
 
-        SodiumQuadAtlas atlas = SodiumQuadAtlas.of(quad.sprite().atlasLocation());
+        SodiumQuadAtlas atlas = SodiumQuadAtlas.of(quad.getSprite().atlasLocation());
 
         if (atlas == null) {
             atlas = SodiumQuadAtlas.BLOCK;
