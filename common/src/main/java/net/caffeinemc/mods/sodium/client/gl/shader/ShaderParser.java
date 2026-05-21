@@ -91,7 +91,7 @@ public class ShaderParser {
         String namespace = matcher.group("namespace");
         String path = matcher.group("path");
 
-        return new ResourceLocation("sodium").fromNamespaceAndPath(namespace, path);
+        return new ResourceLocation("sodium").tryBuild(namespace, path);
     }
 
     private void prependDefineStrings(ShaderConstants constants) {
