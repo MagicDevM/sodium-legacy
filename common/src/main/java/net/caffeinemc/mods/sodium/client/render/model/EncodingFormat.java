@@ -23,6 +23,7 @@ import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.ModelHelper;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.ArrayUtils;
@@ -93,11 +94,17 @@ public final class EncodingFormat {
     private static final int DIRECTION_COUNT = Direction.values().length;
     private static final int NULLABLE_DIRECTION_COUNT = DIRECTION_COUNT + 1;
 
-    private static final @Nullable RenderType[] NULLABLE_BLOCK_RENDER_LAYERS = ArrayUtils.add(RenderType.values(), null);
+    private static final @Nullable RenderType[] NULLABLE_BLOCK_RENDER_LAYERS = {
+        RenderType.solid(),
+        RenderType.cutout(),
+        RenderType.cutoutMipped(),
+        RenderType.translucent(),
+        null
+    };
     private static final int NULLABLE_BLOCK_RENDER_LAYER_COUNT = NULLABLE_BLOCK_RENDER_LAYERS.length;
     private static final TriState[] TRI_STATES = TriState.values();
     private static final int TRI_STATE_COUNT = TRI_STATES.length;
-    private static final @Nullable Boolean[] NULLABLE_GLINTS = new Boolean(true, false, null);
+    private static final @Nullable Boolean[] NULLABLE_GLINTS = new Boolean[] { true, false, null };
     private static final int NULLABLE_GLINT_COUNT = NULLABLE_GLINTS.length;
     private static final SodiumShadeMode[] SHADE_MODES = SodiumShadeMode.values();
     private static final int SHADE_MODE_COUNT = SHADE_MODES.length;
@@ -201,9 +208,33 @@ public final class EncodingFormat {
     static RenderType renderLayer(int bits) {
         return NULLABLE_BLOCK_RENDER_LAYERS[(bits & RENDER_LAYER_MASK) >>> RENDER_LAYER_BIT_OFFSET];
     }
-
+    
+    private static int getRenderLayerIndex(@Nullable RenderType renderLayer) {
+        if (renderLayer == null) {
+            return NULL_RENDER_LAYER_INDEX;
+        }
+    
+        if (renderLayer == RenderType.solid()) {
+            return 0;
+        }
+    
+        if (renderLayer == RenderType.cutout()) {
+            return 1;
+        }
+    
+        if (renderLayer == RenderType.cutoutMipped()) {
+            return 2;
+        }
+    
+        if (renderLayer == RenderType.translucent()) {
+            return 3;
+        }
+    
+        return NULL_RENDER_LAYER_INDEX;
+    }
+    
     static int renderLayer(int bits, @Nullable RenderType renderLayer) {
-        int index = renderLayer == null ? NULL_RENDER_LAYER_INDEX : renderLayer.ordinal();
+        int index = renderLayer == null ? NULL_RENDER_LAYER_INDEX : getRenderLayerIndex(renderLayer);
         return (bits & ~RENDER_LAYER_MASK) | (index << RENDER_LAYER_BIT_OFFSET);
     }
 
@@ -236,8 +267,17 @@ public final class EncodingFormat {
         return NULLABLE_GLINTS[(bits & GLINT_MASK) >>> GLINT_BIT_OFFSET];
     }
 
-    static int glint(int bits, @Nullable boolean glint) {
-        int index = glint == null ? NULL_GLINT_INDEX : glint.ordinal();
+    static int glint(int bits, boolean @Nullable glint) {
+        int index;
+        
+        if (glint == null) {
+            index = NULL_GLINT_INDEX;
+        } else if (glint) {
+            index = 0;
+        } else {
+            index = 1;
+        }
+        
         return (bits & ~GLINT_MASK) | (index << GLINT_BIT_OFFSET);
     }
 
