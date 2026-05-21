@@ -142,7 +142,7 @@ public class RenderRegionManager {
             return;
         }
 
-        var cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        var cameraPosition = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
         var resources = region.createResources(commandList);
         var regionFillFractionInv = region.getFillFractionInv();
