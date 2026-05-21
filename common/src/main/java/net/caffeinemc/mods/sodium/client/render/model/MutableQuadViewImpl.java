@@ -307,7 +307,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         }
 
         setQuadAtlas(atlas);
-        cachedSprite(quad.sprite());
+        cachedSprite(quad.getSprite());
         return this;
     }
 
