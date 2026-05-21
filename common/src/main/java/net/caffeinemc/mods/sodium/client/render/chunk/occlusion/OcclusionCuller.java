@@ -275,15 +275,15 @@ public class OcclusionCuller {
     {
         var origin = viewport.getChunkCoord();
 
-        if (origin.getY() < this.level.getMinSectionY()) {
+        if (origin.getY() < this.level.getMinSection()) {
             // below the level
             this.outOfWorldRadius = 0;
-            this.outOfWorldHeight = this.level.getMinSectionY();
+            this.outOfWorldHeight = this.level.getMinSection();
             this.outOfWorldDirection = GraphDirection.DOWN;
-        } else if (origin.getY() > this.level.getMaxSectionY()) {
+        } else if (origin.getY() > this.level.getMaxSection()) {
             // above the level
             this.outOfWorldRadius = 0;
-            this.outOfWorldHeight = this.level.getMaxSectionY();
+            this.outOfWorldHeight = this.level.getMaxSection();
             this.outOfWorldDirection = GraphDirection.UP;
         } else {
             this.outOfWorldRadius = -1;
