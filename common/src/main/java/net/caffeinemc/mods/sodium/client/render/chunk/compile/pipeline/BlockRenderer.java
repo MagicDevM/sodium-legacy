@@ -21,6 +21,7 @@ import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.parameter
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.TranslucentGeometryCollector;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.builder.ChunkMeshBufferBuilder;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEncoder;
+import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.TriState;
 import net.caffeinemc.mods.sodium.client.render.model.MutableQuadViewImpl;
 import net.caffeinemc.mods.sodium.client.render.model.AbstractBlockRenderContext;
 import net.caffeinemc.mods.sodium.client.render.model.SodiumShadeMode;
@@ -39,12 +40,6 @@ import org.jspecify.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class BlockRenderer extends AbstractBlockRenderContext {
-    // Create TriState Object
-    public enum TriState {
-        TRUE,
-        FALSE,
-        DEFAULT
-    };
     private final ColorProviderRegistry colorProviderRegistry;
     private final int[] vertexColors = new int[4];
     private final ChunkVertexEncoder.Vertex[] vertices = ChunkVertexEncoder.Vertex.uninitializedQuad();
@@ -87,7 +82,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
 
         this.posOffset.set(origin.getX(), origin.getY(), origin.getZ());
         if (state.hasOffsetFunction()) {
-            Vec3 modelOffset = state.getOffset(pos);
+            Vec3 modelOffset = state.getOffset(origin, pos);
             this.posOffset.add((float) modelOffset.x, (float) modelOffset.y, (float) modelOffset.z);
         }
 
