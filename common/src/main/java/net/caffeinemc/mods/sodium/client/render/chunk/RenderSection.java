@@ -397,8 +397,10 @@ public class RenderSection {
     public void setLastSubmittedFrame(int lastSubmittedFrame) {
         this.lastSubmittedFrame = lastSubmittedFrame;
     }
-
-    public float getCurrentVisibility() {
+    
+    // TODO: Maybe implement chunk fading?
+    
+    /* public float getCurrentVisibility() {
         int currentTime = Math.toIntExact(System.currentTimeMillis() - region.getCreationTime());
         int fadeTime = currentTime - this.fadeTime;
         float elapsed = (float) fadeTime;
@@ -407,5 +409,5 @@ public class RenderSection {
 
     public void setFadeTime(int relativeBuiltTime) {
         this.fadeTime = relativeBuiltTime;
-    }
+    } */
 }
