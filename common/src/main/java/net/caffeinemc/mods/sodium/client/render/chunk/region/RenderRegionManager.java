@@ -32,6 +32,7 @@ public class RenderRegionManager {
     private final StagingBuffer stagingBuffer;
 
     public RenderRegionManager(CommandList commandList) {
+        this.client = Minecraft.getInstance();
         this.stagingBuffer = createStagingBuffer(commandList);
     }
 
