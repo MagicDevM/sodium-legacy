@@ -64,7 +64,7 @@ public class ChunkBuilderMeshingTask extends ChunkBuilderTask<ChunkBuildOutput> 
 
     @Override
     public ChunkBuildOutput execute(ChunkBuildContext buildContext, CancellationToken cancellationToken) {
-        ProfilerFiller profiler = Minecraft.getProfiler();
+        ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         BuiltSectionInfo.Builder renderData = new BuiltSectionInfo.Builder();
         VisGraph occluder = new VisGraph();
 
@@ -135,12 +135,12 @@ public class ChunkBuilderMeshingTask extends ChunkBuilderTask<ChunkBuildOutput> 
                                 BlockEntityRenderer<BlockEntity> renderer = Minecraft.getInstance().getBlockEntityRenderDispatcher().getRenderer(entity);
 
                                 if (renderer != null) {
-                                    renderData.addBlockEntity(entity, !renderer.shouldRenderOffScreen());
+                                    renderData.addBlockEntity(entity, !renderer.shouldRenderOffScreen(entity));
                                 }
                             }
                         }
 
-                        if (blockState.isSolidRender()) {
+                        if (blockState.isSolidRender(slice, blockPos)) {
                             occluder.setOpaque(blockPos);
                         }
                     }
