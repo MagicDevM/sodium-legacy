@@ -29,15 +29,11 @@ public class TerrainRenderPass {
         return this.fragmentDiscard;
     }
 
-    public RenderPipeline getPipeline() {
-        return renderType.pipeline();
-    }
-
     public RenderTarget getTarget() {
         return (isTranslucent && Minecraft.useShaderTransparency()) ? Minecraft.getInstance().levelRenderer.getTranslucentTarget() : Minecraft.getInstance().getMainRenderTarget();
     }
 
     public AbstractTexture getAtlas() {
-        return Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).getTextureView();
+        return Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS);
     }
 }
