@@ -29,7 +29,7 @@ public class ClonedChunkSection {
     
     private static final DataLayer DEFAULT_SKY_LIGHT_ARRAY = new DataLayer(15);
     private static final DataLayer DEFAULT_BLOCK_LIGHT_ARRAY = new DataLayer(0);
-    private static final PalettedContainer<BlockState> DEFAULT_STATE_CONTAINER = new PalettedContainer<>(Blocks.AIR.defaultBlockState(), Strategy.createForBlockStates(Block.BLOCK_STATE_REGISTRY));
+    private static final PalettedContainer<BlockState> DEFAULT_STATE_CONTAINER = new PalettedContainer<>(Block.STATE_IDS, Blocks.AIR.getDefaultState(), PalettedContainer.PaletteProvider.BLOCK_STATE);
 
     private final SectionPos pos;
 
@@ -94,7 +94,7 @@ public class ClonedChunkSection {
             return DEFAULT_STATE_CONTAINER;
 
         // We use swapUnsafe in the loops to avoid acquiring/releasing the lock on each iteration
-        var container = new PalettedContainer<>(Blocks.AIR.defaultBlockState(), Strategy.createForBlockStates(Block.BLOCK_STATE_REGISTRY));
+        var container = new PalettedContainer<>(Block.STATE_IDS, Blocks.AIR.getDefaultState(), PalettedContainer.PaletteProvider.BLOCK_STATE);
         if (pos.getY() == 3) {
             // Set the blocks at relative Y 12 (world Y 60) to barriers
             BlockState barrier = Blocks.BARRIER.defaultBlockState();
