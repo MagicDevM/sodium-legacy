@@ -1,6 +1,5 @@
 package net.caffeinemc.mods.sodium.client.util.sorting;
 
-import net.caffeinemc.mods.sodium.client.util.backports.CompactVectorArray;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.util.MathUtil;
@@ -32,7 +31,7 @@ public class VertexSorters {
 
     private abstract static class AbstractSorter implements VertexSortingExtended {
         @Override
-        public final int @NonNull [] sort(CompactVectorArray centroids) {
+        public final int @NonNull [] sort(Vector3f[] centroids) {
             final int length = centroids.size();
             final var keys = new int[length];
             final var perm = new int[length];
