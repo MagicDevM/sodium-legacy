@@ -48,7 +48,6 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * numbers. It also allows for a consistent interface for those transformations.
  */
 public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListStorage {
-    private EncodingFormat.TriState TriState = EncodingFormat.TriState;
     @Nullable
     private TextureAtlasSprite cachedSprite;
 
