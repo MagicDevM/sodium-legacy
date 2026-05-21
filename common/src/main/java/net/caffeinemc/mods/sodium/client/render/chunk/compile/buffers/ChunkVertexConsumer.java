@@ -10,6 +10,7 @@ import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.Transl
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEncoder;
 import net.caffeinemc.mods.sodium.client.render.texture.SpriteFinderCache;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import org.joml.Matrix4f;
 import org.jspecify.annotations.NonNull;
 
 public class ChunkVertexConsumer implements VertexConsumer {
@@ -38,7 +39,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer addVertex(float x, float y, float z) {
+    public @NonNull VertexConsumer vertex(Matrix4f matrix, float x, float y, float z) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.x = x;
         vertex.y = y;
@@ -50,7 +51,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
 
     // Writing color ignores alpha since alpha is used as a color multiplier by Sodium.
     @Override
-    public @NonNull VertexConsumer setColor(int red, int green, int blue, int alpha) {
+    public @NonNull VertexConsumer color(int red, int green, int blue, int alpha) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.color = ColorABGR.pack(red, green, blue, alpha);
         this.writtenAttributes |= ATTRIBUTE_COLOR_BIT;
@@ -58,7 +59,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer setColor(float red, float green, float blue, float alpha) {
+    public @NonNull VertexConsumer color(float red, float green, float blue, float alpha) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.color = ColorABGR.pack(red, green, blue, alpha);
         this.writtenAttributes |= ATTRIBUTE_COLOR_BIT;
@@ -66,7 +67,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer setColor(int argb) {
+    public @NonNull VertexConsumer color(int argb) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.color = ColorARGB.toABGR(argb);
         this.writtenAttributes |= ATTRIBUTE_COLOR_BIT;
@@ -74,7 +75,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer setUv(float u, float v) {
+    public @NonNull VertexConsumer uv(float u, float v) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.u = u;
         vertex.v = v;
@@ -84,17 +85,12 @@ public class ChunkVertexConsumer implements VertexConsumer {
 
     // Overlay is ignored for chunk geometry.
     @Override
-    public @NonNull VertexConsumer setUv1(int u, int v) {
+    public @NonNull VertexConsumer overlayCoords(int uv) {
         return potentiallyEndVertex();
     }
 
     @Override
-    public @NonNull VertexConsumer setOverlay(int uv) {
-        return potentiallyEndVertex();
-    }
-
-    @Override
-    public @NonNull VertexConsumer setUv2(int u, int v) {
+    public @NonNull VertexConsumer uv2(int u, int v) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.light = ((v & 0xFFFF) << 16) | (u & 0xFFFF);
         this.writtenAttributes |= ATTRIBUTE_LIGHT_BIT;
@@ -102,7 +98,7 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer setLight(int uv) {
+    public @NonNull VertexConsumer uv2(int uv) {
         ChunkVertexEncoder.Vertex vertex = this.vertices[this.vertexIndex];
         vertex.light = uv;
         this.writtenAttributes |= ATTRIBUTE_LIGHT_BIT;
@@ -110,14 +106,28 @@ public class ChunkVertexConsumer implements VertexConsumer {
     }
 
     @Override
-    public @NonNull VertexConsumer setNormal(float x, float y, float z) {
+    public @NonNull VertexConsumer normal(float x, float y, float z) {
         this.writtenAttributes |= ATTRIBUTE_NORMAL_BIT;
         return potentiallyEndVertex();
     }
 
     @Override
-    public VertexConsumer setLineWidth(float f) {
-        return potentiallyEndVertex();
+    public void unsetDefaultColor() {}
+
+    @Override
+    public void defaultColor(int red, int green, int blue, int alpha) {}
+
+    @Override
+    public void endVertex() {}
+
+    @Override
+    public @NonNull VertexConsumer overlayCoords(int u, int v) {
+      return this;
+    }
+
+    @Override
+    public @NonNull VertexConsumer vertex(double x, double y, double z) {
+      return this;
     }
 
     public VertexConsumer potentiallyEndVertex() {
