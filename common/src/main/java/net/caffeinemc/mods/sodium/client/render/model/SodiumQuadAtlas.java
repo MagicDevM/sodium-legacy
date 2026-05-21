@@ -10,8 +10,8 @@ public enum SodiumQuadAtlas {
     public static SodiumQuadAtlas of(ResourceLocation atlasTextureId) {
         if (atlasTextureId.equals(TextureAtlas.LOCATION_BLOCKS)) {
             return BLOCK;
-        } else if (atlasTextureId.equals(TextureAtlas.LOCATION_ITEMS)) {
-            return ITEM;
+        } else if (atlasTextureId.equals(TextureAtlas.LOCATION_BLOCKS)) {
+            return BLOCK;
         } else {
             return null;
         }
