@@ -38,11 +38,6 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * of maintaining and encoding the quad state.
  */
 public class QuadViewImpl implements ModelQuadView {
-    public enum TriState {
-        TRUE,
-        FALSE,
-        DEFAULT
-    };
     @Nullable
     protected Direction nominalFace;
     /** True when face normal, light face, normal face, or geometry flags may not match geometry. */
@@ -118,7 +113,7 @@ public class QuadViewImpl implements ModelQuadView {
         return EncodingFormat.diffuseShade(data[baseIndex + HEADER_BITS]);
     }
 
-    public TriState ambientOcclusion() {
+    public EncodingFormat.TriState ambientOcclusion() {
         return EncodingFormat.ambientOcclusion(data[baseIndex + HEADER_BITS]);
     }
 
