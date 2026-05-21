@@ -267,7 +267,7 @@ public final class EncodingFormat {
         return NULLABLE_GLINTS[(bits & GLINT_MASK) >>> GLINT_BIT_OFFSET];
     }
 
-    static int glint(int bits, boolean @Nullable glint) {
+    static int glint(int bits, @Nullable Boolean glint) {
         int index;
         
         if (glint == null) {

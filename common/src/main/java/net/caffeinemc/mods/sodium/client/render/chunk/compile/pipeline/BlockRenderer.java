@@ -45,7 +45,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
     private final ChunkVertexEncoder.Vertex[] vertices = ChunkVertexEncoder.Vertex.uninitializedQuad();
 
     private ChunkBuildBuffers buffers;
-
+    
     private final Vector3f posOffset = new Vector3f();
     private final BlockPos.MutableBlockPos scratchPos = new BlockPos.MutableBlockPos();
     @Nullable
@@ -55,7 +55,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
     public BlockRenderer(ColorProviderRegistry colorRegistry, LightPipelineProvider lighters) {
         this.colorProviderRegistry = colorRegistry;
         this.lighters = lighters;
-
+        
         this.random = new SingleThreadedRandomSource(42L);
     }
 
@@ -82,7 +82,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
 
         this.posOffset.set(origin.getX(), origin.getY(), origin.getZ());
         if (state.hasOffsetFunction()) {
-            Vec3 modelOffset = state.getOffset(origin, pos);
+            Vec3 modelOffset = state.getOffset(level, pos);
             this.posOffset.add((float) modelOffset.x, (float) modelOffset.y, (float) modelOffset.z);
         }
 
