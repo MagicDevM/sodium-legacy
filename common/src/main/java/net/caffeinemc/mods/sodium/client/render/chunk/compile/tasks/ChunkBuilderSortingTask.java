@@ -26,7 +26,7 @@ public class ChunkBuilderSortingTask extends ChunkBuilderTask<ChunkSortOutput> {
             return null;
         }
 
-        ProfilerFiller profiler = Minecraft.getProfiler();
+        ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("translucency sorting");
 
         this.sorter.writeIndexBuffer(this, false);
