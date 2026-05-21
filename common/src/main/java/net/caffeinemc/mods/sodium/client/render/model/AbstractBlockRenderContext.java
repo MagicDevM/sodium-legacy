@@ -118,7 +118,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
         BlockState neighborBlockState = this.level.getBlockState(neighborPos);
 
         // The cull shape of the neighbor between the block being rendered and it
-        VoxelShape neighborShape = neighborBlockState.getFaceOcclusionShape(DirectionUtil.getOpposite(facing));
+        VoxelShape neighborShape = neighborBlockState.getFaceOcclusionShape(level, neighborPos, DirectionUtil.getOpposite(facing));
 
         // Minecraft enforces that if the neighbor has a full-block occlusion shape, the face is always hidden
         if (ShapeComparisonCache.isFullShape(neighborShape)) {
@@ -142,7 +142,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
         }
 
         // The cull shape between of the block being rendered, between it and the neighboring block
-        VoxelShape selfShape = this.state.getFaceOcclusionShape(facing);
+        VoxelShape selfShape = this.state.getFaceOcclusionShape(level, neighborPos, facing);
 
         // If the block being rendered has an empty cull shape, there will be no intersection with the neighboring
         // block's cull shape, so no geometry can be hidden.
@@ -227,9 +227,9 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
     /* Handling of vanilla models - this is the hot path for non-modded models */
     public void bufferDefaultModel(BlockModel part, Predicate<Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
         MutableQuadViewImpl editorQuad = this.editorQuad;
-        this.prepareAoInfo(part.ambientOcclusion());
+        this.prepareAoInfo(part.hasAmbientOcclusion());
 
-        RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(state, this.defaultRenderType);
+        RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(part, state, this.defaultRenderType);
         RenderType defaultType = this.defaultRenderType;
         this.defaultRenderType = renderType;
 
@@ -243,7 +243,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
             // TODO NeoForge 1.21.5
             AmbientOcclusionMode ao = PlatformBlockAccess.getInstance().usesAmbientOcclusion(part, state, renderType, slice, pos);
 
-            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, state, cullFace, random, renderType);
+            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, part, state, cullFace, random, renderType);
             final int count = quads.size();
 
             for (int j = 0; j < count; j++) {
