@@ -23,3 +23,5 @@ accessible class net/minecraft/client/renderer/FogRenderer$FogData
 
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
+
+accessible method it/unimi/dsi/fastutil/longs/Long2ReferenceLinkedOpenHashMap ensureCapacity (I)V
