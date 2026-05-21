@@ -1,5 +1,7 @@
 package net.caffeinemc.mods.sodium.client.render.model;
 
+import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.TriState;
+
 public enum AmbientOcclusionMode {
     ENABLED,
     DEFAULT,
