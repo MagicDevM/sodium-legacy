@@ -57,7 +57,7 @@ public abstract class StatefulOption<V> extends Option {
         this.applyHook = applyHook;
 
         if (applyHook != null) {
-            this.applyHookId = new ResourceLocation("sodium").fromNamespaceAndPath("__meta__", "apply_hook_" + id.getNamespace() + "_" + id.getPath());
+            this.applyHookId = new ResourceLocation("sodium").tryBuild("__meta__", "apply_hook_" + id.getNamespace() + "_" + id.getPath());
         } else {
             this.applyHookId = null;
         }
