@@ -41,8 +41,8 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
   private static final float UV_SHRINK = 0.1F;
   
   @Override
-	private BakedModel bake(ModelBaker modelBaker,
-			Function<Material, TextureAtlasSprite> textures,
+	public BakedModel bake(ModelBaker modelBaker,
+			Function<Material, TextureAtlasSprite> spriteGetter,
 			ModelState modelState,
 			ResourceLocation identifier
 	) {
@@ -50,30 +50,37 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 
 		for (var index = 0; index < LAYERS.size(); index ++) {
         var layer = LAYERS.get(index);
+        
+        var material = spriteGetter.get(layer);
+        if (material == null) {
+          break;
+        }
 
         bakeItemQuads(
             blockElements,
-            textures,
+            material,
             layer,
             index
         );
 		}
 		
 		// Extract correct transforms
-		UnbakedModel generated = modelBaker.getModel(new ResourceLocation("minecraft:item/generated"));
+		BlockModel generated = (BlockModel) modelBaker.getModel(
+        new ResourceLocation("minecraft:item/generated")
+    );
 		
 		// Setup Bekar
-		BlockModel model = new BlockModel(
+		BlockModel backery = new BlockModel(
         null,
         blockElements,
-        textures,
+        material,
         false,
-        guiLight.FRONT,
-        generated.transform(),
+        BlockModel.GuiLight.FRONT,
+        generated.getTransforms(),
         Collections.emptyList()
 		);
 		
-		return model.bake(modelBaker, textures, modelState, identifier);
+		return backery.bake(modelBaker, material, modelState, identifier);
 	}
 
 	private static void bakeItemQuads(
@@ -86,9 +93,11 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                 new Vector3f(0.0F, 0.0F, 7.5F),
                 new Vector3f(16.0F, 16.0F, 8.5F),
                 Map.of(
-                        Direction.SOUTH, new BlockElementFace(null, index, layer, SOUTH_FACE_UVS, 0),
-                        Direction.NORTH, new BlockElementFace(null, index, layer, NORTH_FACE_UVS, 0)
-                )
+                        Direction.SOUTH, new BlockElementFace(Direction.SOUTH, index, layer, SOUTH_FACE_UVS),
+                        Direction.NORTH, new BlockElementFace(Direction.NORTH, index, layer, NORTH_FACE_UVS)
+                ),
+                0,
+                true
         ));
 
 		bakeSideQuads(
@@ -189,17 +198,18 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                     new Vector3f(fromX, fromY, MIN_Z),
                     new Vector3f(toX, toY, MAX_Z),
                     Map.of(faceFacing.getDirection(), new BlockElementFace(
-                            null,
+                            faceFacing.getDirection(),
                             index,
                             layer,
-                            new BlockElementFace.UVs(
-                                    u0 * xScale,
-                                    v0 * yScale,
-                                    u1 * xScale,
-                                    v1 * yScale
-                            ),
-                            0
-                    ))
+                            new BlockFaceUV(new float[] {
+                            u0 * xScale,
+                            v0 * yScale,
+                            u1 * xScale,
+                            v1 * yScale
+                        }, 0)
+                    )),
+                    0,
+                    true
             ));
 		}
 	}
