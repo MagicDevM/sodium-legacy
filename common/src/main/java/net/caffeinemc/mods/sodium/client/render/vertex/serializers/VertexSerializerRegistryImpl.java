@@ -3,6 +3,7 @@ package net.caffeinemc.mods.sodium.client.render.vertex.serializers;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceMap;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceOpenHashMap;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatExtensions;
 import net.caffeinemc.mods.sodium.client.render.vertex.serializers.generated.VertexSerializerFactory;
 import net.caffeinemc.mods.sodium.api.vertex.serializer.VertexSerializer;
@@ -82,7 +83,7 @@ public class VertexSerializerRegistryImpl implements VertexSerializerRegistry {
         }
     }
 
-    private static VertexSerializer createSerializer(VertexFormat srcVertexFormat, VertexFormat dstVertexFormat) {
+    private static VertexSerializer createSerializer(VertexFormatDescription srcVertexFormat, VertexFormatDescription dstVertexFormat) {
         var identifier = String.format("%04X$%04X", getGlobalId(srcVertexFormat), getGlobalId(dstVertexFormat));
 
         var bytecode = VertexSerializerFactory.generate(srcVertexFormat, dstVertexFormat, identifier);

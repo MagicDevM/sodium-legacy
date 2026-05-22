@@ -131,7 +131,7 @@ public class VertexSerializerFactory {
             Label labelIncrementSourcePointer = new Label();
             methodVisitor.visitLabel(labelIncrementSourcePointer);
             methodVisitor.visitVarInsn(Opcodes.LLOAD, localSrcPointer);
-            methodVisitor.visitLdcInsn((long) srcFormat.getVertexSize());
+            methodVisitor.visitLdcInsn((long) srcFormat.stride());
             methodVisitor.visitInsn(Opcodes.LADD);
             methodVisitor.visitVarInsn(Opcodes.LSTORE, localSrcPointer);
 
@@ -139,7 +139,7 @@ public class VertexSerializerFactory {
             Label labelIncrementDestinationPointer = new Label();
             methodVisitor.visitLabel(labelIncrementDestinationPointer);
             methodVisitor.visitVarInsn(Opcodes.LLOAD, localDstPointer);
-            methodVisitor.visitLdcInsn((long) dstFormat.getVertexSize());
+            methodVisitor.visitLdcInsn((long) dstFormat.stride());
             methodVisitor.visitInsn(Opcodes.LADD);
             methodVisitor.visitVarInsn(Opcodes.LSTORE, localDstPointer);
 
