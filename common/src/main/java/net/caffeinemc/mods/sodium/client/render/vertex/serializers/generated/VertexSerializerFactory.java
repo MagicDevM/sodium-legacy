@@ -1,5 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.vertex.serializers.generated;
 
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.CommonVertexAttribute;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
@@ -168,24 +169,24 @@ public class VertexSerializerFactory {
         return new Bytecode(classWriter.toByteArray());
     }
 
-    private static List<MemoryTransfer> createMemoryTransferList(VertexFormat srcVertexFormat, VertexFormat dstVertexFormat) {
+    private static List<MemoryTransfer> createMemoryTransferList(VertexFormatDescription srcVertexFormat, VertexFormatDescription dstVertexFormat) {
         var ops = new ArrayList<MemoryTransfer>();
 
         for (var elementType : CommonVertexAttribute.values()) {
             // Check if we need to transfer the element into the destination format
-            if (!dstVertexFormat.contains(elementType)) {
+            if (!dstVertexFormat.containsElement(elementType)) {
                 continue;
             }
 
             // If the destination format has the element, then the source format needs to have it as well
-            if (!srcVertexFormat.contains(elementType)) {
+            if (!srcVertexFormat.containsElement(elementType)) {
                 throw new RuntimeException("Source format is missing element %s as required by destination format".formatted(elementType));
             }
 
-            var srcOffset = srcVertexFormat.getOffset(elementType);
-            var dstOffset = dstVertexFormat.getOffset(elementType);
+            var srcOffset = srcVertexFormat.getElementOffset(elementType);
+            var dstOffset = dstVertexFormat.getElementOffset(elementType);
 
-            ops.add(new MemoryTransfer(srcOffset, dstOffset, elementType.byteSize()));
+            ops.add(new MemoryTransfer(srcOffset, dstOffset, elementType.getByteSize()));
         }
 
         return mergeAdjacentMemoryTransfers(ops);
