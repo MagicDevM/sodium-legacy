@@ -16,8 +16,8 @@ public abstract class AbstractScrollable extends AbstractParentWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        this.scrollbar.scroll((int) (-verticalAmount * 10));
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        this.scrollbar.scroll((int) (-amount * 10));
         return true;
     }
 }
