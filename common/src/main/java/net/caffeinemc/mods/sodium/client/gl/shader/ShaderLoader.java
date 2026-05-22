@@ -39,7 +39,7 @@ public class ShaderLoader {
     }
 
     public static String getShaderSource(ResourceLocation name) {
-        String path = String.format("/assets/%s/shaders/%s", name.getNamespace(), new name("sodium").getPath());
+        String path = String.format("/assets/%s/shaders/%s", new name("sodium").getNamespace(), new name("sodium").getPath());
 
         try (InputStream in = ShaderLoader.class.getResourceAsStream(path)) {
             if (in == null) {
