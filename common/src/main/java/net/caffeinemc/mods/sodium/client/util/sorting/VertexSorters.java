@@ -32,7 +32,7 @@ public class VertexSorters {
     private abstract static class AbstractSorter implements VertexSortingExtended {
         @Override
         public final int @NonNull [] sort(Vector3f[] centroids) {
-            final int length = centroids.length();
+            final int length = centroids.length;
             final var keys = new int[length];
             final var perm = new int[length];
 
