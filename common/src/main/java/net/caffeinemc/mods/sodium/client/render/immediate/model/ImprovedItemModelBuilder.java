@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BlockElementFace;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.BakedModel;
@@ -17,6 +18,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import org.joml.Vector3f;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,18 +49,27 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 			ResourceLocation identifier
 	) {
     var blockElements = new ArrayList<BlockElement>();
+    Map<String, Either<Material, String>> textures = new HashMap<>();
 
 		for (var index = 0; index < LAYERS.size(); index ++) {
         var layer = LAYERS.get(index);
         
-        var material = spriteGetter.get(layer);
+        Material material = new Material(
+            TextureAtlas.LOCATION_BLOCKS,
+            new ResourceLocation(identifier.getNamespace(), "item/" + identifier.getPath())
+        );
+        
+        textures.put(layer, Either.left(material));
+        
         if (material == null) {
           break;
         }
 
+        var texture = spriteGetter.apply(material);
+
         bakeItemQuads(
             blockElements,
-            material,
+            texture,
             layer,
             index
         );
@@ -73,14 +84,14 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		BlockModel backery = new BlockModel(
         null,
         blockElements,
-        material,
+        textures,
         false,
-        BlockModel.GuiLight.FRONT,
+        generated.getGuiLight(),
         generated.getTransforms(),
         Collections.emptyList()
 		);
 		
-		return backery.bake(modelBaker, material, modelState, identifier);
+		return backery.bake(modelBaker, spriteGetter, modelState, identifier);
 	}
 
 	private static void bakeItemQuads(
@@ -96,7 +107,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                         Direction.SOUTH, new BlockElementFace(Direction.SOUTH, index, layer, SOUTH_FACE_UVS),
                         Direction.NORTH, new BlockElementFace(Direction.NORTH, index, layer, NORTH_FACE_UVS)
                 ),
-                0,
+                null,
                 true
         ));
 
@@ -208,7 +219,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                             v1 * yScale
                         }, 0)
                     )),
-                    0,
+                    null,
                     true
             ));
 		}
