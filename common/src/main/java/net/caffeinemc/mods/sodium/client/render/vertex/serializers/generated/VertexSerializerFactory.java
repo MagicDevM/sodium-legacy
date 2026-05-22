@@ -15,7 +15,7 @@ import java.util.List;
 public class VertexSerializerFactory {
     private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 
-    public static Bytecode generate(VertexFormat srcFormat, VertexFormat dstFormat, String identifier) {
+    public static Bytecode generate(VertexFormatDescription srcFormat, VertexFormatDescription dstFormat, String identifier) {
         var memoryCopies = createMemoryTransferList(srcFormat, dstFormat);
 
         var name = "net/caffeinemc/mods/sodium/client/render/vertex/serializers/generated/VertexSerializer$Impl$" + identifier;
@@ -186,7 +186,7 @@ public class VertexSerializerFactory {
             var srcOffset = srcVertexFormat.getElementOffset(elementType);
             var dstOffset = dstVertexFormat.getElementOffset(elementType);
 
-            ops.add(new MemoryTransfer(srcOffset, dstOffset, elementType.getByteSize()));
+            ops.add(new MemoryTransfer(srcOffset, dstOffset, elementType.getByteLength()));
         }
 
         return mergeAdjacentMemoryTransfers(ops);
