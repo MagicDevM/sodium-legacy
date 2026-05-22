@@ -1,5 +1,6 @@
 package net.caffeinemc.mods.sodium.client.render.vertex.serializers.generated;
 
+import net.caffeinemc.mods.sodium.api.vertex.attributes.CommonVertexAttribute;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.caffeinemc.mods.sodium.api.vertex.serializer.VertexSerializer;
@@ -170,13 +171,7 @@ public class VertexSerializerFactory {
     private static List<MemoryTransfer> createMemoryTransferList(VertexFormat srcVertexFormat, VertexFormat dstVertexFormat) {
         var ops = new ArrayList<MemoryTransfer>();
 
-        for (var elementIndex = 0; elementIndex < 32; elementIndex++) {
-            var elementType = VertexFormatElement.byId(elementIndex);
-
-            if (elementType == null) {
-                continue;
-            }
-
+        for (var elementType : CommonVertexAttribute.values()) {
             // Check if we need to transfer the element into the destination format
             if (!dstVertexFormat.contains(elementType)) {
                 continue;
