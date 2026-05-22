@@ -37,7 +37,7 @@ public class VertexSerializerRegistryImpl implements VertexSerializerRegistry {
     private final StampedLock lock = new StampedLock();
 
     @Override
-    public VertexSerializer get(VertexFormat srcFormat, VertexFormat dstFormat) {
+    public VertexSerializer get(VertexFormatDescription srcFormat, VertexFormatDescription dstFormat) {
         var identifier = createKey(srcFormat, dstFormat);
         var serializer = this.find(identifier);
 
@@ -49,11 +49,11 @@ public class VertexSerializerRegistryImpl implements VertexSerializerRegistry {
     }
 
     @Override
-    public void registerSerializer(VertexFormat srcFormat, VertexFormat dstFormat, VertexSerializer serializer) {
+    public void registerSerializer(VertexFormatDescription srcFormat, VertexFormatDescription dstFormat, VertexSerializer serializer) {
         this.cache.put(createKey(srcFormat, dstFormat), serializer);
     }
 
-    private VertexSerializer create(long identifier, VertexFormat srcFormat, VertexFormat dstFormat) {
+    private VertexSerializer create(long identifier, VertexFormatDescription srcFormat, VertexFormatDescription dstFormat) {
         var stamp = this.lock.writeLock();
 
         try {
@@ -130,11 +130,11 @@ public class VertexSerializerRegistryImpl implements VertexSerializerRegistry {
         }
     }
 
-    private static long createKey(VertexFormat a, VertexFormat b) {
+    private static long createKey(VertexFormatDescription a, VertexFormatDescription b) {
         return (long) getGlobalId(a) & 0xffffffffL | ((long) getGlobalId(b) & 0xffffffffL) << 32;
     }
 
-    private static int getGlobalId(VertexFormat format) {
+    private static int getGlobalId(VertexFormatDescription format) {
         return ((VertexFormatExtensions) format).sodium$getGlobalId();
     }
 }
