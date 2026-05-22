@@ -20,6 +20,8 @@ accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MI
 accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MAX_Z F
 
 accessible class net/minecraft/client/renderer/FogRenderer$FogData
+accessible class net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction
+accessible method net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction getPriorityFogFunction(net/minecraft/world/entity/Entity;F) net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction
 
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
