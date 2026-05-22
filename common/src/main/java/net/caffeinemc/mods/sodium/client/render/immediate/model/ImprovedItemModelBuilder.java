@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
@@ -40,22 +40,23 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
     new BlockFaceUV(new float[] { 16.0F, 0.0F, 0.0F, 16.0F }, 0);
   private static final float UV_SHRINK = 0.1F;
   
-	private static List<BakedQuad> bake(ModelBaker modelBaker,
+  @Override
+	private BakedModel bake(ModelBaker modelBaker,
 			Function<Material, TextureAtlasSprite> textures,
 			ModelState modelState,
 			ResourceLocation identifier
 	) {
-        var blockElements = new ArrayList<BlockElement>();
+    var blockElements = new ArrayList<BlockElement>();
 
 		for (var index = 0; index < LAYERS.size(); index ++) {
-            var layer = LAYERS.get(index);
+        var layer = LAYERS.get(index);
 
-            bakeItemQuads(
-                    blockElements,
-                    textures,
-                    layer,
-                    index
-            );
+        bakeItemQuads(
+            blockElements,
+            textures,
+            layer,
+            index
+        );
 		}
 		
 		// Extract correct transforms
@@ -63,16 +64,16 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 		
 		// Setup Bekar
 		BlockModel model = new BlockModel(
-		        null,
-		        blockElements,
-		        textures,
-		        false,
-		        guiLight.FRONT,
-		        generated.transform(),
-		        Collections.emptyList()
-		  );
-		  
-		  return model.bake(modelBaker, textures, modelState, identifier);
+        null,
+        blockElements,
+        textures,
+        false,
+        guiLight.FRONT,
+        generated.transform(),
+        Collections.emptyList()
+		);
+		
+		return model.bake(modelBaker, textures, modelState, identifier);
 	}
 
 	private static void bakeItemQuads(
@@ -96,6 +97,14 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
 				layer,
 				index
 		);
+	}
+
+	@Override
+	public void resolveParents(Function<ResourceLocation, UnbakedModel> modelLoader) {}
+
+	@Override
+	public Collection<ResourceLocation> getDependencies() {
+	  return Collections.emptyList();
 	}
 
 	private static void bakeSideQuads(
