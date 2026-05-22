@@ -143,12 +143,12 @@ public class EntityRenderer {
             return;
         }
 
-        CUBE_FACE_NORMAL[FACE_NEG_Y] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.DOWN);
-        CUBE_FACE_NORMAL[FACE_POS_Y] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.UP);
-        CUBE_FACE_NORMAL[FACE_NEG_Z] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.NORTH);
-        CUBE_FACE_NORMAL[FACE_POS_Z] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.SOUTH);
-        CUBE_FACE_NORMAL[FACE_POS_X] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.WEST);
-        CUBE_FACE_NORMAL[FACE_NEG_X] = MatrixHelper.transformNormal(matrices.normal(), matrices.trustedNormals, Direction.EAST);
+        CUBE_FACE_NORMAL[FACE_NEG_Y] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.DOWN);
+        CUBE_FACE_NORMAL[FACE_POS_Y] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.UP);
+        CUBE_FACE_NORMAL[FACE_NEG_Z] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.NORTH);
+        CUBE_FACE_NORMAL[FACE_POS_Z] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.SOUTH);
+        CUBE_FACE_NORMAL[FACE_POS_X] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.WEST);
+        CUBE_FACE_NORMAL[FACE_NEG_X] = MatrixHelper.transformNormal(matrices.normal(), true, Direction.EAST);
 
         prevNormalMatrix.set(matrices.normal());
     }

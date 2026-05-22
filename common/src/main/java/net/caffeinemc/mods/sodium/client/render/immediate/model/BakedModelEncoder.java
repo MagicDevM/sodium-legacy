@@ -47,7 +47,7 @@ public class BakedModelEncoder {
                 }
 
                 // The packed transformed normal vector
-                int normal = MatrixHelper.transformNormal(matNormal, matrices.trustedNormals, quad.getAccurateNormal(i));
+                int normal = MatrixHelper.transformNormal(matNormal, true, quad.getAccurateNormal(i));
 
                 // The transformed position vector
                 float xt = MatrixHelper.transformPositionX(matPosition, x, y, z);
@@ -86,7 +86,7 @@ public class BakedModelEncoder {
                 float fB;
                 float fA;
 
-                var normal = MatrixHelper.transformNormal(matNormal, matrices.trustedNormals, quad.getAccurateNormal(i));
+                var normal = MatrixHelper.transformNormal(matNormal, true, quad.getAccurateNormal(i));
 
                 float brightness = brightnessTable[i];
 
