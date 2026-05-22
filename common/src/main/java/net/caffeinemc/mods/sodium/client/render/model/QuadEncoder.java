@@ -105,12 +105,12 @@ public class QuadEncoder {
             float yt = MatrixHelper.transformPositionY(matPosition, x, y, z);
             float zt = MatrixHelper.transformPositionZ(matPosition, x, y, z);
 
-            vertexConsumer.addVertex(xt, yt, zt);
+            vertexConsumer.vertex(xt, yt, zt);
 
-            vertexConsumer.setColor(quad.baseColor(i));
-            vertexConsumer.setUv(quad.getTexU(i), quad.getTexV(i));
-            vertexConsumer.setOverlay(overlay);
-            vertexConsumer.setLight(quad.getLight(i));
+            vertexConsumer.color(quad.baseColor(i));
+            vertexConsumer.uv(quad.getTexU(i), quad.getTexV(i));
+            vertexConsumer.overlayCoords(overlay);
+            vertexConsumer.uv2(quad.getLight(i));
 
             if (useNormals) {
                 int packedNormal = quad.packedNormal(i);
@@ -133,7 +133,7 @@ public class QuadEncoder {
                 }
             }
 
-            vertexConsumer.setNormal(nxt, nyt, nzt);
+            vertexConsumer.normal(nxt, nyt, nzt);
         }
     }
 }
