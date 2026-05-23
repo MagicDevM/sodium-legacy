@@ -11,6 +11,7 @@ import net.caffeinemc.mods.sodium.api.util.ColorMixer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.world.level.material.FogType;
+import net.minecraft.client.Camera;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.player.LocalPlayer;
@@ -178,7 +179,7 @@ public class CloudRenderer {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         if (Minecraft.useShaderTransparency()) {
-            Minecraft.getInstance().getCloudsTarget().bindWrite(false);
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
         }
 
         RenderSystem.setShaderFogEnd(previousEnd);
@@ -188,20 +189,20 @@ public class CloudRenderer {
     private void applyFogModifiers(ClientLevel world, FogRenderer.FogData fogData, LocalPlayer player, int cloudDistance, float tickDelta) {
         GameRenderer renderer = Minecraft.getInstance().gameRenderer;
         Camera camera = renderer.getMainCamera();
-        FogTyps fogType = camera.getFluidInCamera();
+        FogType fogType = camera.getFluidInCamera();
 
-        if (fogType == FogTyps.LAVA) {
+        if (fogType == FogType.LAVA) {
             if (player.isSpectator()) {
                 fogData.start = -8.0f;
                 fogData.end = (cloudDistance) * 0.5f;
-            } else if (player.hasStatusEffect(MobEffects.FIRE_RESISTANCE)) {
+            } else if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                 fogData.start = 0.0f;
                 fogData.end = 3.0f;
             } else {
                 fogData.start = 0.25f;
                 fogData.end = 1.0f;
             }
-        } else if (fogType == FogTyps.POWDER_SNOW) {
+        } else if (fogType == FogType.POWDER_SNOW) {
             if (player.isSpectator()) {
                 fogData.start = -8.0f;
                 fogData.end = (cloudDistance) * 0.5f;
@@ -209,7 +210,7 @@ public class CloudRenderer {
                 fogData.start = 0.0f;
                 fogData.end = 2.0f;
             }
-        } else if (fogType == FogTyps.WATER) {
+        } else if (fogType == FogType.WATER) {
             fogData.start = -8.0f;
             fogData.end = 96.0f;
             fogData.end *= Math.max(0.25f, player.getWaterVision());
@@ -231,7 +232,7 @@ public class CloudRenderer {
         FogRenderer.MobEffectFogFunction fogModifier = FogRenderer.getPriorityFogFunction(player, tickDelta);
 
         if (fogModifier != null) {
-            MobEffectInstance statusEffectInstance = player.getMobEffect(fogModifier.getMobEffect());
+            MobEffectInstance statusEffectInstance = player.getEffect(fogModifier.getMobEffect());
 
             if (statusEffectInstance != null) {
                 fogModifier.setupFog(fogData, player, statusEffectInstance, (cloudDistance * 8), tickDelta);

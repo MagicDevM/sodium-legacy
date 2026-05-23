@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.block.model.ItemModelGenerator;
 import org.joml.Vector3f;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,10 +32,7 @@ import static net.minecraft.client.renderer.block.model.ItemModelGenerator.MAX_Z
 import static net.minecraft.client.renderer.block.model.ItemModelGenerator.SpanFacing;
 
 public class ImprovedItemModelBuilder implements UnbakedModel {
-  
-  private static boolean isTransparent(SpriteContents sprite, int frame, int x, int y, int width, int height) {
-      return x >= 0 && y >= 0 && x < width && y < height ? sprite.isTransparent(frame, x, y) : true;
-   }
+  private static final ItemModelGenerator itemModelGenerator = new ItemModelGenerator();
   
   private static final BlockFaceUV SOUTH_FACE_UVS =
     new BlockFaceUV(new float[] { 0.0F, 0.0F, 16.0F, 16.0F }, 0);
@@ -324,7 +322,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
         ) {
             // If the pixel is transparent, any side quads would also be invisible.
             // Skip the transparent pixel to avoid generating redundant invisible quad faces.
-            var opaque = !isTransparent(
+            var opaque = !itemModelGenerator.isTransparent(
                     sprite,
                     frame,
                     pixelX,
@@ -365,7 +363,7 @@ public class ImprovedItemModelBuilder implements UnbakedModel {
                 int height
         ) {
             // Check if the neighbor pixel in the corresponding direction is transparent.
-            var neighborTransparent = isTransparent(
+            var neighborTransparent = itemModelGenerator.isTransparent(
                     sprite,
                     frame,
                     pixelX - faceFacing.getDirection().getStepX(),

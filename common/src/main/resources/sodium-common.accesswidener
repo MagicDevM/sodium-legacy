@@ -21,7 +21,10 @@ accessible field net/minecraft/client/renderer/block/model/ItemModelGenerator MA
 
 accessible class net/minecraft/client/renderer/FogRenderer$FogData
 accessible class net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction
-accessible method net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction getPriorityFogFunction(net/minecraft/world/entity/Entity;F) net/minecraft/client/renderer/FogRenderer$MobEffectFogFunction
+
+accessible method net/minecraft/client/renderer/FogRenderer getPriorityFogFunction (Lnet/minecraft/world/entity/Entity;F)Lnet/minecraft/client/renderer/FogRenderer$MobEffectFogFunction;
+
+accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator isTransparent (Lnet/minecraft/client/renderer/texture/SpriteContents;IIIII)Z
 
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
