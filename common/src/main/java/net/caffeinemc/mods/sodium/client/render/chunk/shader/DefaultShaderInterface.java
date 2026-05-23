@@ -30,8 +30,9 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
     private final GlUniformFloat3v uniformRegionOffset;
     private final GlUniformFloat2v uniformTexCoordShrink;
     private final GlUniformFloat2v uniformTexelSize;
+    private final GlUniformBool uniformRGSS;
     private final GlUniformInt uniformCurrentTime;
-    private final GlUniformFloat uniformFadePeriod;
+    //private final GlUniformFloat uniformFadePeriod;
 
     private final GlUniformBlock uniformChunkData;
 
@@ -47,7 +48,7 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
         this.uniformRGSS = context.bindUniform("u_UseRGSS", GlUniformBool::new);
 
         this.uniformCurrentTime = context.bindUniform("u_CurrentTime", GlUniformInt::new);
-        this.uniformFadePeriod = context.bindUniform("u_FadePeriodInv", GlUniformFloat::new);
+        //this.uniformFadePeriod = context.bindUniform("u_FadePeriodInv", GlUniformFloat::new);
 
         this.uniformChunkData = context.bindUniformBlock("ChunkData", 0);
 
@@ -61,7 +62,7 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
     @Override // the shader interface should not modify pipeline state
     public void setupState(TerrainRenderPass pass, FogParameters parameters) {
         this.bindTexture(ChunkShaderTextureSlot.BLOCK, pass.getAtlas());
-        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().getTextureView(), RenderSystem.getSamplerCache().getClampToEdge(GL11.LINEAR));
+        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().getId());
 
         var textureAtlas = (TextureAtlasAccessor) Minecraft.getInstance()
                 .getTextureManager()
@@ -83,7 +84,7 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
                 1.0f / textureAtlas.sodium$getHeight()
         );
 
-        uniformFadePeriod.setFloat((float) (1.0 / (Minecraft.getInstance().options.chunkSectionFadeInTime().get() * 1000.0))); // this is in seconds!
+        //uniformFadePeriod.setFloat((float) (1.0 / (Minecraft.getInstance().options.chunkSectionFadeInTime().get() * 1000.0))); // this is in seconds!
 
         this.fogShader.setup(parameters);
     }

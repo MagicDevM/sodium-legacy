@@ -33,7 +33,7 @@ public class TerrainRenderPass {
         return (isTranslucent && Minecraft.useShaderTransparency()) ? Minecraft.getInstance().levelRenderer.getTranslucentTarget() : Minecraft.getInstance().getMainRenderTarget();
     }
 
-    public AbstractTexture getAtlas() {
-        return Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS);
+    public int getAtlas() {
+        return Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).getId();
     }
 }
