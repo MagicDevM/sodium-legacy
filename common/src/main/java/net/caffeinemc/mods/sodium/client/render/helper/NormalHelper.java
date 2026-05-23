@@ -43,7 +43,7 @@ public abstract class NormalHelper {
         final Direction nominalFace = q.getNominalFace();
 
         if (nominalFace != null && GeometryHelper.isQuadParallelToFace(nominalFace, q)) {
-            Vec3i vec = nominalFace.getUnitVec3i();
+            Vec3i vec = nominalFace.getNormal();
             saveTo.set(vec.getX(), vec.getY(), vec.getZ());
             return;
         }
