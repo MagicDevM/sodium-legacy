@@ -26,5 +26,7 @@ accessible method net/minecraft/client/renderer/FogRenderer getPriorityFogFuncti
 
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator isTransparent (Lnet/minecraft/client/renderer/texture/SpriteContents;IIIII)Z
 
+accessible field net/minecraft/client/renderer/LightTexture lightTexture Lnet/minecraft/client/renderer/texture/DynamicTexture;
+
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z

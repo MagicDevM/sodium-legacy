@@ -62,7 +62,7 @@ public class DefaultShaderInterface implements ChunkShaderInterface {
     @Override // the shader interface should not modify pipeline state
     public void setupState(TerrainRenderPass pass, FogParameters parameters) {
         this.bindTexture(ChunkShaderTextureSlot.BLOCK, pass.getAtlas());
-        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().getId());
+        this.bindTexture(ChunkShaderTextureSlot.LIGHT, Minecraft.getInstance().gameRenderer.lightTexture().lightTexture.getId());
 
         var textureAtlas = (TextureAtlasAccessor) Minecraft.getInstance()
                 .getTextureManager()
