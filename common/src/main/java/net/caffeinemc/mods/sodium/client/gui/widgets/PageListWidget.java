@@ -195,7 +195,7 @@ public class PageListWidget extends AbstractScrollable {
                 return;
             }
 
-            var firstPage = pages.getFirst();
+            var firstPage = pages.get(0);
             var firstPageWidget = PageListWidget.this.pageToWidget.get(firstPage);
             if (firstPageWidget != null) {
                 PageListWidget.this.switchSelectedWidget(firstPageWidget);
