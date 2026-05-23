@@ -22,11 +22,16 @@ public class DefaultMaterials {
     }
 
     public static Material forChunkLayer(RenderType layer) {
-        return switch (layer) {
-            case SOLID -> SOLID;
-            case CUTOUT -> CUTOUT_MIPPED;
-            case TRANSLUCENT -> TRANSLUCENT;
-            case TRIPWIRE -> TRIPWIRE;
-        };
+        if (layer == RenderType.solid()) {
+            return SOLID;
+        } else if (layer == RenderType.cutoutMipped()) {
+            return CUTOUT_MIPPED;
+        } else if (layer == RenderType.translucent()) {
+            return TRANSLUCENT;
+        } else if (layer == RenderType.tripwire()) {
+            return TRIPWIRE;
+        }
+
+        throw new IllegalArgumentException("No material mapping exists for " + layer);
     }
 }
