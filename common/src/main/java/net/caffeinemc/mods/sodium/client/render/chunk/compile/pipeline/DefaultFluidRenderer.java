@@ -126,7 +126,7 @@ public class DefaultFluidRenderer {
             return true;
         }
 
-        var otherShape = otherState.getFaceOcclusionShape(DirectionUtil.getOpposite(facing));
+        var otherShape = otherState.getFaceOcclusionShape(view, selfPos, DirectionUtil.getOpposite(facing));
 
         // If the other block has an empty cull shape, then it cannot hide any geometry
         if (ShapeComparisonCache.isEmptyShape(otherShape)) {
@@ -146,10 +146,10 @@ public class DefaultFluidRenderer {
      * @param fluidShape     The shape of the fluid
      * @return True if the fluid side facing {@param facing} is self-visible, otherwise false
      */
-    private boolean isFluidSelfVisible(BlockState selfBlockState, Direction facing, VoxelShape fluidShape) {
+    private boolean isFluidSelfVisible(BlockAndTintGetter level, BlockPos blockPos, BlockState selfBlockState, Direction facing, VoxelShape fluidShape) {
         // only perform self-occlusion if the own block state can't occlude
         if (selfBlockState.canOcclude()) {
-            var selfShape = selfBlockState.getFaceOcclusionShape(facing);
+            var selfShape = selfBlockState.getFaceOcclusionShape(level, blockPos, facing);
 
             // only a non-empty self-shape can occlude anything
             if (!ShapeComparisonCache.isEmptyShape(selfShape)) {
@@ -166,12 +166,12 @@ public class DefaultFluidRenderer {
         return true;
     }
 
-    private boolean isFullBlockFluidSelfVisible(BlockState blockState, Direction dir) {
-        return this.isFluidSelfVisible(blockState, dir, Shapes.block());
+    private boolean isFullBlockFluidSelfVisible(BlockAndTintGetter level, BlockPos blockPos, BlockState blockState, Direction dir) {
+        return this.isFluidSelfVisible(level, blockPos, blockState, dir, Shapes.block());
     }
 
     private boolean isFluidSideExposed(BlockAndTintGetter world, BlockState ownBlockState, BlockPos neighborPos, Direction facing, float height) {
-        return this.isFluidSideExposed(ownBlockState, world.getBlockState(neighborPos), facing, height);
+        return this.isFluidSideExposed(world, neighborPos, ownBlockState, world.getBlockState(neighborPos), facing, height);
     }
 
     /**
@@ -183,7 +183,7 @@ public class DefaultFluidRenderer {
      * @param height             The height of the fluid
      * @return True if the fluid side facing {@param facing} is not occluded, otherwise false
      */
-    private boolean isFluidSideExposed(BlockState ownBlockState, BlockState neighborBlockState, Direction facing, float height) {
+    private boolean isFluidSideExposed(BlockAndTintGetter level, BlockPos pos, BlockState ownBlockState, BlockState neighborBlockState, Direction facing, float height) {
         // zero-height fluids don't render anything anyway
         if (height <= 0.0F) {
             return false;
@@ -199,7 +199,7 @@ public class DefaultFluidRenderer {
             return true;
         }
 
-        VoxelShape neighborShape = neighborBlockState.getFaceOcclusionShape(DirectionUtil.getOpposite(facing));
+        VoxelShape neighborShape = neighborBlockState.getFaceOcclusionShape(level, pos, DirectionUtil.getOpposite(facing));
 
         // empty neighbor occlusion shape can't occlude anything
         if (ShapeComparisonCache.isEmptyShape(neighborShape)) {
@@ -218,7 +218,7 @@ public class DefaultFluidRenderer {
             fluidShape = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, height, 1.0D);
         }
 
-        var ownShape = ownBlockState.getFaceOcclusionShape(facing);
+        var ownShape = ownBlockState.getFaceOcclusionShape(level, pos, facing);
         return this.occlusionCache.get().lookup(fluidShape, neighborShape, ownShape);
     }
 
@@ -230,7 +230,7 @@ public class DefaultFluidRenderer {
      * Calculates the combined visibility of a fluid face based on the neighboring block states and the fluid state.
      */
     private boolean isFullBlockFluidVisible(BlockAndTintGetter world, BlockPos pos, Direction dir, BlockState blockState, FluidState fluid) {
-        return isFullBlockFluidSelfVisible(blockState, dir) && this.isFullBlockFluidSideVisible(world, pos, dir, fluid);
+        return isFullBlockFluidSelfVisible(world, pos, blockState, dir) && this.isFullBlockFluidSideVisible(world, pos, dir, fluid);
     }
 
     /**
@@ -336,12 +336,12 @@ public class DefaultFluidRenderer {
             // check that there's an accessible path to the diagonal
             BlockPos aNeighbor = this.scratchPos.setWithOffset(origin, dirA);
             BlockState aNeighborState = world.getBlockState(aNeighbor);
-            boolean exposedAD = this.isFullBlockFluidSelfVisible(aNeighborState, dirB) &&
+            boolean exposedAD = this.isFullBlockFluidSelfVisible(world, origin, aNeighborState, dirB) &&
                     this.isSideExposedOffset(world, aNeighborState, aNeighbor, dirB, 1.0f);
 
             BlockPos bNeighbor = this.scratchPos.setWithOffset(origin, dirB);
             BlockState bNeighborState = world.getBlockState(bNeighbor);
-            boolean exposedBD = this.isFullBlockFluidSelfVisible(bNeighborState, dirA) &&
+            boolean exposedBD = this.isFullBlockFluidSelfVisible(world, origin, bNeighborState, dirA) &&
                     this.isSideExposedOffset(world, bNeighborState, bNeighbor, dirA, 1.0f);
 
             exposedADB = exposedAD && exposedBD;
@@ -397,10 +397,10 @@ public class DefaultFluidRenderer {
 
         // self-visibility and visibility are kept separate because self-visibility is used by the corner height sampling
         // while visibility would be too strict (as faces are not visible if there's an adjacent fluid of the same type)
-        boolean northSelfVisible = this.isFullBlockFluidSelfVisible(blockState, Direction.NORTH);
-        boolean southSelfVisible = this.isFullBlockFluidSelfVisible(blockState, Direction.SOUTH);
-        boolean westSelfVisible = this.isFullBlockFluidSelfVisible(blockState, Direction.WEST);
-        boolean eastSelfVisible = this.isFullBlockFluidSelfVisible(blockState, Direction.EAST);
+        boolean northSelfVisible = this.isFullBlockFluidSelfVisible(level, blockPos, blockState, Direction.NORTH);
+        boolean southSelfVisible = this.isFullBlockFluidSelfVisible(level, blockPos, blockState, Direction.SOUTH);
+        boolean westSelfVisible = this.isFullBlockFluidSelfVisible(level, blockPos, blockState, Direction.WEST);
+        boolean eastSelfVisible = this.isFullBlockFluidSelfVisible(level, blockPos, blockState, Direction.EAST);
 
         boolean northVisible = northSelfVisible && this.isFullBlockFluidSideVisible(level, blockPos, Direction.NORTH, fluidState);
         boolean southVisible = southSelfVisible && this.isFullBlockFluidSideVisible(level, blockPos, Direction.SOUTH, fluidState);
@@ -752,7 +752,7 @@ public class DefaultFluidRenderer {
 
         // stop at solid blocks, don't propagate but also not considered exposed
         var neighborBlockState = level.getBlockState(this.scratchPos.setWithOffset(origin, xOffset, 0, zOffset));
-        if (neighborBlockState.isSolidRender()) {
+        if (neighborBlockState.isSolidRender(level, origin)) {
             return NO_EXPOSURE;
         }
 
@@ -778,7 +778,7 @@ public class DefaultFluidRenderer {
         // If it's a block that should have fluid faces rendered against it, expose both. Otherwise, just the outwards face is rendered
         // to prevent the inwards face from being visible from within the water. However, the outwards face is still visible from the outside
         // and needs to be rendered in any case the block is not solid.
-        if (!aboveIsSameFluid && !aboveBlockState.isSolidRender()) {
+        if (!aboveIsSameFluid && !aboveBlockState.isSolidRender(level, origin)) {
             if (!PlatformBlockAccess.getInstance().shouldShowFluidOverlay(aboveBlockState, level, this.scratchPos, fluidState)) {
                 return BOTH_EXPOSED;
             } else {
