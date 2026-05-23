@@ -23,7 +23,7 @@ import java.util.List;
 
 // TODO: is narration of the tooltip already handled by the screen or is there no narration at all?
 public class ScrollableTooltip {
-    private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation("sodium").fromNamespaceAndPath("sodium", "textures/gui/tooltip_arrows.png");
+    private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation("sodium").tryBuild("sodium", "textures/gui/tooltip_arrows.png");
     private static final int ARROW_WIDTH = 5;
     private static final int SPRITE_WIDTH = 10;
     private static final int ARROW_HEIGHT = 9;
@@ -219,11 +219,28 @@ public class ScrollableTooltip {
             arrowY = Math.max(arrowY, this.tooltipArea.y());
             arrowY = Math.min(arrowY + ARROW_HEIGHT, this.tooltipArea.getLimitY()) - ARROW_HEIGHT;
 
-            graphics.nextStratum();
+            graphics.pose().translate(0.0F, 0.0F, 1.0F);
 
             // parameters are: render type, sprite, x, y, u offset, v offset, render width, render height, u size, v size, color
-            graphics.blit(ResourceLocation, ARROW_TEXTURE, arrowX, arrowY, ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT, Colors.BACKGROUND_LIGHT);
-            graphics.blit(ResourceLocation, ARROW_TEXTURE, arrowX, arrowY, 0, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT, Colors.BACKGROUND_DEFAULT);
+            graphics.setColor(
+                Colors.r(Colors.BACKGROUND_LIGHT),
+                Colors.g(Colors.BACKGROUND_LIGHT),
+                Colors.b(Colors.BACKGROUND_LIGHT),
+                Colors.a(Colors.BACKGROUND_LIGHT)
+            );
+            
+            graphics.blit(ARROW_TEXTURE, arrowX, arrowY, ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT);
+            
+            graphics.setColor(
+                Colors.r(Colors.BACKGROUND_DEFAULT),
+                Colors.g(Colors.BACKGROUND_DEFAULT),
+                Colors.b(Colors.BACKGROUND_DEFAULT),
+                Colors.a(Colors.BACKGROUND_DEFAULT)
+            );
+            
+            graphics.blit(ARROW_TEXTURE, arrowX, arrowY, 0, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT);
+            
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
         int lineHeight = this.getLineHeight();
@@ -237,7 +254,9 @@ public class ScrollableTooltip {
 
         graphics.enableScissor(this.visibleDim.x(), this.visibleDim.y(), this.visibleDim.getLimitX(), this.visibleDim.getLimitY());
         graphics.fill(this.visibleDim.x(), this.visibleDim.y(), this.visibleDim.getLimitX(), this.visibleDim.getLimitY(), backgroundColor);
-        graphics.nextStratum();
+        
+        graphics.pose().translate(0.0F, 0.0F, 1.0F);
+        
         for (int i = 0; i < this.content.size(); i++) {
             graphics.drawString(this.font, this.content.get(i),
                     this.visibleDim.x() + TEXT_HORIZONTAL_PADDING, this.visibleDim.y() + TEXT_VERTICAL_PADDING + (i * lineHeight) - scrollAmount,

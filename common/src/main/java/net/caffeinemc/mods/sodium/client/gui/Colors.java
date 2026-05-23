@@ -45,4 +45,17 @@ public class Colors {
         hsv[2] = Math.max(hsv[2], minBrightness);
         return ColorARGB.fromHSV(hsv);
     }
+    
+    public static float r(int color) {
+        return ((color >> 16) & 255) / 255F;
+    }
+    public static float g(int color) {
+        return ((color >> 8) & 255) / 255F;
+    }
+    public static float b(int color) {
+        return (color & 255) / 255F;
+    }
+    public static float a(int color) {
+        return ((color >> 24) & 255) / 255F;
+    }
 }
