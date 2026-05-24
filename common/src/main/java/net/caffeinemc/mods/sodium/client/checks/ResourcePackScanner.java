@@ -152,7 +152,7 @@ public class ResourcePackScanner {
         final var unsupportedShaderPrograms = new ArrayList<String>();
         final var unsupportedShaderIncludes = new ArrayList<String>();
 
-        resourcePack.listResources(PackType.CLIENT_RESOURCES, Identifier.DEFAULT_NAMESPACE, "shaders", (identifier, supplier) -> {
+        resourcePack.listResources(PackType.CLIENT_RESOURCES, ResourceLocation.DEFAULT_NAMESPACE, "shaders", (identifier, supplier) -> {
             // Trim full shader file path to only contain the filename
             final var path = identifier.getPath();
             final var name = path.substring(path.lastIndexOf('/') + 1);
@@ -175,7 +175,7 @@ public class ResourcePackScanner {
     }
 
     private static boolean isExternalResourcePack(PackResources pack) {
-        return pack instanceof PathPackResources || pack instanceof FilePackResources || pack instanceof CompositePackResources;
+        return pack instanceof PathPackResources || pack instanceof FilePackResources;
     }
 
     private static String getResourcePackName(PackResources pack) {
