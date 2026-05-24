@@ -26,13 +26,4 @@ public abstract class TextureSheetParticleMixin {
     private void afterSetSprite(TextureAtlasSprite sprite, CallbackInfo ci) {
         this.shouldTickSprite = sprite != null && SpriteUtil.INSTANCE.hasAnimation(sprite);
     }
-
-    @Override
-    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
-        if (this.shouldTickSprite) {
-            SpriteUtil.INSTANCE.markSpriteActive(this.sprite);
-        }
-
-        super.buildGeometry(vertexConsumer, camera, tickDelta);
-    }
 }
