@@ -171,7 +171,7 @@ public class ConsoleRenderer {
         public static ActiveMessage create(Message message, double timestamp) {
             var text = (message.translated() ? Component.translatable(message.text()) : Component.literal(message.text()))
                     .copy()
-                    .withStyle((style) -> style.withFont(Minecraft.UNIFORM));
+                    .withStyle((style) -> style.withFont(Minecraft.UNIFORM_FONT));
 
             return new ActiveMessage(message.level(), text, message.duration(), timestamp);
         }
