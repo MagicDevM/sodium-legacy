@@ -1,8 +1,10 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
 import org.lwjgl.glfw.GLFW;
+import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,7 +17,7 @@ import org.jspecify.annotations.Nullable;
  * It derives is positioning from the parent so it tracks the parent's scroll position automatically.
  */
 public class ResetButton extends AbstractWidget {
-    private static final ResourceLocation ICON = ResourceLocation("sodium").fromNamespaceAndPath("sodium", "textures/gui/reset_button.png");
+    private static final ResourceLocation ICON = new ResourceLocation("sodium").tryBuild("sodium", "textures/gui/reset_button.png");
     private static final int ICON_SIZE = Layout.CONTROL_ICON_SIZE;
     private static final int COLOR = 0xFFFF8C30;
 
@@ -29,7 +31,7 @@ public class ResetButton extends AbstractWidget {
     }
 
     public static boolean isShiftHeld() {
-        return Minecraft.getInstance().hasShiftDown();
+        return Screen.hasShiftDown();
     }
 
     public boolean isActive() {
@@ -60,7 +62,17 @@ public class ResetButton extends AbstractWidget {
         int x = this.getCenterX() - ICON_SIZE / 2;
         int y = this.getCenterY() - ICON_SIZE / 2;
 
-        graphics.blit(ResourceLocation, ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE, COLOR);
+        graphics.setColor(
+          Colors.r(COLOR),
+          Colors.g(COLOR),
+          Colors.b(COLOR),
+          Colors.a(COLOR)
+        );
+
+        graphics.blit(ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+
         GLFW.glfwSetCursor(
           Minecraft.getInstance().getWindow().getWindow(),
           GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
