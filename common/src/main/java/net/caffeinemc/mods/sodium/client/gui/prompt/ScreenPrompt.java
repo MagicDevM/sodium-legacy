@@ -127,7 +127,7 @@ public class ScreenPrompt implements GuiEventListener, Renderable {
             return true;
         }
 
-        return GuiEventListener.super.keyPressed(event);
+        return GuiEventListener.super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
