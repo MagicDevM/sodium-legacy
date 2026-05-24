@@ -13,6 +13,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
 
 public class SliderControl implements Control {
+    private static final long HAND_CURSOR = GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR);
+    private static final long RESIZE_CURSOR = GLFW.glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR);
+    
+    private static long currentCursor = 0;
+    
     private final IntegerOption option;
 
     public SliderControl(IntegerOption option) {
@@ -104,15 +109,16 @@ public class SliderControl implements Control {
             }
 
             if (this.isMouseOverSlider(mouseX, mouseY)) {
-                graphics.requestCursor(this.sliderHeld ? 
-                GLFW.glfwSetCursor(
-                  Minecraft.getInstance().getWindow().getWindow(),
-                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR)
-              ) : 
-                GLFW.glfwSetCursor(
-                  Minecraft.getInstance().getWindow().getWindow(),
-                  GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
-              ));
+                long window = Minecraft.getInstance().getWindow().getWindow();
+                
+                long targetCursor = this.sliderHeld
+                    ? RESIZE_CURSOR
+                    : HAND_CURSOR;
+                
+                if (currentCursor != targetCursor) {
+                    GLFW.glfwSetCursor(window, targetCursor);
+                    currentCursor = targetCursor;
+                }
             }
         }
 
