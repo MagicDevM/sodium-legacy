@@ -1,6 +1,7 @@
 package net.caffeinemc.mods.sodium.client.gui;
 
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
+import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.config.ConfigManager;
 import net.caffeinemc.mods.sodium.client.config.structure.IntegerOption;
 import net.caffeinemc.mods.sodium.client.config.structure.Option;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.Util;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -396,7 +398,7 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
         if (this.prompt == null && !this.searchWidget.isSearching()) {
             // shift + P opens the vanilla video settings screen
             if (keyCode == GLFW.GLFW_KEY_P && (modifiers & GLFW.GLFW_MOD_SHIFT) != 0) {
-                Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.options.VideoSettingsScreen(this.prevScreen, Minecraft.getInstance(), Minecraft.getInstance().options));
+                Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.VideoSettingsScreen(this.prevScreen, Minecraft.getInstance().options));
                 return true;
             }
 
@@ -409,13 +411,13 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
 
         // dispatch ALT+letter shortcuts to any keybound buttons on this screen
         for (var button : this.shortcutButtons) {
-            if (button.tryActivateShortcut(event)) {
+            if (button.tryActivateShortcut(keyCode, scanCode, modifiers)) {
                 return true;
             }
         }
 
         // ESC closes this screen without saving any pending changes
-        if (event.key() == GLFW.GLFW_KEY_ESCAPE) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
             if (this.hasPendingChanges) {
                 this.undoChanges();
             }
@@ -423,7 +425,7 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
             this.onClose();
         }
 
-        return super.keyReleased(event);
+        return super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     @Override
@@ -446,31 +448,31 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double f, double amount) {
+    public boolean mouseScrolled(double x, double y, double amount) {
         // change the gui scale with scrolling if the control key is held
-        if (Minecraft.getInstance().hasControlDown()) {
-            var location = new ResourceLocation("sodium").parse("sodium:general.gui_scale");
+        if (Screen.hasControlDown()) {
+            var location = new ResourceLocation("sodium").tryParse("sodium:general.gui_scale");
             var option = ConfigManager.CONFIG.getOption(location);
             if (option instanceof IntegerOption guiScaleOption) {
-                if (guiScaleOption.getValidatedValue() instanceof Integer intValue) {
-                    var range = guiScaleOption.getSteppedValidator();
-                    var top = range.max() + 1;
-                    var auto = range.min();
+                var intValue = guiScaleOption.getValidatedValue();
+                
+                var range = guiScaleOption.getSteppedValidator();
+                var top = range.max() + 1;
+                var auto = range.min();
 
-                    // re-maps the auto value (presumably 0) to be at the top of the scroll range
-                    if (intValue == auto) {
-                        intValue = top;
+                // re-maps the auto value (presumably 0) to be at the top of the scroll range
+                if (intValue == auto) {
+                    intValue = top;
+                }
+                var newValue = Mth.clamp(intValue + (int) Math.signum(amount), auto + 1, top);
+                if (newValue != intValue) {
+                    if (newValue == top) {
+                        newValue = auto;
                     }
-                    var newValue = Math.clamp(intValue + (int) Math.signum(amount), auto + 1, top);
-                    if (newValue != intValue) {
-                        if (newValue == top) {
-                            newValue = auto;
-                        }
-                        if (range.isValueValid(newValue)) {
-                            guiScaleOption.modifyValue(newValue);
-                            ConfigManager.CONFIG.applyOption(location);
-                            return true;
-                        }
+                    if (range.isValueValid(newValue)) {
+                        guiScaleOption.modifyValue(newValue);
+                        ConfigManager.CONFIG.applyOption(location);
+                        return true;
                     }
                 }
             }
@@ -481,7 +483,7 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
             return true;
         }
 
-        return super.mouseScrolled(x, y, f, amount);
+        return super.mouseScrolled(x, y, amount);
     }
 
     @Override
@@ -534,18 +536,24 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
 
     public static int renderIconWithSpacing(GuiGraphics graphics, ResourceLocation icon, int color, boolean iconMonochrome, int x, int y, int height, int margin) {
         int iconSize = height - margin * 2;
-
-        var texture = Minecraft.getInstance().getTextureManager().getTexture(icon);
-        int w = texture.getTexture().getWidth(0);
-        int h = texture.getTexture().getHeight(0);
-
+        int w = iconSize;
+        int h = iconSize;
+        
         x = x + margin;
         y = y + height / 2 - iconSize / 2;
+        
         if (iconMonochrome) {
-            graphics.blit(ResourceLocation, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h, color);
-        } else {
-            graphics.blit(ResourceLocation, icon, x, y, 0, 0, iconSize, iconSize, w, h, w, h);
+            graphics.setColor(
+                Colors.r(color),
+                Colors.g(color),
+                Colors.b(color),
+                Colors.a(color)
+            );
         }
+        
+        graphics.blit(icon, x, y, 0, 0, iconSize, iconSize, w, h);
+
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         return margin * 2 + iconSize;
     }
@@ -555,9 +563,9 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     static {
         DONATION_PROMPT_MESSAGE = List.of(
                 FormattedText.composite(Component.literal("Hello!")),
-                FormattedText.composite(Component.literal("It seems that you've been enjoying "), Component.literal("Sodium").withColor(0x27eb92), Component.literal(", the powerful and open rendering optimization mod for Minecraft.")),
-                FormattedText.composite(Component.literal("Mods like these are complex. They require "), Component.literal("thousands of hours").withColor(0xff6e00), Component.literal(" of development, debugging, and tuning to create the experience that players have come to expect.")),
-                FormattedText.composite(Component.literal("If you'd like to show your token of appreciation, and support the development of our mod in the process, then consider "), Component.literal("buying us a coffee").withColor(0xed49ce), Component.literal(".")),
+                FormattedText.composite(Component.literal("It seems that you've been enjoying "), Component.literal("Sodium").withStyle(style -> style.withColor(0x27eb92)), Component.literal(", the powerful and open rendering optimization mod for Minecraft.")),
+                FormattedText.composite(Component.literal("Mods like these are complex. They require "), Component.literal("thousands of hours").withStyle(style -> style.withColor(0xff6e00)), Component.literal(" of development, debugging, and tuning to create the experience that players have come to expect.")),
+                FormattedText.composite(Component.literal("If you'd like to show your token of appreciation, and support the development of our mod in the process, then consider "), Component.literal("buying us a coffee").withStyle(style -> style.withColor(0xed49ce)), Component.literal(".")),
                 FormattedText.composite(Component.literal("And thanks again for using our mod! We hope it helps you (and your computer.)"))
         );
     }
