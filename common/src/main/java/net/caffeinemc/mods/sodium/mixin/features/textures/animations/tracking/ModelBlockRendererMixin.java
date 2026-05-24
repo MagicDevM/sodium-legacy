@@ -23,8 +23,8 @@ public class ModelBlockRendererMixin {
      */
     @Inject(method = "putQuadData", at = @At("HEAD"))
     private void preRenderQuad(BlockAndTintGetter blockAndTintGetter, BlockState blockState, BlockPos blockPos, VertexConsumer vertexConsumer, PoseStack.Pose pose, BakedQuad quad, @Coerce Object commonRenderStorage, int i, CallbackInfo ci) {
-        if (quad.sprite() != null) {
-            SpriteUtil.INSTANCE.markSpriteActive(quad.sprite());
+        if (quad.getSprite() != null) {
+            SpriteUtil.INSTANCE.markSpriteActive(quad.getSprite());
         }
     }
 }
