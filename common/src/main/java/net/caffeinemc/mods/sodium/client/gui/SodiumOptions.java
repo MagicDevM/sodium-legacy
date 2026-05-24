@@ -40,7 +40,7 @@ public class SodiumOptions {
         public boolean hiddenFluidCulling = true;
         public boolean improvedFluidShaping = false;
         public boolean useClosestPointEntitySort = false;
-        public GL11 pixelFilteringMode = GL11.NEAREST;
+        public GL11 pixelFilteringMode = GL11.GL_NEAREST;
     }
 
     public static class PerformanceSettings {
