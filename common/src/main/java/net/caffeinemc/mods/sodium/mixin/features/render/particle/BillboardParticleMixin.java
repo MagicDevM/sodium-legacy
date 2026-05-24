@@ -54,32 +54,32 @@ public abstract class BillboardParticleMixin extends Particle {
 
         ci.cancel();
 
-        Vec3 vec3d = camera.getPos();
+        Vec3 vec3d = camera.getPosition();
 
-        float x = (float) (Mth.lerp(tickDelta, this.prevPosX, this.x) - vec3d.getX());
-        float y = (float) (Mth.lerp(tickDelta, this.prevPosY, this.y) - vec3d.getY());
-        float z = (float) (Mth.lerp(tickDelta, this.prevPosZ, this.z) - vec3d.getZ());
+        float x = (float) (Mth.lerp(tickDelta, this.xo, this.x) - vec3d.x());
+        float y = (float) (Mth.lerp(tickDelta, this.yo, this.y) - vec3d.y());
+        float z = (float) (Mth.lerp(tickDelta, this.zo, this.z) - vec3d.z());
 
         Quaternionf quaternion;
 
-        if (this.angle == 0.0F) {
-            quaternion = camera.getRotation();
+        if (this.roll == 0.0F) {
+            quaternion = camera.rotation();
         } else {
-            float angle = Mth.lerp(tickDelta, this.prevAngle, this.angle);
+            float angle = Mth.lerp(tickDelta, this.oRoll, this.roll);
 
-            quaternion = new Quaternionf(camera.getRotation());
+            quaternion = new Quaternionf(camera.rotation());
             quaternion.rotateZ(angle);
         }
 
         float size = this.getSize(tickDelta);
-        int light = this.getBrightness(tickDelta);
+        int light = this.getLightColor(tickDelta);
 
         float minU = this.getMinU();
         float maxU = this.getMaxU();
         float minV = this.getMinV();
         float maxV = this.getMaxV();
 
-        int color = ColorABGR.pack(this.red , this.green, this.blue, this.alpha);
+        int color = ColorABGR.pack(this.rCol , this.gCol, this.bCol, this.alpha);
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             long buffer = stack.nmalloc(4 * ParticleVertex.STRIDE);
