@@ -50,7 +50,7 @@ public class KeyBoundButtonWidget extends FlatButtonWidget {
 
     @Override
     protected Component getRenderedLabel() {
-        return this.isEnabled() && Minecraft.getInstance().hasAltDown() ? this.underlinedLabel : super.getRenderedLabel();
+        return this.isEnabled() && Screen.hasAltDown() ? this.underlinedLabel : super.getRenderedLabel();
     }
 
     public boolean tryActivateShortcut(int keyCode, int scanCode, int modifiers) {
