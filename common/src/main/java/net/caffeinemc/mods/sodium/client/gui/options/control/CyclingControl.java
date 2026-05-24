@@ -83,7 +83,7 @@ public class CyclingControl<T extends Enum<T>> implements Control {
             if (this.isResetOverlayActive()) return false;
 
             if (this.option.isEnabled() && button == 0 && this.isMouseOver(mouseX, mouseY)) {
-                cycleControl(Minecraft.getInstance().hasShiftDown());
+                cycleControl(Screen.hasShiftDown());
                 return true;
             }
 
@@ -95,7 +95,7 @@ public class CyclingControl<T extends Enum<T>> implements Control {
             if (!isFocused()) return false;
 
             if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_A) {
-                cycleControl(Minecraft.getInstance().hasShiftDown());
+                cycleControl(Screen.hasShiftDown());
                 return true;
             }
 

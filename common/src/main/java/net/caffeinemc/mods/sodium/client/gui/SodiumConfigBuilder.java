@@ -71,7 +71,7 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                 }
             }
     
-            return LINEAR; // fallback/default
+            return LINEAR;
         }
     }
     
