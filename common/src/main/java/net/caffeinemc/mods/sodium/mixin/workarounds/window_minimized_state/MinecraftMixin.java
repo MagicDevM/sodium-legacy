@@ -28,12 +28,12 @@ public class MinecraftMixin {
     @Redirect(method = "runTick", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Window;isMinimized()Z"))
     private boolean redirectWindowMinimized(Window window) {
         if (!sodium$redirectWindowMinimizedState) {
-            return window.isMinimized();
+            return !window.isFullscreen();
         }
         try (var stack = MemoryStack.stackPush()) {
             var width = stack.callocInt(1);
             var height = stack.callocInt(1);
-            GLFW.glfwGetFramebufferSize(window.handle(), width, height);
+            GLFW.glfwGetFramebufferSize(window.getWindow(), width, height);
             return width.get(0) == 0 || height.get(0) == 0;
         }
     }
