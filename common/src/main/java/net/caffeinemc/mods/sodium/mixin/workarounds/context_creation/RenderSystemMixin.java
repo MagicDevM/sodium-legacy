@@ -76,7 +76,7 @@ public class RenderSystemMixin {
 
         // Likely, this indicates a module was injected into the current process. We should check that
         // nothing problematic was just installed.
-        ModuleScanner.checkModules(() -> GLFWNativeWin32.glfwGetWin32Window(window.handle()));
+        ModuleScanner.checkModules(() -> GLFWNativeWin32.glfwGetWin32Window(window.getWindow()));
 
         // If we didn't find anything problematic (which would have thrown an exception), then let's just record
         // the new context pointer and carry on.
