@@ -106,10 +106,10 @@ public class BakedGlyphMixin {
 
         ci.cancel();
 
-        float x1 = effect.x0();
-        float x2 = effect.x1();
-        float h1 = effect.y1(); // Yes, this is swapped in 1.21.6+.
-        float h2 = effect.y0();
+        float x1 = effect.x0;
+        float x2 = effect.x1;
+        float h1 = effect.y1; // Yes, this is swapped in 1.21.6+.
+        float h2 = effect.y0;
         float z = depthOffset;
 
         int color = ColorARGB.toABGR(c);
