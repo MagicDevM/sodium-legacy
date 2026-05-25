@@ -33,5 +33,10 @@ accessible field com/mojang/blaze3d/vertex/BufferBuilder buffer Ljava/nio/ByteBu
 accessible field com/mojang/blaze3d/vertex/BufferBuilder vertices I
 accessible field com/mojang/blaze3d/vertex/BufferBuilder format Lcom/mojang/blaze3d/vertex/VertexFormat;
 
+accessible field net/minecraft/client/gui/font/glyphs/BakedGlyph$Effect x0 F
+accessible field net/minecraft/client/gui/font/glyphs/BakedGlyph$Effect x1 F
+accessible field net/minecraft/client/gui/font/glyphs/BakedGlyph$Effect y0 F
+accessible field net/minecraft/client/gui/font/glyphs/BakedGlyph$Effect y1 F
+
 accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
