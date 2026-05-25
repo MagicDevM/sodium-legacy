@@ -44,14 +44,6 @@ public interface VertexConsumerMixin {
         float yt = MatrixHelper.transformNormalY(matrix, x, y, z);
         float zt = MatrixHelper.transformNormalZ(matrix, x, y, z);
 
-        if (!pose.trustedNormals) {
-            float scalar = Math.invsqrt(Math.fma(xt, xt, Math.fma(yt, yt, zt * zt)));
-
-            xt *= scalar;
-            yt *= scalar;
-            zt *= scalar;
-        }
-
         return this.setNormal(xt, yt, zt);
     }
 }
