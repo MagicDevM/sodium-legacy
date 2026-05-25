@@ -48,7 +48,7 @@ public class GameRendererMixin {
 
         ConsoleHooks.render(guiGraphics, GLFW.glfwGetTime());
 
-        profiler.get().pop();
+        profiler.pop();
 
         HAS_RENDERED_OVERLAY_ONCE = true;
     }
