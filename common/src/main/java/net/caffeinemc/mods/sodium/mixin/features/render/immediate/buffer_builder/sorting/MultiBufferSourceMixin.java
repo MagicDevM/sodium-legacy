@@ -56,7 +56,7 @@ public class MultiBufferSourceMixin {
     
     // Reorder Quad vertices to free up memory
     @Unique
-    private static BufferBuilder.RenderedBuffer reorderQuadVertices(ByteBuffer buffer, int[] primitiveIds, int vertexSize) {
+    private static void reorderQuadVertices(ByteBuffer buffer, int[] primitiveIds, int vertexSize) {
         int quadSize = vertexSize * 4;
         
         ByteBuffer copy = MemoryUtil.memAlloc(buffer.capacity());
