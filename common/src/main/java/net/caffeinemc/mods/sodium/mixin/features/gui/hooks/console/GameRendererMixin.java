@@ -40,13 +40,15 @@ public class GameRendererMixin {
             }
         }
 
-        minecraft.getProfiler().push("sodium_console_overlay");
+        ProfilerFiller profiler = minecraft.getProfiler();
+
+        profiler.push("sodium_console_overlay");
         
-        GuiGraphics guiGraphics = new GuiGraphics(this.minecraft, this.guiRenderState, this.buffers.bufferSource());
+        GuiGraphics guiGraphics = new GuiGraphics(this.minecraft, this.renderBuffers.bufferSource());
 
         ConsoleHooks.render(guiGraphics, GLFW.glfwGetTime());
 
-        Profiler.get().pop();
+        profiler.get().pop();
 
         HAS_RENDERED_OVERLAY_ONCE = true;
     }
