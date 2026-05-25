@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import com.llamalad7.mixinextras.sugar.Local;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public abstract class DebugHudMixin {
         var renderer = SodiumWorldRenderer.instanceNullable();
 
         if (renderer != null) {
-            strings.addAll(renderer.getDebugStrings());
+            strings.addAll(renderer.getDebugStrings(false));
         }
 
         for (int i = 0; i < strings.size(); i++) {
@@ -49,7 +50,7 @@ public abstract class DebugHudMixin {
     }
     
     @Redirect(method = "getGameInformation", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList([Ljava/lang/Object;)Ljava/util/ArrayList;", remap = false))
-    private ArrayList<String> redirectLeftTextEarly(Object[] elements, GuiGraphics guiGraphics, CallbackInfo ci, @Local(ordinal = 0) List<String> leftLines) {
+    private @Nullable List<String> redirectLeftTextEarly(Object[] elements, GuiGraphics guiGraphics, CallbackInfo ci, @Local(ordinal = 0) List<String> leftLines) {
         ArrayList<String> strings = Lists.newArrayList((String[]) elements);
         strings.add("");
         
@@ -57,7 +58,7 @@ public abstract class DebugHudMixin {
         
         var results = FrameTimeStatistics.INSTANCE.get();
         if (results == null || results.isEmpty()) {
-            return;
+            return null;
         }
 
         // splice the percentile fps display into the debug lines to make sure it's right under the fps string.
@@ -88,6 +89,11 @@ public abstract class DebugHudMixin {
         leftLines.add(insertAt, sb.toString());
         
         return leftLines;
+    }
+    
+    @Unique
+    private static long sodium$nanosToFps(long ns) {
+        return ns > 0L ? Math.round(1.0e9 / ns) : 0L;
     }
     
     @Unique
