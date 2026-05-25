@@ -63,7 +63,7 @@ public abstract class ItemRendererMixin {
             int color = 0xFFFFFFFF;
 
             if (bakedQuad.isTinted()) {
-                color = ColorARGB.toABGR(getLayerColorSafe(colors, bakedQuad.tintIndex()));
+                color = ColorARGB.toABGR(getLayerColorSafe(colors, bakedQuad.getTintIndex()));
             }
 
             BakedModelEncoder.writeQuadVertices(writer, matrices, quad, color, light, overlay, BakedModelEncoder.shouldMultiplyAlpha());
