@@ -20,6 +20,6 @@ public abstract class EntityRendererMixin<T extends Entity> {
             return original.call(instance, aABB);
         }
 
-        return renderer.isEntityVisible(entity) && original.call(instance, aABB);
+        return renderer.isEntityVisible((EntityRenderer<T>) (Object) this, entity) && original.call(instance, aABB);
     }
 }
