@@ -40,12 +40,6 @@ public class BakedModelEncoder {
 
                 int newLight = mergeLighting(quad.getMaxLightQuad(i), light);
 
-                int newColor = color;
-
-                if (colorize) {
-                    newColor = ColorMixer.mulComponentWise(newColor, quad.getColor(i));
-                }
-
                 // The packed transformed normal vector
                 int normal = MatrixHelper.transformNormal(matNormal, true, quad.getAccurateNormal(i));
 
@@ -54,7 +48,7 @@ public class BakedModelEncoder {
                 float yt = MatrixHelper.transformPositionY(matPosition, x, y, z);
                 float zt = MatrixHelper.transformPositionZ(matPosition, x, y, z);
 
-                EntityVertex.write(ptr, xt, yt, zt, newColor, quad.getTexU(i), quad.getTexV(i), overlay, newLight, normal);
+                EntityVertex.write(ptr, xt, yt, zt, color, quad.getTexU(i), quad.getTexV(i), overlay, newLight, normal);
                 ptr += EntityVertex.STRIDE;
             }
 
@@ -62,7 +56,7 @@ public class BakedModelEncoder {
         }
     }
 
-    public static void writeQuadVertices(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, float r, float g, float b, float a, float[] brightnessTable, int[] light, int overlay) {
+    public static void writeQuadVertices(VertexBufferWriter writer, PoseStack.Pose matrices, ModelQuadView quad, float[] brightnessTable, float r, float g, float b, float a, int[] light, int overlay, boolean colorize) {
         Matrix3f matNormal = matrices.normal();
         Matrix4f matPosition = matrices.pose();
 
@@ -75,6 +69,7 @@ public class BakedModelEncoder {
                 float x = quad.getX(i);
                 float y = quad.getY(i);
                 float z = quad.getZ(i);
+
 
                 // The transformed position vector
                 float xt = MatrixHelper.transformPositionX(matPosition, x, y, z);
@@ -89,7 +84,6 @@ public class BakedModelEncoder {
                 var normal = MatrixHelper.transformNormal(matNormal, true, quad.getAccurateNormal(i));
 
                 float brightness = brightnessTable[i];
-
                 fR = brightness * r;
                 fG = brightness * g;
                 fB = brightness * b;
@@ -97,9 +91,14 @@ public class BakedModelEncoder {
 
                 int color = ColorABGR.pack(fR, fG, fB, fA);
 
+                int newColor = color;
+                if (colorize) {
+                    newColor = ColorMixer.mulComponentWise(newColor, quad.getColor(i));
+                }
+                
                 int newLight = mergeLighting(quad.getMaxLightQuad(i), light[i]);
 
-                EntityVertex.write(ptr, xt, yt, zt, color, quad.getTexU(i), quad.getTexV(i), overlay, newLight, normal);
+                EntityVertex.write(ptr, xt, yt, zt, newColor, quad.getTexU(i), quad.getTexV(i), overlay, newLight, normal);
                 ptr += EntityVertex.STRIDE;
             }
 
