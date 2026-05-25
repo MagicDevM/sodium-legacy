@@ -47,26 +47,26 @@ public class ShadowFeatureRendererMixin {
 
         ci.cancel();
 
-        BlockPos blockPos = pos.down();
+        BlockPos blockPos = pos.below();
         BlockState blockState = world.getBlockState(blockPos);
 
-        if (blockState.getRenderType() == RenderShape.INVISIBLE || !blockState.isFullCube(world, blockPos)) {
+        if (blockState.getRenderShape() == RenderShape.INVISIBLE || !blockState.isCollisionShapeFullBlock(world, blockPos)) {
             return;
         }
 
-        var light = world.getLightLevel(pos);
+        var light = world.getMaxLocalRawBrightness(pos);
 
         if (light <= 3) {
             return;
         }
 
-        VoxelShape voxelShape = blockState.getOutlineShape(world, blockPos);
+        VoxelShape voxelShape = blockState.getShape(world, blockPos);
 
         if (voxelShape.isEmpty()) {
             return;
         }
 
-        float brightness = LightTexture.getBrightness(world.getDimension(), light);
+        float brightness = LightTexture.getBrightness(world.dimensionType(), light);
         float alpha = (float) (((double) opacity - ((y - (double) pos.getY()) / 2.0)) * 0.5 * (double) brightness);
 
         if (alpha >= 0.0F) {
@@ -74,7 +74,7 @@ public class ShadowFeatureRendererMixin {
                 alpha = 1.0F;
             }
 
-            Box box = voxelShape.getBoundingBox();
+            AABB box = voxelShape.bounds();
 
             float minX = (float) ((pos.getX() + box.minX) - x);
             float maxX = (float) ((pos.getX() + box.maxX) - x);
@@ -98,8 +98,8 @@ public class ShadowFeatureRendererMixin {
         float v1 = (-minZ * size) + 0.5F;
         float v2 = (-maxZ * size) + 0.5F;
 
-        var matNormal = matrices.getNormalMatrix();
-        var matPosition = matrices.getPositionMatrix();
+        var matNormal = matrices.normal();
+        var matPosition = matrices.pose();
 
         var color = ColorABGR.withAlpha(SHADOW_COLOR, alpha);
         var normal = MatrixHelper.transformNormal(matNormal, true, Direction.UP);
@@ -131,6 +131,6 @@ public class ShadowFeatureRendererMixin {
         float yt = MatrixHelper.transformPositionY(matPosition, x, y, z);
         float zt = MatrixHelper.transformPositionZ(matPosition, x, y, z);
 
-        EntityVertex.write(ptr, xt, yt, zt, color, u, v, LightTexture.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, normal);
+        EntityVertex.write(ptr, xt, yt, zt, color, u, v, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, normal);
     }
 }
