@@ -12,4 +12,6 @@ public interface VertexFormatRegistry {
     }
 
     int allocateGlobalId(VertexFormat format);
+    
+    VertexFormatDescription get(VertexFormat format);
 }
