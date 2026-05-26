@@ -37,11 +37,12 @@ public class TextureAtlasMixin implements ExtendedTextureAtlas {
     private boolean isBlocks = false;
 
     @Inject(method = "upload", at = @At("RETURN"))
+    // TODO: CleanUp
     private void sodium$deleteSpriteFinder(SpriteLoader.Preparations preparations, CallbackInfo ci) {
         if (this.location.equals(TextureAtlas.LOCATION_BLOCKS)) {
             SpriteFinderCache.resetSpriteFinder();
             this.isBlocks = true;
-        } else if (this.location.equals(TextureAtlas.LOCATION_ITEMS)) {
+        } else if (this.location.equals(TextureAtlas.LOCATION_BLOCKS)) {
             SpriteFinderCache.resetItemSpriteFinder();
             this.isBlocks = false;
         }
