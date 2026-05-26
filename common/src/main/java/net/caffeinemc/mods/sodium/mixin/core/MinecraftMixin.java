@@ -36,7 +36,7 @@ public class MinecraftMixin {
      */
     @Inject(method = "runTick", at = @At("HEAD"))
     private void preRender(boolean tick, CallbackInfo ci) {
-        ProfilerFiller profiler = Minecraft.getProfiler();
+        ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("wait_for_gpu");
 
         while (this.fences.size() > SodiumClientMod.options().advanced.cpuRenderAheadLimit) {
