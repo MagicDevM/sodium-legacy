@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.ColorAttribute;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.NormalAttribute;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatRegistry;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.PositionAttribute;
 
 public final class LineVertex  {
-    public static final VertexFormat FORMAT = DefaultVertexFormat.POSITION_COLOR_NORMAL;
+    public static final VertexFormatDescription FORMAT = VertexFormatRegistry.instance().get(DefaultVertexFormat.POSITION_COLOR_NORMAL);
 
     public static final int STRIDE = 20;
 

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.ColorAttribute;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import org.lwjgl.system.MemoryStack;
 import org.spongepowered.asm.mixin.Final;
@@ -39,7 +40,7 @@ public abstract class EntityOutlineGeneratorMixin implements VertexBufferWriter 
     }
 
     @Override
-    public void push(MemoryStack stack, long ptr, int count, VertexFormat format) {
+    public void push(MemoryStack stack, long ptr, int count, VertexFormatDescription format) {
         transform(ptr, count, format,
                 this.color);
 
