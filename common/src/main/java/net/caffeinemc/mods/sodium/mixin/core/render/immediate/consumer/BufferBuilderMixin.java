@@ -6,8 +6,10 @@ import net.caffeinemc.mods.sodium.api.memory.MemoryIntrinsics;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.serializer.VertexSerializerRegistry;
 import net.caffeinemc.mods.sodium.client.render.vertex.buffer.BufferBuilderExtension;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import java.nio.ByteBuffer;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,12 +17,16 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(BufferBuilder.class)
 public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBuilderExtension {
+    // TODO: Implement stuff from the v0.5 class
     @Shadow
     private int vertices;
 
     @Shadow
     @Final
     private int vertexSize;
+    
+    @Shadow
+    private int nextElementByte;
 
     @Shadow
     private long vertexPointer;
@@ -34,7 +40,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
 
     @Shadow
     @Final
-    private VertexFormat format;
+    private VertexFormatDescription format = VertexFormatDescription;
 
     @Override
     public void sodium$duplicateVertex() {
@@ -61,7 +67,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
 
         // The buffer may change in the even, so we need to make sure that the
         // pointer is retrieved *after* the resize
-        this.ensureCapacity(length);
+        /* this.ensureCapacity(length); */
         long dst = MemoryUtil.memAddress(this.buffer) + this.nextElementByte;
 
         if (format == this.format) {
