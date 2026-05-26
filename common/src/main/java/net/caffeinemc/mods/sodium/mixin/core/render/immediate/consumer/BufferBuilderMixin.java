@@ -38,9 +38,8 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     @Shadow
     private int elementsToFill;
 
-    @Shadow
-    @Final
-    private VertexFormatDescription format = VertexFormatDescription;
+    @Unique
+    private VertexFormatDescription format;
 
     @Override
     public void sodium$duplicateVertex() {
@@ -62,7 +61,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     }
 
     @Override
-    public void push(MemoryStack stack, long src, int count, VertexFormat format) {
+    public void push(MemoryStack stack, long src, int count, VertexFormatDescription format) {
         var length = count * this.vertexSize;
 
         // The buffer may change in the even, so we need to make sure that the
@@ -85,7 +84,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     }
 
     @Unique
-    private void copySlow(long src, long dst, int count, VertexFormat format) {
+    private void copySlow(long src, long dst, int count, VertexFormatDescription format) {
         VertexSerializerRegistry.instance()
                 .get(format, this.format)
                 .serialize(src, dst, count);
