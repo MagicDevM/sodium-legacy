@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.ColorAttribute;
@@ -23,6 +24,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Map;
+import java.util.HashMap;
 
 @Mixin(SheetedDecalTextureGenerator.class)
 public class SheetedDecalTextureGeneratorMixin implements VertexBufferWriter {
@@ -78,11 +82,21 @@ public class SheetedDecalTextureGeneratorMixin implements VertexBufferWriter {
     private static void transform(long ptr, int count, VertexFormat format,
                                   Matrix3f inverseNormalMatrix, Matrix4f inverseTextureMatrix, float textureScale) {
         long stride = format.getVertexSize();
-
-        var offsetPosition = format.getOffset(VertexFormatElement.POSITION);
-        var offsetColor = format.getOffset(VertexFormatElement.COLOR);
-        var offsetNormal = format.getOffset(VertexFormatElement.NORMAL);
-        var offsetTexture = format.getOffset(VertexFormatElement.UV0);
+        
+        // TODO: Maybe add caching if this is frequently runned?
+        Map<VertexFormatElement, Integer> offsets = new HashMap<>();
+        
+        int offset = 0;
+        for (VertexFormatElement element : format.getElements()) {
+            offsets.put(element, offset);
+            
+            offset += element.getByteSize();
+        }
+        
+        var offsetPosition = offsets.get(DefaultVertexFormat.ELEMENT_POSITION);
+        var offsetColor = offsets.get(DefaultVertexFormat.ELEMENT_COLOR);
+        var offsetNormal = offsets.get(DefaultVertexFormat.ELEMENT_NORMAL);
+        var offsetTexture = offsets.get(DefaultVertexFormat.ELEMENT_UV0);
 
         int color = ColorABGR.pack(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -101,7 +115,7 @@ public class SheetedDecalTextureGeneratorMixin implements VertexBufferWriter {
             normal.z = NormI8.unpackZ(packedNormal);
 
             Vector3f transformedNormal = inverseNormalMatrix.transform(normal);
-            Direction direction = Direction.getApproximateNearest(transformedNormal.x(), transformedNormal.y(), transformedNormal.z());
+            Direction direction = Direction.getNearest(transformedNormal.x(), transformedNormal.y(), transformedNormal.z());
 
             Vector4f transformedTexture = inverseTextureMatrix.transform(position);
             transformedTexture.rotateY(3.1415927F);

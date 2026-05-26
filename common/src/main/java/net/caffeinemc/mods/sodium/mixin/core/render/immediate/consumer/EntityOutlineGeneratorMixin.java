@@ -3,6 +3,7 @@ package net.caffeinemc.mods.sodium.mixin.core.render.immediate.consumer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.ColorAttribute;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
@@ -58,7 +59,17 @@ public abstract class EntityOutlineGeneratorMixin implements VertexBufferWriter 
     private static void transform(long ptr, int count, VertexFormat format,
                                   int color) {
         long stride = format.getVertexSize();
-        long offsetColor = format.getOffset(DefaultVertexFormat.ELEMENT_COLOR);
+        
+        int offset = 0;
+        for (VertexFormatElement element : format.getElements()) {
+            if (element.equals(DefaultVertexFormat.ELEMENT_COLOR)) {
+                break;
+            }
+        
+            offset += element.getByteSize();
+        }
+        
+        long offsetColor = offset;
 
         for (int vertexIndex = 0; vertexIndex < count; vertexIndex++) {
             ColorAttribute.set(ptr + offsetColor, ColorARGB.toABGR(color));
