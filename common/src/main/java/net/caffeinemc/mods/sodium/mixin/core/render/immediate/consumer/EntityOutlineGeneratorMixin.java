@@ -57,9 +57,9 @@ public abstract class EntityOutlineGeneratorMixin implements VertexBufferWriter 
      * @param color  The packed color to use for transforming the vertices
      */
     @Unique
-    private static void transform(long ptr, int count, VertexFormat format,
+    private static void transform(long ptr, int count, VertexFormatDescription format,
                                   int color) {
-        long stride = format.getVertexSize();
+        long stride = format.stride();
         
         int offset = 0;
         for (VertexFormatElement element : format.getElements()) {

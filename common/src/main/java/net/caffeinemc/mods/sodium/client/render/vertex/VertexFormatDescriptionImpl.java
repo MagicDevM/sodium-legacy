@@ -5,12 +5,15 @@ import net.caffeinemc.mods.sodium.api.vertex.attributes.CommonVertexAttribute;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.NoSuchElementException;
 
 public class VertexFormatDescriptionImpl implements VertexFormatDescription {
+    private final VertexFormatElement elements;
+
     private final int id;
     private final int stride;
 
@@ -19,6 +22,7 @@ public class VertexFormatDescriptionImpl implements VertexFormatDescription {
     private final boolean isSimple;
 
     public VertexFormatDescriptionImpl(VertexFormat format, int id) {
+        this.elements = format.getElements();
         this.id = id;
         this.stride = format.getVertexSize();
 
@@ -33,7 +37,7 @@ public class VertexFormatDescriptionImpl implements VertexFormatDescription {
         for (int elementIndex = 0; elementIndex < elementList.size(); elementIndex++) {
             var element = elementList.get(elementIndex);
             var commonType = CommonVertexAttribute.getCommonType(element);
-            if (element != DefaultVertexFormat.PADDING_ELEMENT && (commonType == null || !attributeSet.add(commonType))) {
+            if (element != DefaultVertexFormat.ELEMENT_PADDING && (commonType == null || !attributeSet.add(commonType))) {
                 return false;
             }
         }
@@ -90,5 +94,10 @@ public class VertexFormatDescriptionImpl implements VertexFormatDescription {
     @Override
     public boolean isSimpleFormat() {
         return this.isSimple;
+    }
+    
+    @Override
+    public VertexFormatElement getElements() {
+        return this.elements;
     }
 }

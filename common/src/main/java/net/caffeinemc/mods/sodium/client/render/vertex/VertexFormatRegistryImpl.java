@@ -1,18 +1,18 @@
 package net.caffeinemc.mods.sodium.client.render.vertex;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
-import it.unimi.dsi.fastutil.objects.Reference2IntMap;
-import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexFormatDescriptionImpl;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatRegistry;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 
+import java.util.Map;
 import java.util.concurrent.locks.StampedLock;
 
 public class VertexFormatRegistryImpl implements VertexFormatRegistry {
     private static final int ABSENT_INDEX = -1;
 
-    private final Reference2IntMap<VertexFormat> descriptions = new Reference2IntOpenHashMap<>();
+    private final Map<VertexFormat, VertexFormatDescriptionImpl> descriptions = new Reference2ReferenceOpenHashMap<>();
     private final StampedLock lock = new StampedLock();
 
     public VertexFormatRegistryImpl() {

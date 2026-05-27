@@ -71,8 +71,8 @@ public class SpriteCoordinateExpanderMixin implements VertexBufferWriter {
      * @param maxV   The maximum Y-coordinate of the sprite bounds
      */
     @Unique
-    private static void transform(long ptr, int count, VertexFormat format, float minU, float minV, float maxU, float maxV) {
-        long stride = format.getVertexSize();
+    private static void transform(long ptr, int count, VertexFormatDescription format, float minU, float minV, float maxU, float maxV) {
+        long stride = format.stride();
         
         int offset = 0;
         for (VertexFormatElement element : format.getElements()) {

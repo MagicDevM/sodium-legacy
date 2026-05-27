@@ -1,6 +1,7 @@
 package net.caffeinemc.mods.sodium.api.vertex.format;
 
 import net.caffeinemc.mods.sodium.api.vertex.attributes.CommonVertexAttribute;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 
 import java.util.NoSuchElementException;
 
@@ -33,4 +34,9 @@ public interface VertexFormatDescription {
      * Returns whether or not the format is "simple" (has no duplicate elements).
      */
     boolean isSimpleFormat();
+    
+    /**
+     * Returns The whole set of VertexFormatElement(s)
+     */
+    VertexFormatElement getElements();
 }

@@ -80,9 +80,9 @@ public class SheetedDecalTextureGeneratorMixin implements VertexBufferWriter {
      * @param textureScale The amount which the overlay texture should be adjusted
      */
     @Unique
-    private static void transform(long ptr, int count, VertexFormat format,
+    private static void transform(long ptr, int count, VertexFormatDescription format,
                                   Matrix3f inverseNormalMatrix, Matrix4f inverseTextureMatrix, float textureScale) {
-        long stride = format.getVertexSize();
+        long stride = format.stride();
         
         // TODO: Maybe add caching if this is frequently runned?
         Map<VertexFormatElement, Integer> offsets = new HashMap<>();
