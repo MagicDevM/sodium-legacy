@@ -9,7 +9,7 @@ base {
     archivesName = "sodium-common"
 }
 
-val configurationPreLaunch = configurations.create("preLaunchDeps") {
+val configurationPreLaunch by configurations.creating {
     isCanBeResolved = true
 }
 
@@ -21,13 +21,6 @@ sourceSets {
     api.apply {
         java {
             compileClasspath += main.compileClasspath
-            compileClasspath += configurationPreLaunch
-        }
-    }
-
-    boot.apply {
-        java {
-            compileClasspath += configurationPreLaunch
         }
     }
 
@@ -35,11 +28,21 @@ sourceSets {
         java {
             compileClasspath += api.output
             compileClasspath += boot.output
-            compileClasspath += configurationPreLaunch
         }
     }
 
     create("desktop")
+}
+
+// Apply global dependencies
+configurations.named("implementation") {
+    extendsFrom(configurationPreLaunch)
+}
+configurations.named("apiImplementation") {
+    extendsFrom(configurationPreLaunch)
+}
+configurations.named("bootImplementation") {
+    extendsFrom(configurationPreLaunch)
 }
 
 repositories {
@@ -85,6 +88,10 @@ fun exportSourceSetJava(name: String, sourceSet: SourceSet) {
     val configuration = configurations.create("${name}Java") {
         isCanBeResolved = true
         isCanBeConsumed = true
+        
+        extendsFrom(
+            configurations.getByName(sourceSet.implementationConfigurationName)
+        )
     }
 
     val compileTask = tasks.getByName<JavaCompile>(sourceSet.compileJavaTaskName)
@@ -97,6 +104,10 @@ fun exportSourceSetSources(name: String, sourceSet: SourceSet) {
     val configuration = configurations.create("${name}Sources") {
         isCanBeResolved = true
         isCanBeConsumed = true
+        
+        extendsFrom(
+            configurations.getByName(sourceSet.implementationConfigurationName)
+        )
     }
 
     val compileTask = tasks.register<Copy>(sourceSet.getTaskName("process", "sources")) {
@@ -112,6 +123,10 @@ fun exportSourceSetResources(name: String, sourceSet: SourceSet) {
     val configuration = configurations.create("${name}Resources") {
         isCanBeResolved = true
         isCanBeConsumed = true
+        
+        extendsFrom(
+            configurations.getByName(sourceSet.implementationConfigurationName)
+        )
     }
 
     val compileTask = tasks.getByName<ProcessResources>(sourceSet.processResourcesTaskName)
