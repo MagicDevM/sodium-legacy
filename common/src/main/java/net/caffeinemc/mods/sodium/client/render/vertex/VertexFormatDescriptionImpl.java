@@ -7,12 +7,13 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.NoSuchElementException;
 
 public class VertexFormatDescriptionImpl implements VertexFormatDescription {
-    private final VertexFormatElement elements;
+    private final ImmutableList<VertexFormatElement> elements;
 
     private final int id;
     private final int stride;
@@ -97,7 +98,7 @@ public class VertexFormatDescriptionImpl implements VertexFormatDescription {
     }
     
     @Override
-    public VertexFormatElement getElements() {
+    public ImmutableList<VertexFormatElement> getElements() {
         return this.elements;
     }
 }

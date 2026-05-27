@@ -2,6 +2,8 @@ package net.caffeinemc.mods.sodium.client.render.vertex;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexFormatDescriptionImpl;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatRegistry;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
@@ -13,10 +15,11 @@ public class VertexFormatRegistryImpl implements VertexFormatRegistry {
     private static final int ABSENT_INDEX = -1;
 
     private final Map<VertexFormat, VertexFormatDescriptionImpl> descriptions = new Reference2ReferenceOpenHashMap<>();
+    private final Reference2IntMap<VertexFormat> descriptionIds = new Reference2IntOpenHashMap<>();
     private final StampedLock lock = new StampedLock();
 
     public VertexFormatRegistryImpl() {
-        this.descriptions.defaultReturnValue(ABSENT_INDEX);
+        this.descriptionIds.defaultReturnValue(ABSENT_INDEX);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class VertexFormatRegistryImpl implements VertexFormatRegistry {
             var stamp = this.lock.readLock();
 
             try {
-                id = this.descriptions.getInt(format);
+                id = this.descriptionIds.getInt(format);
             } finally {
                 this.lock.unlockRead(stamp);
             }
@@ -73,7 +76,7 @@ public class VertexFormatRegistryImpl implements VertexFormatRegistry {
             var stamp = this.lock.writeLock();
 
             try {
-                this.descriptions.put(format, id = this.descriptions.size());
+                this.descriptionIds.put(format, id = this.descriptionIds.size());
             } finally {
                 this.lock.unlockWrite(stamp);
             }
