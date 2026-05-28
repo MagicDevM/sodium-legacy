@@ -7,7 +7,7 @@ import net.caffeinemc.mods.sodium.client.services.PlatformBlockAccess;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.ChunkSectionLayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
