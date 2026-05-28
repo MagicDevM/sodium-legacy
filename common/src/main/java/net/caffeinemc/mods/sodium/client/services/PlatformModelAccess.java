@@ -35,7 +35,7 @@ public interface PlatformModelAccess {
      * @param renderType The current render type being drawn.
      * @return The list of quads used by the model.
      */
-    List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType);
+    List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BakedModel model, BlockState state, Direction face, RandomSource random, RenderType renderType);
 
     /**
      * Gets the container holding model data for this chunk. <b>This operation is not thread safe.</b>
@@ -53,6 +53,4 @@ public interface PlatformModelAccess {
     SodiumModelData getEmptyModelData();
 
     RenderType getPartRenderType(BlockModel part, BlockState state, RenderType defaultType);
-
-    List<BlockModel> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, @Nullable ListStorage emitter);
 }

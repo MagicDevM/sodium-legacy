@@ -25,8 +25,8 @@ public class FabricModelAccess implements PlatformModelAccess {
     private static final SodiumModelDataContainer EMPTY_CONTAINER = new SodiumModelDataContainer(Long2ObjectMaps.emptyMap());
 
     @Override
-    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType) {
-        return model.getQuads(face);
+    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BakedModel model, BlockState state, Direction face, RandomSource random, RenderType renderType) {
+        return model.getQuads(state, face, random);
     }
 
     @Override
@@ -42,12 +42,5 @@ public class FabricModelAccess implements PlatformModelAccess {
     @Override
     public RenderType getPartRenderType(BlockModel part, BlockState state, RenderType renderType) {
         return renderType;
-    }
-
-    @Override
-    public List<BlockModel> collectPartsOf(BakedModel blockStateModel, BlockAndTintGetter blockView, BlockPos pos, BlockState state, RandomSource random, ListStorage emitter) {
-        List<BlockModel> parts = emitter == null ? new ArrayList<>() : emitter.clearAndGet();
-        blockStateModel.collectParts(random, parts);
-        return parts;
     }
 }
