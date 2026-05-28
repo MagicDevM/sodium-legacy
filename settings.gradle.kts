@@ -10,5 +10,7 @@ pluginManagement {
 }
 
 include("common")
-include("frapi")
+// TODO: Implement fabric rendering api properly
+
+//include("frapi")
 include("fabric")
