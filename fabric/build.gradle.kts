@@ -113,6 +113,10 @@ loom {
 }
 
 tasks {
+    withType<Jar> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    
     jar {
         from(configurationCommonModJava)
         from(configurationApiModJava)
