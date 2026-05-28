@@ -99,12 +99,14 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public float getTexU(int idx) {
-        return UVPair.unpackU(this.packedUV(idx));
+        long packed = this.packedUV(idx);
+        return Float.intBitsToFloat((int)(packed & 0xFFFFFFFFL));
     }
 
     @Override
     public float getTexV(int idx) {
-        return UVPair.unpackV(this.packedUV(idx));
+        long packed = this.packedUV(idx);
+        return Float.intBitsToFloat((int)(packed >>> 32));
     }
 
     @Override
@@ -134,7 +136,10 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public int getMaxLightQuad(int idx) {
-        return LightTexture.lightCoordsWithEmission(getLight(idx), lightEmission());
+        return LightTexture.pack(
+            Math.max(LightTexture.block(getLight(idx)), lightEmission()),
+            LightTexture.sky(getLight(idx))
+        );
     }
 
     @Override
