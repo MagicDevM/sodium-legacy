@@ -16,7 +16,7 @@ import net.caffeinemc.mods.sodium.client.services.FluidRendererFactory;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRendering;
+import net.fabricmc.fabric.impl.client.rendering.fluid.FluidRenderHandlerRegistryImpl;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
@@ -80,7 +80,7 @@ public class FluidRendererImpl extends FluidRenderer {
         }
     }
 
-    private static class DefaultRenderContext implements FluidRenderHandlerRegistry.INSTANCE {
+    private static class DefaultRenderContext {
         private DefaultFluidRenderer renderer;
         private LevelSlice level;
         private BlockState blockState;
@@ -133,7 +133,6 @@ public class FluidRendererImpl extends FluidRenderer {
             return FabricColorProviders.adapt(handler);
         }
 
-        @Override
         public void render(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
             this.renderer.render(this.level, this.blockState, this.fluidState, this.blockPos, this.offset, this.collector, this.meshBuilder, this.material,
                     getColorProvider(fluidState.getType()), handler.getFluidSprites(this.level, this.blockPos, this.fluidState));
