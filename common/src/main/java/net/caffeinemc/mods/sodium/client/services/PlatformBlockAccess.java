@@ -12,6 +12,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.client.resources.model.BakedModel;
 
 public interface PlatformBlockAccess {
     PlatformBlockAccess INSTANCE = Services.load(PlatformBlockAccess.class);
@@ -74,7 +75,7 @@ public interface PlatformBlockAccess {
      * @param pos The current position
      * @return If ambient occlusion is forced, or {@code DEFAULT}
      */
-    AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos);
+    AmbientOcclusionMode usesAmbientOcclusion(BakedModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos);
 
     /**
      * @param blockEntity The block entity to check.

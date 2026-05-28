@@ -52,5 +52,5 @@ public interface PlatformModelAccess {
     @ApiStatus.Internal
     SodiumModelData getEmptyModelData();
 
-    RenderType getPartRenderType(BlockModel part, BlockState state, RenderType defaultType);
+    RenderType getPartRenderType(BakedModel part, BlockState state, RenderType defaultType);
 }

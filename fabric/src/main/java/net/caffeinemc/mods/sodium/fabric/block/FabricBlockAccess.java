@@ -15,6 +15,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.client.resources.model.BakedModel;
 
 public class FabricBlockAccess implements PlatformBlockAccess {
     /**
@@ -80,8 +81,8 @@ public class FabricBlockAccess implements PlatformBlockAccess {
     }
 
     @Override
-    public AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
-        return model.ambientOcclusion() ? AmbientOcclusionMode.DEFAULT : AmbientOcclusionMode.DISABLED;
+    public AmbientOcclusionMode usesAmbientOcclusion(BakedModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
+        return model.useAmbientOcclusion() ? AmbientOcclusionMode.DEFAULT : AmbientOcclusionMode.DISABLED;
     }
 
     @Override

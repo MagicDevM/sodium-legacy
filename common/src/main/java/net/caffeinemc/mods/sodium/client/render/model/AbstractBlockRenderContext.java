@@ -52,10 +52,6 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
         public void markInvalidToDowngrade() {
             AbstractBlockRenderContext.this.allowDowngrade = false;
         }
-
-        public void emitPart(BlockModel part, Predicate<@Nullable Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
-            AbstractBlockRenderContext.this.bufferDefaultModel(part, cullTest, emitter);
-        }
     }
 
 
@@ -226,9 +222,9 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
     private List<BlockModel> parts = new ObjectArrayList<>();
 
     /* Handling of vanilla models - this is the hot path for non-modded models */
-    public void bufferDefaultModel(BlockModel part, Predicate<Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
+    public void bufferDefaultModel(BakedModel part, Predicate<Direction> cullTest, Consumer<MutableQuadViewImpl> emitter) {
         MutableQuadViewImpl editorQuad = this.editorQuad;
-        this.prepareAoInfo(part.hasAmbientOcclusion());
+        this.prepareAoInfo(part.useAmbientOcclusion());
 
         RenderType renderType = PlatformModelAccess.getInstance().getPartRenderType(part, state, this.defaultRenderType);
         RenderType defaultType = this.defaultRenderType;
@@ -244,9 +240,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
             // TODO NeoForge 1.21.5
             AmbientOcclusionMode ao = PlatformBlockAccess.getInstance().usesAmbientOcclusion(part, state, renderType, slice, pos);
             
-            BakedModel model = BakedModel;
-
-            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, model, state, cullFace, random, renderType);
+            final List<BakedQuad> quads = PlatformModelAccess.getInstance().getQuads(level, pos, part, state, cullFace, random, renderType);
             final int count = quads.size();
 
             for (int j = 0; j < count; j++) {

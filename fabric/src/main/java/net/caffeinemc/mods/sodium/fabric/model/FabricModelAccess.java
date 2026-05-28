@@ -40,7 +40,7 @@ public class FabricModelAccess implements PlatformModelAccess {
     }
 
     @Override
-    public RenderType getPartRenderType(BlockModel part, BlockState state, RenderType renderType) {
+    public RenderType getPartRenderType(BakedModel part, BlockState state, RenderType renderType) {
         return renderType;
     }
 }
