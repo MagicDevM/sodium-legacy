@@ -33,7 +33,7 @@ public class ModelBlockRendererMixin {
     private static final ThreadLocal<RandomSource> RANDOM = ThreadLocal.withInitial(() -> new SingleThreadedRandomSource(42L));
 
     @Unique
-    private static final ThreadLocal<List<BlockModel>> LIST = ThreadLocal.withInitial(() -> new ObjectArrayList<>());
+    private static final ThreadLocal<List<BakedModel>> LIST = ThreadLocal.withInitial(() -> new ObjectArrayList<>());
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
@@ -58,7 +58,7 @@ public class ModelBlockRendererMixin {
      * @author JellySquid
      */
     @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
-    private static void renderFast(PoseStack.Pose entry, VertexConsumer vertexConsumer, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
+    private static void renderFast(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockState state, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
         if (writer == null) {
             return;
@@ -76,22 +76,20 @@ public class ModelBlockRendererMixin {
         int defaultColor = ColorABGR.pack(red, green, blue, 1.0F);
         random.setSeed(42L);
 
-        List<BlockModel> list = LIST.get();
+        List<BakedModel> list = LIST.get();
 
         list.clear();
 
-        bakedModel.collectParts(random, list);
-
-        for (BlockModel part : list) {
+        for (BakedModel part : list) {
             for (Direction direction : DirectionUtil.ALL_DIRECTIONS) {
-                List<BakedQuad> quads = part.getQuads(direction);
+                List<BakedQuad> quads = part.getQuads(state, direction, random);
 
                 if (!quads.isEmpty()) {
                     renderQuads(entry, writer, defaultColor, quads, light, overlay);
                 }
             }
 
-            List<BakedQuad> quads = part.getQuads(null);
+            List<BakedQuad> quads = part.getQuads(state, null, random);
 
             if (!quads.isEmpty()) {
                 renderQuads(entry, writer, defaultColor, quads, light, overlay);
