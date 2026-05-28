@@ -42,7 +42,7 @@ public class FluidRendererImpl extends FluidRenderer {
         var meshBuilder = buffers.get(material);
 
         FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluidState.getType());
-        boolean hasModOverride = FluidRenderHandlerRegistry.INSTANCE.getOverride(fluidState.getType()) != null;
+        boolean hasModOverride = FluidRenderHandlerRegistry.INSTANCE.get(fluidState.getType()) != null;
 
         // Match the vanilla FluidRenderer's behavior if the handler is null
         if (handler == null) {
@@ -74,7 +74,7 @@ public class FluidRendererImpl extends FluidRenderer {
         defaultContext.setUp(this.colorProviderRegistry, this.defaultRenderer, level, blockState, fluidState, blockPos, offset, collector, meshBuilder, material, handler, hasModOverride);
 
         try {
-            FluidRenderHandler.render(blockPos, level, meshBuilder.asFallbackVertexConsumer(material, collector), blockState, fluidState);
+            handler.renderFluid(blockPos, level, meshBuilder.asFallbackVertexConsumer(material, collector), blockState, fluidState);
         } finally {
             defaultContext.clear();
         }
