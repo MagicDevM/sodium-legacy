@@ -74,13 +74,13 @@ public class FluidRendererImpl extends FluidRenderer {
         defaultContext.setUp(this.colorProviderRegistry, this.defaultRenderer, level, blockState, fluidState, blockPos, offset, collector, meshBuilder, material, handler, hasModOverride);
 
         try {
-            FluidRendering.render(handler, level, blockPos, meshBuilder.asFallbackVertexConsumer(material, collector), blockState, fluidState, defaultContext);
+            FluidRenderHandler.render(blockPos, level, meshBuilder.asFallbackVertexConsumer(material, collector), blockState, fluidState);
         } finally {
             defaultContext.clear();
         }
     }
 
-    private static class DefaultRenderContext implements FluidRendering.DefaultRenderer {
+    private static class DefaultRenderContext implements FluidRenderHandlerRegistry.INSTANCE {
         private DefaultFluidRenderer renderer;
         private LevelSlice level;
         private BlockState blockState;
@@ -134,7 +134,7 @@ public class FluidRendererImpl extends FluidRenderer {
         }
 
         @Override
-        public void render(FluidRenderHandler handler, BlockAndTintGetter world, BlockPos pos, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
+        public void render(BlockPos pos, BlockAndTintGetter world, VertexConsumer vertexConsumer, BlockState blockState, FluidState fluidState) {
             this.renderer.render(this.level, this.blockState, this.fluidState, this.blockPos, this.offset, this.collector, this.meshBuilder, this.material,
                     getColorProvider(fluidState.getType()), handler.getFluidSprites(this.level, this.blockPos, this.fluidState));
         }
