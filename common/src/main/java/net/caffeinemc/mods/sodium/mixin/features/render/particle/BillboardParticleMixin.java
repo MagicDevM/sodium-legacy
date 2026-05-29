@@ -22,19 +22,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SingleQuadParticle.class)
 public abstract class BillboardParticleMixin extends Particle {
     @Shadow
-    public abstract float getSize(float tickDelta);
+    public abstract float getQuadSize(float tickDelta);
 
     @Shadow
-    protected abstract float getMinU();
+    protected abstract float getU0();
 
     @Shadow
-    protected abstract float getMaxU();
+    protected abstract float getU1();
 
     @Shadow
-    protected abstract float getMinV();
+    protected abstract float getV0();
 
     @Shadow
-    protected abstract float getMaxV();
+    protected abstract float getV1();
 
     protected BillboardParticleMixin(ClientLevel world, double x, double y, double z) {
         super(world, x, y, z);

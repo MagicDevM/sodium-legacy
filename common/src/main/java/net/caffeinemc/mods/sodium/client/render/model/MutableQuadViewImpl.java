@@ -22,13 +22,13 @@ import net.caffeinemc.mods.sodium.client.model.quad.BakedQuadView;
 import net.caffeinemc.mods.sodium.client.render.helper.ColorHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.ListStorage;
 import net.caffeinemc.mods.sodium.client.render.helper.TextureHelper;
-import net.caffeinemc.mods.sodium.client.render.texture.SodiumSpriteFinder;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public abstract class MutableQuadViewImpl extends QuadViewImpl implements ListSt
         cachedSprite = sprite;
     }
 
-    public TextureAtlasSprite sprite(SodiumSpriteFinder finder) {
+    public TextureAtlasSprite sprite(SpriteFinder finder) {
         TextureAtlasSprite sprite = cachedSprite;
 
         if (sprite == null) {

@@ -17,10 +17,7 @@ public class OptionsScreenMixin extends Screen {
     }
 
     @Dynamic
-    @Inject(method = {
-            "method_19828",
-            "lambda$init$2"
-    }, require = 1, at = @At("HEAD"), cancellable = true)
+    @Inject(method = "method_19828", at = @At("HEAD"), cancellable = true)
     private void open(CallbackInfoReturnable<Screen> ci) {
         ci.setReturnValue(VideoSettingsScreen.createScreen(this));
     }

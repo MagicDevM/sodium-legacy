@@ -16,13 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public class WorldRendererMixin {
     @Shadow
-    private @Nullable ClientLevel world;
+    private @Nullable ClientLevel level;
     @Shadow
     private int ticks;
 
     @Shadow
     @Final
-    private Minecraft client;
+    private Minecraft minecraft;
 
     @Unique
     private CloudRenderer cloudRenderer;
@@ -40,7 +40,7 @@ public class WorldRendererMixin {
         this.cloudRenderer.render(this.world, this.client.player, matrices, projectionMatrix, this.ticks, tickDelta, x, y, z);
     }
 
-    @Inject(method = "onResourceManagerReload(Lnet/minecraft/resource/ResourceManager;)V", at = @At("RETURN"))
+    @Inject(method = "onResourceManagerReload(Lnet/minecraft/server/packs/resources/ResourceManager;)V", at = @At("RETURN"))
     private void onReload(ResourceManager manager, CallbackInfo ci) {
         if (this.cloudRenderer != null) {
             this.cloudRenderer.reloadTextures(manager);

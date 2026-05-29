@@ -14,17 +14,17 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(VertexConsumer.class)
 public interface VertexConsumerMixin {
     @Shadow
-    VertexConsumer setNormal(float x, float y, float z);
+    VertexConsumer normal(float x, float y, float z);
 
     @Shadow
-    VertexConsumer addVertex(float x, float y, float z);
+    VertexConsumer vertex(float x, float y, float z);
 
     /**
      * @reason Avoid allocations
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer addVertex(Matrix4fc matrix, float x, float y, float z) {
+    default VertexConsumer vertex(Matrix4fc matrix, float x, float y, float z) {
         float xt = MatrixHelper.transformPositionX(matrix, x, y, z);
         float yt = MatrixHelper.transformPositionY(matrix, x, y, z);
         float zt = MatrixHelper.transformPositionZ(matrix, x, y, z);
@@ -37,7 +37,7 @@ public interface VertexConsumerMixin {
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer setNormal(PoseStack.Pose pose, float x, float y, float z) {
+    default VertexConsumer normal(PoseStack.Pose pose, float x, float y, float z) {
         Matrix3f matrix = pose.normal();
 
         float xt = MatrixHelper.transformNormalX(matrix, x, y, z);

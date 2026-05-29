@@ -61,15 +61,6 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     @Final
     private Minecraft minecraft;
 
-    @Shadow
-    private int lastCameraSectionX;
-
-    @Shadow
-    private int lastCameraSectionY;
-
-    @Shadow
-    private int lastCameraSectionZ;
-
 //     @Shadow
 //     @Final
 //     private WorldBorderRenderer worldBorderRenderer;
@@ -114,7 +105,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
      * @author JellySquid
      */
     @Overwrite
-    public int countRenderedSections() {
+    public int countRenderedChunks() {
         return this.renderer.getVisibleChunkCount();
     }
 
@@ -123,7 +114,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
      * @author JellySquid
      */
     @Overwrite
-    public boolean hasRenderedAllSections() {
+    public boolean hasRenderedAllChunks() {
         return this.renderer.isTerrainRenderComplete();
     }
 
@@ -132,15 +123,6 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
         this.renderer.scheduleTerrainUpdate();
     }
 
-    /**
-     * @reason Redirect to our renderer
-     * @author IMS
-     */
-    @Overwrite
-    public int getCompletedChunkCount() {
-        return this.renderer.getVisibleChunkCount();
-    }
-    
     // TODO: Implement terrain culling maybe? if more culling doesnt do it
     
 /*     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;cullTerrain(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Z)V"))
@@ -218,7 +200,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
      * @author JellySquid
      */
     @Overwrite
-    public boolean isSectionCompiledAndVisible(BlockPos pos) {
+    public boolean isSectionCompiled(BlockPos pos) {
         return this.renderer.isSectionReady(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
     }
 
@@ -235,7 +217,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
 
     // Exclusive to NeoForge, allow to fail.
     @SuppressWarnings("all")
-    @Inject(method = "iterateVisibleBlockEntities", at = @At("HEAD"), cancellable = true, require = 0)
+    @Inject(method = "iterateVisibleBlockEntities", at = @At("HEAD"), cancellable = true, require = 0, remap = false)
     public void replaceBlockEntityIteration(Consumer<BlockEntity> blockEntityConsumer, CallbackInfo ci) {
         ci.cancel();
 
@@ -247,7 +229,7 @@ public abstract class LevelRendererMixin implements LevelRendererExtension {
     * @author JellySquid
     */
     @Overwrite
-    public String getSectionStatistics() {
+    public String getChunkStatistics() {
         return this.renderer.getChunksDebugString();
     }
 

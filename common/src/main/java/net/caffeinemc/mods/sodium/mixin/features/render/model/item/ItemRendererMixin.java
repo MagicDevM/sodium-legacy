@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.caffeinemc.mods.sodium.client.model.color.interop.ItemColorsExtended;
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
@@ -12,7 +13,9 @@ import net.caffeinemc.mods.sodium.client.render.immediate.model.BakedModelEncode
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.client.util.DirectionUtil;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
@@ -37,8 +40,8 @@ public abstract class ItemRendererMixin {
      * @reason Avoid Allocations
      * @return JellySquid
      */
-    @WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
-    private static void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, int[] colors, int light, int overlay, Operation<Void> original) {
+    @WrapOperation(method = "renderModelList", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
+    private static void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack itemStack, int light, int overlay, Operation<Void> original) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
         if (writer == null) {
@@ -46,15 +49,19 @@ public abstract class ItemRendererMixin {
             return;
         }
 
+        ItemColor colorProvider = null;
+
         // TODO/NOTE: Should .last be a LocalRef?
         if (!quads.isEmpty()) {
-            renderBakedItemQuads(poseStack.last(), writer, quads, colors, light, overlay);
+            colorProvider = ((ItemColorsExtended) this.colors).sodium$getColorProvider(itemStack);
+            
+            renderBakedItemQuads(poseStack.last(), writer, quads, itemStack, colorProvider, light, overlay);
         }
     }
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private static void renderBakedItemQuads(PoseStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, int[] colors, int light, int overlay) {
+    private static void renderBakedItemQuads(PoseStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, ItemStack itemStack, ItemColor colorProvider, int light, int overlay) {
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad bakedQuad = quads.get(i);
 
@@ -63,7 +70,7 @@ public abstract class ItemRendererMixin {
             int color = 0xFFFFFFFF;
 
             if (bakedQuad.isTinted()) {
-                color = ColorARGB.toABGR(getLayerColorSafe(colors, bakedQuad.getTintIndex()));
+                color = ColorARGB.toABGR((colorProvider.getColor(itemStack, quad.getTintIndex())), 255);
             }
 
             BakedModelEncoder.writeQuadVertices(writer, matrices, quad, color, light, overlay, BakedModelEncoder.shouldMultiplyAlpha());

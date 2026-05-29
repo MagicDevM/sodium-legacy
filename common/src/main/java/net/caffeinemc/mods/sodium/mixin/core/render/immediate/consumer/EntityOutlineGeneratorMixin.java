@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
+import com.mojang.blaze3d.vertex.DefaultedVertexConsumer;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.vertex.attributes.common.ColorAttribute;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
@@ -18,18 +19,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/client/renderer/OutlineBufferSource$EntityOutlineGenerator")
-public abstract class EntityOutlineGeneratorMixin implements VertexBufferWriter {
+public abstract class EntityOutlineGeneratorMixin extends DefaultedVertexConsumer implements VertexBufferWriter {
     @Shadow
     @Final
     private VertexConsumer delegate;
 
-    @Shadow
-    @Final
-    private int color;
     @Unique
     private boolean canUseIntrinsics;
 
-    @Inject(method = "<init>(Lcom/mojang/blaze3d/vertex/VertexConsumer;I)V", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
         this.canUseIntrinsics = VertexBufferWriter.tryOf(this.delegate) != null;
     }
@@ -42,7 +40,7 @@ public abstract class EntityOutlineGeneratorMixin implements VertexBufferWriter 
     @Override
     public void push(MemoryStack stack, long ptr, int count, VertexFormatDescription format) {
         transform(ptr, count, format,
-                this.color);
+                ColorABGR.pack(this.defaultR, this.defaultG, this.defaultB, this.defaultA));
 
         VertexBufferWriter.of(this.delegate)
                 .push(stack, ptr, count, format);

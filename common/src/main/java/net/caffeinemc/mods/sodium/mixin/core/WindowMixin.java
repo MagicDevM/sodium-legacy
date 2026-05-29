@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Window.class)
 public abstract class WindowMixin implements NativeWindowHandle {
     @Shadow
-    public abstract long handle();
+    public abstract long getWindow();
 
     @WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwCreateWindow(IILjava/lang/CharSequence;JJ)J"), require = 0)
     public long setAdditionalWindowHints(int titleEncoded, int width, CharSequence height, long title, long monitor, Operation<Long> original) {

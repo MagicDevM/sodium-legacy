@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BakedQuad.class)
 public abstract class BakedQuadMixin implements BakedQuadView {
-
-
     @Shadow
     @Final
     private boolean shade;
@@ -30,14 +28,11 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     public abstract int lightEmission();
 
     @Shadow
-    public abstract Vector3fc position(int i);
+    public abstract int[] getVertices();
 
     @Shadow
     @Final
     private TextureAtlasSprite sprite;
-
-    @Shadow
-    public abstract long packedUV(int i);
 
     @Shadow
     @Final
@@ -64,17 +59,20 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public float getX(int idx) {
-        return this.position(idx).x();
+        int[] data = this.getVertices();
+        return Float.intBitsToFloat(data[idx * 8]);
     }
 
     @Override
     public float getY(int idx) {
-        return this.position(idx).y();
+        int[] data = this.getVertices();
+        return Float.intBitsToFloat(data[idx * 8 + 1]);
     }
 
     @Override
     public float getZ(int idx) {
-        return this.position(idx).z();
+        int[] data = this.getVertices();
+        return Float.intBitsToFloat(data[idx * 8 + 2]);
     }
 
     @Override
@@ -99,14 +97,12 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public float getTexU(int idx) {
-        long packed = this.packedUV(idx);
-        return Float.intBitsToFloat((int)(packed & 0xFFFFFFFFL));
+        return Float.intBitsToFloat(this.vertexData[vertexOffset(idx) + TEXTURE_INDEX]);
     }
 
     @Override
     public float getTexV(int idx) {
-        long packed = this.packedUV(idx);
-        return Float.intBitsToFloat((int)(packed >>> 32));
+        return Float.intBitsToFloat(this.vertexData[vertexOffset(idx) + TEXTURE_INDEX + 1]);
     }
 
     @Override
@@ -136,9 +132,7 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public int getMaxLightQuad(int idx) {
-        return LightTexture.pack(
-            Math.max(LightTexture.block(getLight(idx)), lightEmission()),
-            LightTexture.sky(getLight(idx))
+        return this.getLight(idx);
         );
     }
 

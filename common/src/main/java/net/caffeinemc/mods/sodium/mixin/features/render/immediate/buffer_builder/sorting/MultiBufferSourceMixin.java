@@ -20,7 +20,7 @@ public class MultiBufferSourceMixin {
     private static final int VERTICES_PER_QUAD = 6;
     
     @WrapOperation(
-        method = "endBatch(Lnet/minecraft/client/renderer/rendertype/RenderType;)V",
+        method = "endBatch(Lnet/minecraft/client/renderer/RenderType;)V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/blaze3d/vertex/BufferBuilder;getSortState()Lcom/mojang/blaze3d/vertex/BufferBuilder$SortState;"

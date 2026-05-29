@@ -47,7 +47,7 @@ public class WindowMixin {
         }
     }
 
-    @SuppressWarnings("all")
+/*     @SuppressWarnings("all")
     @WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/neoforged/fml/loading/ImmediateWindowHandler;setupMinecraftWindow(Ljava/util/function/IntSupplier;Ljava/util/function/IntSupplier;Ljava/util/function/Supplier;Ljava/util/function/LongSupplier;)J"), expect = 0, require = 0)
     private long wrapGlfwCreateWindowForge(final IntSupplier width, final IntSupplier height, final Supplier<String> title, final LongSupplier monitor, Operation<Long> op) {
         boolean applyWorkaroundsLate = !PlatformRuntimeInformation.getInstance()
@@ -66,5 +66,5 @@ public class WindowMixin {
                 AmdWorkarounds.undoEnvironmentChanges();
             }
         }
-    }
+    } */
 }

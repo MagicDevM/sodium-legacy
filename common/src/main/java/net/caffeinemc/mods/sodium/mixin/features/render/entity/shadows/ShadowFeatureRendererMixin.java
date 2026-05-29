@@ -37,7 +37,7 @@ public class ShadowFeatureRendererMixin {
      * @author JellySquid
      * @reason Reduce vertex assembly overhead for shadow rendering
      */
-    @Inject(method = "renderShadowPart", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderBlockShadow", at = @At("HEAD"), cancellable = true)
     private static void renderShadowPartFast(PoseStack.Pose entry, VertexConsumer vertices, ChunkAccess chunk, LevelReader world, BlockPos pos, double x, double y, double z, float radius, float opacity, CallbackInfo ci) {
         var writer = VertexConsumerUtils.convertOrLog(vertices);
 

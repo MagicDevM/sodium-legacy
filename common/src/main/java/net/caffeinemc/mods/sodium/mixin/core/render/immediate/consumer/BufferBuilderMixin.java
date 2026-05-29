@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.api.memory.MemoryIntrinsics;
 import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
 import net.caffeinemc.mods.sodium.api.vertex.serializer.VertexSerializerRegistry;
+import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatRegistry;
 import net.caffeinemc.mods.sodium.client.render.vertex.buffer.BufferBuilderExtension;
 import net.caffeinemc.mods.sodium.api.vertex.format.VertexFormatDescription;
 import java.nio.ByteBuffer;
@@ -13,6 +14,10 @@ import org.lwjgl.system.MemoryUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(BufferBuilder.class)
@@ -21,25 +26,32 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     @Shadow
     private int vertices;
 
-    @Shadow
-    @Final
+    @Unique
     private int vertexSize;
     
     @Shadow
     private int nextElementByte;
 
     @Shadow
-    private long vertexPointer;
-
-    @Shadow
     @Final
     private ByteBuffer buffer;
 
-    @Shadow
-    private int elementsToFill;
-
     @Unique
     private VertexFormatDescription format;
+
+    @Inject(
+        method = "setFormat",
+        at = @At(
+            value = "FIELD",
+            target = "Lcom/mojang/blaze3d/vertex/BufferBuilder;format:Lcom/mojang/blaze3d/vertex/VertexFormat;",
+            opcode = Opcodes.PUTFIELD
+        )
+    )
+    private void onFormatChanged(VertexFormat format, CallbackInfo ci) {
+        this.format = VertexFormatRegistry.instance()
+                .get(format);
+        this.vertexSize = this.formatDescription.stride();
+    }
 
     @Override
     public void sodium$duplicateVertex() {
@@ -79,8 +91,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
         }
 
         this.vertices += count;
-        this.vertexPointer = (dst + length) - vertexSize;
-        this.elementsToFill = 0;
+        this.nextElementByte += length;
     }
 
     @Unique

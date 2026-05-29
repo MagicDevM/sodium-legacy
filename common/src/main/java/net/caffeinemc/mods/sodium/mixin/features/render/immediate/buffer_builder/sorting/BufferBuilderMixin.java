@@ -19,31 +19,31 @@ public abstract class BufferBuilderMixin {
     private ByteBuffer buffer;
 
     @Shadow
-    private int elementOffset;
+    private int nextElementByte;
 
     @Shadow
     @Nullable
-    private Vector3f[] sortingPrimitiveCenters;
+    private Vector3f[] sortingPoints;
 
     @Shadow
-    private int vertexCount;
+    private int vertices;
 
     @Shadow
     private VertexFormat format;
 
     @Shadow
-    private int batchOffset;
+    private int renderedBufferPointer;
 
     @Shadow
     @Nullable
-    private VertexSorting sorter;
+    private VertexSorting sorting;
 
     /**
      * @author JellySquid
      * @reason Avoid slow memory accesses
      */
     @Overwrite
-    private Vector3f[] buildPrimitiveCenters() {
+    private Vector3f[] makeQuadSortingPoints() {
         int vertexStride = this.format.getVertexSize();
         int primitiveCount = this.vertexCount / 4;
 
@@ -72,7 +72,7 @@ public abstract class BufferBuilderMixin {
      * @reason Use direct memory access, avoid indirection
      */
     @Overwrite
-    private void writeSortedIndices(VertexFormat.IndexType indexType) {
+    private void putSortedQuadIndices(VertexFormat.IndexType indexType) {
         if (this.sorter != null) {
             int[] indices = this.sorter.sort(this.sortingPrimitiveCenters);
             this.writePrimitiveIndices(indexType, indices);
