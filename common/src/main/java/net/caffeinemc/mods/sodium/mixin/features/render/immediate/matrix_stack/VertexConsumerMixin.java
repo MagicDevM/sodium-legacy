@@ -29,7 +29,7 @@ public interface VertexConsumerMixin {
         float yt = MatrixHelper.transformPositionY(matrix, x, y, z);
         float zt = MatrixHelper.transformPositionZ(matrix, x, y, z);
 
-        return this.addVertex(xt, yt, zt);
+        return this.vertex(xt, yt, zt);
     }
 
     /**
@@ -44,6 +44,6 @@ public interface VertexConsumerMixin {
         float yt = MatrixHelper.transformNormalY(matrix, x, y, z);
         float zt = MatrixHelper.transformNormalZ(matrix, x, y, z);
 
-        return this.setNormal(xt, yt, zt);
+        return this.normal(xt, yt, zt);
     }
 }

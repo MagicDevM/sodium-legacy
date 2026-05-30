@@ -19,6 +19,7 @@ package net.caffeinemc.mods.sodium.client.render.model;
 
 import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.caffeinemc.mods.sodium.client.model.quad.ModelQuadView;
+import net.caffeinemc.mods.sodium.client.render.model.material.RenderMaterialImpl;
 import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFlags;
 import net.caffeinemc.mods.sodium.client.render.helper.ColorHelper;
@@ -27,6 +28,7 @@ import net.caffeinemc.mods.sodium.client.render.helper.NormalHelper;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -37,7 +39,7 @@ import static net.caffeinemc.mods.sodium.client.render.model.EncodingFormat.*;
  * Base class for all quads / quad makers. Handles the ugly bits
  * of maintaining and encoding the quad state.
  */
-public class QuadViewImpl implements ModelQuadView {
+public class QuadViewImpl implements QuadView, ModelQuadView {
     @Nullable
     protected Direction nominalFace;
     /** True when face normal, light face, normal face, or geometry flags may not match geometry. */
@@ -224,6 +226,7 @@ public class QuadViewImpl implements ModelQuadView {
         return data[baseIndex + HEADER_TAG];
     }
 
+    @Override
     public final void toVanilla(int[] target, int targetIndex) {
         System.arraycopy(data, baseIndex + HEADER_STRIDE, target, targetIndex, QUAD_STRIDE);
 
@@ -315,5 +318,73 @@ public class QuadViewImpl implements ModelQuadView {
 
     public SodiumQuadAtlas getQuadAtlas() {
         return EncodingFormat.quadAtlas(data[baseIndex + HEADER_BITS]);
+    }
+    
+    @Override
+    public float x(int vertexIndex) {
+        return getX(vertexIndex);
+    }
+
+    @Override
+    public float y(int vertexIndex) {
+        return getY(vertexIndex);
+    }
+
+    @Override
+    public float z(int vertexIndex) {
+        return getZ(vertexIndex);
+    }
+    
+    @Override
+    public int color(int vertexIndex) {
+        return getColor(vertexIndex);
+    }
+    
+    @Override
+    public float u(int vertexIndex) {
+        return getTexU(vertexIndex);
+    }
+
+    @Override
+    public float v(int vertexIndex) {
+        return getTexV(vertexIndex);
+    }
+    
+    @Override
+    public int lightmap(int vertexIndex) {
+        return getLight(vertexIndex);
+    }
+    
+    @Override
+    @Nullable
+    public final Direction cullFace() {
+        return getCullFace();
+    }
+    
+    @Override
+    @Nullable
+    public final Direction lightFace() {
+        return getLightFace();
+    }
+    
+    @Override
+    @Nullable
+    public final Direction nominalFace() {
+        return nominalFace;
+    }
+    
+    @Override
+    public final RenderMaterialImpl material() {
+        return EncodingFormat.material(data[baseIndex + HEADER_BITS]);
+    }
+    
+    @Override
+    public final int colorIndex() {
+        return data[baseIndex + HEADER_COLOR_INDEX];
+    }
+
+    @Override
+    public final int tag() {
+        return data[baseIndex + HEADER_TAG];
     }
 }

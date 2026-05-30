@@ -71,13 +71,13 @@ public abstract class BillboardParticleMixin extends Particle {
             quaternion.rotateZ(angle);
         }
 
-        float size = this.getSize(tickDelta);
+        float size = this.getQuadSize(tickDelta);
         int light = this.getLightColor(tickDelta);
 
-        float minU = this.getMinU();
-        float maxU = this.getMaxU();
-        float minV = this.getMinV();
-        float maxV = this.getMaxV();
+        float minU = this.getU0();
+        float maxU = this.getU1();
+        float minV = this.getV0();
+        float maxV = this.getV1();
 
         int color = ColorABGR.pack(this.rCol , this.gCol, this.bCol, this.alpha);
 

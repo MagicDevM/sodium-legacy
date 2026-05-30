@@ -34,10 +34,10 @@ public class WorldRendererMixin {
     @Overwrite
     public void renderClouds(PoseStack matrices, Matrix4f projectionMatrix, float tickDelta, double x, double y, double z) {
         if (this.cloudRenderer == null) {
-            this.cloudRenderer = new CloudRenderer(this.client.getResourceManager());
+            this.cloudRenderer = new CloudRenderer(this.minecraft.getResourceManager());
         }
 
-        this.cloudRenderer.render(this.world, this.client.player, matrices, projectionMatrix, this.ticks, tickDelta, x, y, z);
+        this.cloudRenderer.render(this.level, this.minecraft.player, matrices, projectionMatrix, this.ticks, tickDelta, x, y, z);
     }
 
     @Inject(method = "onResourceManagerReload(Lnet/minecraft/server/packs/resources/ResourceManager;)V", at = @At("RETURN"))

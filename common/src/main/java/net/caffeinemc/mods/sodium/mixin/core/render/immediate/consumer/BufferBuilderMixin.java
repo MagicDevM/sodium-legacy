@@ -50,7 +50,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     private void onFormatChanged(VertexFormat format, CallbackInfo ci) {
         this.format = VertexFormatRegistry.instance()
                 .get(format);
-        this.vertexSize = this.formatDescription.stride();
+        this.vertexSize = this.format.stride();
     }
 
     @Override

@@ -34,6 +34,6 @@ public abstract class WindowMixin implements NativeWindowHandle {
 
     @Override
     public long getWin32Handle() {
-        return GLFWNativeWin32.glfwGetWin32Window(this.handle());
+        return GLFWNativeWin32.glfwGetWin32Window(this.getWindow());
     }
 }

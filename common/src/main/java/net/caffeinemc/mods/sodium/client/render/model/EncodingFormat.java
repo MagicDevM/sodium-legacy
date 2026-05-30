@@ -22,6 +22,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import net.caffeinemc.mods.sodium.client.render.helper.GeometryHelper;
 import net.caffeinemc.mods.sodium.client.render.helper.ModelHelper;
+import net.caffeinemc.mods.sodium.client.model.quad.properties.ModelQuadFlags;
+import net.caffeinemc.mods.sodium.client.render.model.material.RenderMaterialImpl;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.Direction;
@@ -50,6 +52,7 @@ public final class EncodingFormat {
     public static final int VANILLA_QUAD_STRIDE = VANILLA_VERTEX_STRIDE * 4;
 
     static final int HEADER_BITS = 0;
+    static final int HEADER_COLOR_INDEX = 2;
     static final int HEADER_FACE_NORMAL = 1;
     static final int HEADER_TINT_INDEX = 2;
     static final int HEADER_TAG = 3;
@@ -153,6 +156,21 @@ public final class EncodingFormat {
     private static final int GLINT_MASK = bitMask(GLINT_BIT_LENGTH, GLINT_BIT_OFFSET);
     private static final int SHADE_MODE_MASK = bitMask(SHADE_MODE_BIT_LENGTH, SHADE_MODE_BIT_OFFSET);
     private static final int QUAD_ATLAS_MASK = bitMask(QUAD_ATLAS_BIT_LENGTH, QUAD_ATLAS_BIT_OFFSET);
+    private static final int NORMALS_COUNT = 4;
+    private static final int DIRECTION_MASK = Mth.smallestEncompassingPowerOfTwo(ModelHelper.NULL_FACE_ID + 1) - 1;
+    private static final int DIRECTION_BIT_COUNT = Integer.bitCount(DIRECTION_MASK);
+    private static final int CULL_SHIFT = 0;
+    private static final int LIGHT_SHIFT = CULL_SHIFT + DIRECTION_BIT_COUNT;
+    private static final int NORMAL_FACE_SHIFT = LIGHT_SHIFT + DIRECTION_BIT_COUNT;
+    private static final int FACING_MASK = Mth.smallestEncompassingPowerOfTwo(ModelQuadFacing.COUNT) - 1;
+    private static final int FACING_BIT_COUNT = Integer.bitCount(FACING_MASK);
+    private static final int NORMAL_FACE_INVERSE_MASK = ~(FACING_MASK << NORMAL_FACE_SHIFT);
+    private static final int NORMALS_SHIFT = NORMAL_FACE_SHIFT + FACING_BIT_COUNT;
+    private static final int GEOMETRY_SHIFT = NORMALS_SHIFT + NORMALS_COUNT;
+    private static final int MATERIAL_MASK = Mth.smallestEncompassingPowerOfTwo(RenderMaterialImpl.VALUE_COUNT) - 1;
+    private static final int MATERIAL_BIT_COUNT = Integer.bitCount(MATERIAL_MASK);
+    private static final int MATERIAL_SHIFT = GEOMETRY_SHIFT + ModelQuadFlags.FLAG_BIT_COUNT;
+    private static final int MATERIAL_INVERSE_MASK = ~(MATERIAL_MASK << MATERIAL_SHIFT);
 
     static {
         Preconditions.checkArgument(TOTAL_BIT_LENGTH <= 32, "Indigo header encoding bit count (%s) exceeds integer bit length)", TOTAL_STRIDE);
@@ -295,5 +313,13 @@ public final class EncodingFormat {
 
     static int quadAtlas(int bits, SodiumQuadAtlas quadAtlas) {
         return (bits & ~QUAD_ATLAS_MASK) | (quadAtlas.ordinal() << QUAD_ATLAS_BIT_OFFSET);
+    }
+    
+    static RenderMaterialImpl material(int bits) {
+        return RenderMaterialImpl.byIndex((bits >>> MATERIAL_SHIFT) & MATERIAL_MASK);
+    }
+
+    static int material(int bits, RenderMaterialImpl material) {
+        return (bits & MATERIAL_INVERSE_MASK) | (material.index() << MATERIAL_SHIFT);
     }
 }

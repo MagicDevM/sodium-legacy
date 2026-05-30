@@ -70,11 +70,7 @@ dependencies {
     compileOnly("org.lwjgl:lwjgl-glfw:3.3.3")
     compileOnly("org.lwjgl:lwjgl-opengl:3.3.3")
     
-    fun addEmbeddedFabricModule(name: String) {
-        val module = fabricApi.module(name, BuildConfig.FABRIC_API_VERSION)
-        compileOnly(module)
-    }
-    addEmbeddedFabricModule("fabric-renderer-api-v1")
+    modCompileOnly(fabricApi.module("fabric-renderer-api-v1", BuildConfig.FABRIC_API_VERSION))
 
     // We need to be careful during pre-launch that we don't touch any Minecraft classes, since other mods
     // will not yet have an opportunity to apply transformations.

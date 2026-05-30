@@ -45,13 +45,13 @@ public abstract class BufferBuilderMixin {
     @Overwrite
     private Vector3f[] makeQuadSortingPoints() {
         int vertexStride = this.format.getVertexSize();
-        int primitiveCount = this.vertexCount / 4;
+        int primitiveCount = this.vertices / 4;
 
         Vector3f[] centers = new Vector3f[primitiveCount];
 
         for (int index = 0; index < primitiveCount; ++index) {
-            long v1 = MemoryUtil.memAddress(this.buffer, this.batchOffset + (((index * 4) + 0) * vertexStride));
-            long v2 = MemoryUtil.memAddress(this.buffer, this.batchOffset + (((index * 4) + 2) * vertexStride));
+            long v1 = MemoryUtil.memAddress(this.buffer, this.renderedBufferPointer + (((index * 4) + 0) * vertexStride));
+            long v2 = MemoryUtil.memAddress(this.buffer, this.renderedBufferPointer + (((index * 4) + 2) * vertexStride));
 
             float x1 = MemoryUtil.memGetFloat(v1 + 0);
             float y1 = MemoryUtil.memGetFloat(v1 + 4);
@@ -73,8 +73,8 @@ public abstract class BufferBuilderMixin {
      */
     @Overwrite
     private void putSortedQuadIndices(VertexFormat.IndexType indexType) {
-        if (this.sorter != null) {
-            int[] indices = this.sorter.sort(this.sortingPrimitiveCenters);
+        if (this.sorting != null) {
+            int[] indices = this.sorting.sort(this.sortingPoints);
             this.writePrimitiveIndices(indexType, indices);
         }
     }
@@ -84,7 +84,7 @@ public abstract class BufferBuilderMixin {
 
     @Unique
     private void writePrimitiveIndices(VertexFormat.IndexType indexType, int[] indices) {
-        long ptr = MemoryUtil.memAddress(this.buffer, this.elementOffset);
+        long ptr = MemoryUtil.memAddress(this.buffer, this.nextElementByte);
 
         switch (indexType.bytes) {
             case 2 -> { // SHORT

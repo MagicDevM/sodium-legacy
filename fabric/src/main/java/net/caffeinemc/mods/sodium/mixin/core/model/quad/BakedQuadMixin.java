@@ -133,7 +133,6 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     @Override
     public int getMaxLightQuad(int idx) {
         return this.getLight(idx);
-        );
     }
 
     @Override

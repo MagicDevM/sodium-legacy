@@ -19,15 +19,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
+import net.minecraft.client.color.item.ItemColors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 
 @Mixin(ItemRenderer.class)
-public abstract class ItemRendererMixin {
+public class ItemRendererMixin {
     @Unique
     private static final ThreadLocal<RandomSource> random = ThreadLocal.withInitial(() -> new SingleThreadedRandomSource(42L));
 
@@ -36,16 +38,20 @@ public abstract class ItemRendererMixin {
         throw new AssertionError("Not shadowed");
     }
 
+    @Shadow
+    @Final
+    private ItemColors itemColors;
+
     /**
      * @reason Avoid Allocations
      * @return JellySquid
      */
     @WrapOperation(method = "renderModelList", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
-    private static void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack itemStack, int light, int overlay, Operation<Void> original) {
+    private void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack itemStack, int light, int overlay, Operation<Void> original) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 
         if (writer == null) {
-            original.call(poseStack, vertexConsumer, quads, colors, light, overlay);
+            original.call(poseStack, vertexConsumer, quads, itemStack, light, overlay);
             return;
         }
 
@@ -53,7 +59,7 @@ public abstract class ItemRendererMixin {
 
         // TODO/NOTE: Should .last be a LocalRef?
         if (!quads.isEmpty()) {
-            colorProvider = ((ItemColorsExtended) this.colors).sodium$getColorProvider(itemStack);
+            colorProvider = ((ItemColorsExtended) this.itemColors).sodium$getColorProvider(itemStack);
             
             renderBakedItemQuads(poseStack.last(), writer, quads, itemStack, colorProvider, light, overlay);
         }
@@ -61,7 +67,7 @@ public abstract class ItemRendererMixin {
 
     @Unique
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private static void renderBakedItemQuads(PoseStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, ItemStack itemStack, ItemColor colorProvider, int light, int overlay) {
+    private void renderBakedItemQuads(PoseStack.Pose matrices, VertexBufferWriter writer, List<BakedQuad> quads, ItemStack itemStack, ItemColor colorProvider, int light, int overlay) {
         for (int i = 0; i < quads.size(); i++) {
             BakedQuad bakedQuad = quads.get(i);
 
