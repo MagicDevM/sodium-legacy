@@ -47,6 +47,9 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     private int normal;
 
     @Unique
+    private int[] vertices;
+
+    @Unique
     private ModelQuadFacing normalFace = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -55,39 +58,37 @@ public abstract class BakedQuadMixin implements BakedQuadView {
         this.normalFace = ModelQuadFacing.fromPackedNormal(this.normal);
 
         this.flags = ModelQuadFlags.getQuadFlags(this, direction);
+        this.vertices = this.getVertices();
     }
 
     @Override
     public float getX(int idx) {
-        int[] data = this.getVertices();
-        return Float.intBitsToFloat(data[idx * 8]);
+        return Float.intBitsToFloat(vertices[idx * 8]);
     }
 
     @Override
     public float getY(int idx) {
-        int[] data = this.getVertices();
-        return Float.intBitsToFloat(data[idx * 8 + 1]);
+        return Float.intBitsToFloat(vertices[idx * 8 + 1]);
     }
 
     @Override
     public float getZ(int idx) {
-        int[] data = this.getVertices();
-        return Float.intBitsToFloat(data[idx * 8 + 2]);
+        return Float.intBitsToFloat(vertices[idx * 8 + 2]);
     }
 
     @Override
     public int getColor(int idx) {
-        return 0xFFFFFFFF;//this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.COLOR_INDEX]; // TODO: Implement vertex colors
+        return this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.COLOR_INDEX];
     }
 
     @Override
     public int getVertexNormal(int idx) {
-        return 0;//this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.NORMAL_INDEX];
+        return this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.NORMAL_INDEX];
     }
 
     @Override
     public int getLight(int idx) {
-        return 0;//this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.LIGHT_INDEX];
+        return this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.LIGHT_INDEX];
     }
 
     @Override
@@ -97,12 +98,12 @@ public abstract class BakedQuadMixin implements BakedQuadView {
 
     @Override
     public float getTexU(int idx) {
-        return Float.intBitsToFloat(this.vertexData[vertexOffset(idx) + TEXTURE_INDEX]);
+        return Float.intBitsToFloat(this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.TEXTURE_INDEX]);
     }
 
     @Override
     public float getTexV(int idx) {
-        return Float.intBitsToFloat(this.vertexData[vertexOffset(idx) + TEXTURE_INDEX + 1]);
+        return Float.intBitsToFloat(this.vertices[ModelQuadUtil.vertexOffset(idx) + ModelQuadUtil.TEXTURE_INDEX + 1]);
     }
 
     @Override
