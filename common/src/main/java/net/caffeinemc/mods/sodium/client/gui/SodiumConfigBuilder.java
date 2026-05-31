@@ -41,40 +41,6 @@ import java.util.Optional;
 
 // TODO: get initialValue from the vanilla options (it's private)
 public class SodiumConfigBuilder implements ConfigEntryPoint {
-  // Implement missing enums
-    public enum WeatherStatus {
-      FANCY,
-      FAST
-    }
-    public enum LeavesStatus {
-      FANCY,
-      FAST
-    }
-    public enum PixelFilteringMode {
-        NEAREST(GL11.GL_NEAREST),
-        LINEAR(GL11.GL_LINEAR);
-    
-        private final int glId;
-    
-        PixelFilteringMode(int glId) {
-            this.glId = glId;
-        }
-    
-        public int getGlId() {
-            return this.glId;
-        }
-        
-        public static PixelFilteringMode fromGlId(int glId) {
-            for (PixelFilteringMode mode : values()) {
-                if (mode.glId == glId) {
-                    return mode;
-                }
-            }
-    
-            return LINEAR;
-        }
-    }
-    
     private static final ResourceLocation SODIUM_ICON = new ResourceLocation("sodium").tryBuild("sodium", "textures/gui/config-icon.png");
     private static final SodiumOptions DEFAULTS = SodiumOptions.defaults();
 
@@ -357,29 +323,28 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 }, () -> this.vanillaOpts.cloudStatus().get())
                                 .setImpact(OptionImpact.LOW)
                 )
-// TODO IMP: Implement weather, leaves & vignette stuff
-/*                  .addOption(
-                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.weather"), WeatherStatus.class)
+                  .addOption(
+                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.weather"), SodiumOptions.WeatherQuality.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.weather_quality"))
                                 .setTooltip(Component.translatable("options.weather_quality.tooltip"))
                                 .setElementNameProvider(EnumOptionBuilder.nameProviderFrom(
                                         Component.translatable("options.weather_quality.fast"),
                                         Component.translatable("options.weather_quality.fancy")))
-                                .setDefaultValue(WeatherStatus.FANCY)
-                                .setBinding(value -> this.vanillaOpts.quality.weatherQuality = value, () -> this.vanillaOpts.quality.weatherQuality)
+                                .setDefaultValue(DEFAULTS.quality.weatherQuality)
+                                .setBinding(value -> this.sodiumOpts.quality.weatherQuality = value, () -> this.sodiumOpts.quality.weatherQuality)
                                 .setImpact(OptionImpact.LOW)
-                ) */
-/*                  .addOption(
-                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.leaves"), LeavesStatus.class)
+                )
+                  .addOption(
+                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.leaves"), SodiumOptions.LeavesQuality.class)
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.leaves_quality.name"))
                                 .setTooltip(Component.translatable("options.leaves_quality.tooltip"))
-                                .setDefaultValue(LeavesStatus.FANCY)
-                                .setBinding(value -> this.vanillaOpts.quality.leavesQuality = value, () -> this.vanillaOpts.quality.leavesQuality)
+                                .setDefaultValue(DEFAULTS.quality.leavesQuality)
+                                .setBinding(value -> this.sodiumOpts.quality.leavesQuality = value, () -> this.sodiumOpts.quality.leavesQuality)
                                 .setImpact(OptionImpact.MEDIUM)
                                 .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
-                ) */
+                )
                 .addOption(
                         builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.particles"), ParticleStatus.class)
                                 .setStorageHandler(this.vanillaStorage)
@@ -436,14 +401,14 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setBinding(this.vanillaOpts.entityShadows()::set, this.vanillaOpts.entityShadows()::get)
                                 .setImpact(OptionImpact.MEDIUM)
                 )
-/*                 .addOption(
+                 .addOption(
                         builder.createBooleanOption(new ResourceLocation("sodium").tryParse("sodium:quality.vignette"))
-                                .setStorageHandler(this.vanillaStorage)
+                                .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("options.vignette"))
                                 .setTooltip(Component.translatable("options.vignette.tooltip"))
-                                .setDefaultValue(true)
-                                .setBinding(value -> this.vanillaOpts.vignette = value, () -> this.vanillaOpts.vignette)
-                ) */
+                                .setDefaultValue(DEFAULTS.quality.enableVignette)
+                                .setBinding(value -> this.sodiumOpts.quality.enableVignette = value, () -> this.sodiumOpts.quality.enableVignette)
+                )
 // TODO: Implement chunk fade (2)
 /*                 .addOption(
                         builder.createIntegerOption(new ResourceLocation("sodium").tryParse("sodium:quality.fade_time"))
@@ -474,19 +439,19 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.pixel_filtering_mode"), PixelFilteringMode.class)
+                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.pixel_filtering_mode"), SodiumOptions.PixelFilteringMode.class)
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.pixel_filtering_mode.name"))
                                 .setTooltip(Component.translatable("sodium.options.pixel_filtering_mode.tooltip"))
                                 .setElementNameProvider(filterMode ->
                                         Component.translatable("sodium.options.pixel_filtering_mode." + filterMode.name().toLowerCase(Locale.ROOT))
                                 )
-                                .setDefaultValue(PixelFilteringMode.NEAREST)
+                                .setDefaultValue(SodiumOptions.PixelFilteringMode.NEAREST)
                                 .setBinding(filterMode -> {
                         this.sodiumOpts.quality.pixelFilteringMode =
-                            filterMode.getGlId();
+                            filterMode.getLocalizedName();
                     },
-                    () -> PixelFilteringMode.fromGlId(
+                    () -> PixelFilteringMode.fromName(
                         this.sodiumOpts.quality.pixelFilteringMode
                     ))
                                 .setImpact(OptionImpact.MEDIUM)

@@ -6,10 +6,13 @@ import com.google.gson.GsonBuilder;
 import org.lwjgl.opengl.GL11;
 import net.caffeinemc.mods.sodium.client.render.chunk.DeferMode;
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.QuadSplittingMode;
+import net.caffeinemc.mods.sodium.client.gui.options.TextProvider;
 import net.caffeinemc.mods.sodium.client.services.PlatformRuntimeInformation;
 import net.caffeinemc.mods.sodium.client.util.FileUtil;
-import org.jspecify.annotations.NonNull;
+import net.minecraft.client.GraphicsStatus;
+import net.minecraft.network.chat.Component;
 
+import org.jspecify.annotations.NonNull;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -37,10 +40,15 @@ public class SodiumOptions {
     }
 
     public static class QualitySettings {
+        public WeatherQuality weatherQuality = WeatherQuality.DEFAULT;
+        public LeavesQuality leavesQuality = LeavesQuality.DEFAULT;
+
+        public boolean enableVignette = true;
+        
         public boolean hiddenFluidCulling = true;
         public boolean improvedFluidShaping = false;
         public boolean useClosestPointEntitySort = false;
-        public int pixelFilteringMode = GL11.GL_NEAREST;
+        public int pixelFilteringMode = PixelFilteringMode.DEFAULT;
     }
 
     public static class PerformanceSettings {
@@ -70,6 +78,75 @@ public class SodiumOptions {
     public static class NotificationSettings {
         public boolean hasClearedDonationButton = false;
         public boolean hasSeenDonationPrompt = false;
+    }
+    
+    public enum WeatherQuality implements TextProvider {
+        DEFAULT("options.gamma.default"),
+        FANCY("sodium.options.weather_quality.fancy"),
+        FAST("sodium.options.weather_quality.fast");
+
+        private final Component name;
+
+        WeatherQuality(String name) {
+            this.name = Component.translatable(name);
+        }
+
+        @Override
+        public Component getLocalizedName() {
+            return this.name;
+        }
+
+        public boolean isFancy(GraphicsStatus graphicsMode) {
+            return (this == FANCY) || (this == DEFAULT && (graphicsMode == GraphicsStatus.FANCY || graphicsMode == GraphicsStatus.FABULOUS));
+        }
+    }
+    
+    public enum LeavesQuality implements TextProvider {
+        DEFAULT("options.gamma.default"),
+        FANCY("sodium.options.leaves_quality.fancy"),
+        FAST("sodium.options.leaves_quality.fast");
+
+        private final Component name;
+
+        LeavesQuality(String name) {
+            this.name = Component.translatable(name);
+        }
+
+        @Override
+        public Component getLocalizedName() {
+            return this.name;
+        }
+
+        public boolean isFancy(GraphicsStatus graphicsMode) {
+            return (this == FANCY) || (this == DEFAULT && (graphicsMode == GraphicsStatus.FANCY || graphicsMode == GraphicsStatus.FABULOUS));
+        }
+    }
+
+    public enum PixelFilteringMode implements TextProvider {
+        DEFAULT("options.pixel_filtering_mode.nearest"),
+        NEAREST("options.pixel_filtering_mode.nearest"),
+        LINEAR("options.pixel_filtering_mode.linear");
+        
+        private final Component name;
+
+        PixelFilteringMode(String name) {
+            this.name = Component.translatable(name);
+        }
+
+        @Override
+        public Component getLocalizedName() {
+            return this.name;
+        }
+        
+        public static PixelFilteringMode fromName(int name) {
+            for (PixelFilteringMode mode : values()) {
+                if (mode.name == name) {
+                    return mode;
+                }
+            }
+
+            return LINEAR;
+        }
     }
 
     private static final Gson GSON = new GsonBuilder()
