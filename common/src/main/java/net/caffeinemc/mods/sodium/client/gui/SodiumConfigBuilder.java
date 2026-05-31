@@ -439,27 +439,6 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
 
         qualityPage.addOptionGroup(builder.createOptionGroup()
                 .addOption(
-                        builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.pixel_filtering_mode"), SodiumOptions.PixelFilteringMode.class)
-                                .setStorageHandler(this.sodiumStorage)
-                                .setName(Component.translatable("sodium.options.pixel_filtering_mode.name"))
-                                .setTooltip(Component.translatable("sodium.options.pixel_filtering_mode.tooltip"))
-                                .setElementNameProvider(filterMode ->
-                                        Component.translatable("sodium.options.pixel_filtering_mode." + filterMode.name().toLowerCase(Locale.ROOT))
-                                )
-                                .setDefaultValue(SodiumOptions.PixelFilteringMode.NEAREST)
-                                .setBinding(filterMode -> {
-                        this.sodiumOpts.quality.pixelFilteringMode =
-                            filterMode.getLocalizedName();
-                    },
-                    () -> PixelFilteringMode.fromName(
-                        this.sodiumOpts.quality.pixelFilteringMode
-                    ))
-                                .setImpact(OptionImpact.MEDIUM)
-                )
-        );
-
-        qualityPage.addOptionGroup(builder.createOptionGroup()
-                .addOption(
                         builder.createBooleanOption(new ResourceLocation("sodium").tryParse("sodium:quality.hidden_fluid_culling"))
                                 .setStorageHandler(this.sodiumStorage)
                                 .setName(Component.translatable("sodium.options.hidden_fluid_culling.name"))

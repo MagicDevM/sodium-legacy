@@ -48,7 +48,6 @@ public class SodiumOptions {
         public boolean hiddenFluidCulling = true;
         public boolean improvedFluidShaping = false;
         public boolean useClosestPointEntitySort = false;
-        public int pixelFilteringMode = PixelFilteringMode.DEFAULT;
     }
 
     public static class PerformanceSettings {
@@ -119,33 +118,6 @@ public class SodiumOptions {
 
         public boolean isFancy(GraphicsStatus graphicsMode) {
             return (this == FANCY) || (this == DEFAULT && (graphicsMode == GraphicsStatus.FANCY || graphicsMode == GraphicsStatus.FABULOUS));
-        }
-    }
-
-    public enum PixelFilteringMode implements TextProvider {
-        DEFAULT("options.pixel_filtering_mode.nearest"),
-        NEAREST("options.pixel_filtering_mode.nearest"),
-        LINEAR("options.pixel_filtering_mode.linear");
-        
-        private final Component name;
-
-        PixelFilteringMode(String name) {
-            this.name = Component.translatable(name);
-        }
-
-        @Override
-        public Component getLocalizedName() {
-            return this.name;
-        }
-        
-        public static PixelFilteringMode fromName(int name) {
-            for (PixelFilteringMode mode : values()) {
-                if (mode.name == name) {
-                    return mode;
-                }
-            }
-
-            return LINEAR;
         }
     }
 
