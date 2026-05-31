@@ -65,11 +65,6 @@ dependencies {
     compileOnly("net.fabricmc:sponge-mixin:0.13.2+mixin.0.8.5")
     compileOnly("net.fabricmc:fabric-loader:${BuildConfig.FABRIC_LOADER_VERSION}")
     
-    // This is added again so mixin could detect it
-    modCompileOnly("org.lwjgl:lwjgl:3.3.3")
-    modCompileOnly("org.lwjgl:lwjgl-glfw:3.3.3")
-    modCompileOnly("org.lwjgl:lwjgl-opengl:3.3.3")
-    
     modCompileOnly(fabricApi.module("fabric-renderer-api-v1", BuildConfig.FABRIC_API_VERSION))
 
     // We need to be careful during pre-launch that we don't touch any Minecraft classes, since other mods

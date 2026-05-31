@@ -72,6 +72,9 @@ dependencies {
     })
 
     modImplementation("net.fabricmc:fabric-loader:${BuildConfig.FABRIC_LOADER_VERSION}")
+    compileOnly("org.lwjgl:lwjgl:3.3.3")
+    compileOnly("org.lwjgl:lwjgl-opengl:3.3.3")
+    compileOnly("org.lwjgl:lwjgl-glfw:3.3.3")
 
     fun addEmbeddedFabricModule(name: String) {
         val module = fabricApi.module(name, BuildConfig.FABRIC_API_VERSION)
