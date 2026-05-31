@@ -27,7 +27,7 @@ public class RemovableMultiForest implements RemovableForest {
     }
 
     public void ensureCapacity(float buildDistance) {
-        this.trees.ensureCapacity(getCapacity(buildDistance));
+        this.trees.trim(getCapacity(buildDistance));
     }
 
     @Override
