@@ -66,9 +66,9 @@ dependencies {
     compileOnly("net.fabricmc:fabric-loader:${BuildConfig.FABRIC_LOADER_VERSION}")
     
     // This is added again so mixin could detect it
-    compileOnly("org.lwjgl:lwjgl:3.3.3")
-    compileOnly("org.lwjgl:lwjgl-glfw:3.3.3")
-    compileOnly("org.lwjgl:lwjgl-opengl:3.3.3")
+    modCompileOnly("org.lwjgl:lwjgl:3.3.3")
+    modCompileOnly("org.lwjgl:lwjgl-glfw:3.3.3")
+    modCompileOnly("org.lwjgl:lwjgl-opengl:3.3.3")
     
     modCompileOnly(fabricApi.module("fabric-renderer-api-v1", BuildConfig.FABRIC_API_VERSION))
 

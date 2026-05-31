@@ -40,7 +40,7 @@ public abstract class BufferBuilderMixin implements VertexBufferWriter, BufferBu
     private VertexFormatDescription format;
 
     @Inject(
-        method = "setFormat",
+        method = "switchFormat",
         at = @At(
             value = "FIELD",
             target = "Lcom/mojang/blaze3d/vertex/BufferBuilder;format:Lcom/mojang/blaze3d/vertex/VertexFormat;",

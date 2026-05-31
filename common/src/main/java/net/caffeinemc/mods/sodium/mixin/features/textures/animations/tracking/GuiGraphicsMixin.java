@@ -15,13 +15,12 @@ import java.util.function.Function;
 
 @Mixin(GuiGraphics.class)
 public class GuiGraphicsMixin {
-
-    @Inject(method = "blit(IIIIILcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V", at = @At("HEAD"))
+    @Inject(method = "blit(IIIIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V", at = @At("HEAD"))
     private void preDrawSprite(int x, int y, int z, int width, int height, TextureAtlasSprite sprite, CallbackInfo ci) {
         SpriteUtil.INSTANCE.markSpriteActive(sprite);
     }
 
-    @Inject(method = "blitSprite(IIIIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;FFFF)V", at = @At("HEAD"))
+    @Inject(method = "blit(IIIIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;FFFF)V", at = @At("HEAD"))
     private void preDrawSprite(int x, int y, int z, int width, int height, TextureAtlasSprite sprite, float red, float green, float blue, float alpha, CallbackInfo ci) {
         SpriteUtil.INSTANCE.markSpriteActive(sprite);
     }

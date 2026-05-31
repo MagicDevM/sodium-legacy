@@ -25,9 +25,6 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     private boolean shade;
 
     @Shadow
-    public abstract int lightEmission();
-
-    @Shadow
     public abstract int[] getVertices();
 
     @Shadow

@@ -34,11 +34,6 @@ public class ItemRendererMixin {
     private static final ThreadLocal<RandomSource> random = ThreadLocal.withInitial(() -> new SingleThreadedRandomSource(42L));
 
     @Shadow
-    private static int getLayerColorSafe(int[] is, int i) {
-        throw new AssertionError("Not shadowed");
-    }
-
-    @Shadow
     @Final
     private ItemColors itemColors;
 
@@ -46,7 +41,7 @@ public class ItemRendererMixin {
      * @reason Avoid Allocations
      * @return JellySquid
      */
-    @WrapOperation(method = "renderModelList", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
+    @WrapOperation(method = "renderModelLists", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderQuadList(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Ljava/util/List;[III)V"))
     private void renderModelFast(PoseStack poseStack, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack itemStack, int light, int overlay, Operation<Void> original) {
         var writer = VertexConsumerUtils.convertOrLog(vertexConsumer);
 

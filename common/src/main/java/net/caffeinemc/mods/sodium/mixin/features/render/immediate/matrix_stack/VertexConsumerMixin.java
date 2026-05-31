@@ -6,7 +6,6 @@ import net.caffeinemc.mods.sodium.api.math.MatrixHelper;
 import org.joml.Math;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,14 +16,14 @@ public interface VertexConsumerMixin {
     VertexConsumer normal(float x, float y, float z);
 
     @Shadow
-    VertexConsumer vertex(float x, float y, float z);
+    VertexConsumer vertex(double x, double y, double z);
 
     /**
      * @reason Avoid allocations
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer vertex(Matrix4fc matrix, float x, float y, float z) {
+    default VertexConsumer vertex(Matrix4f matrix, float x, float y, float z) {
         float xt = MatrixHelper.transformPositionX(matrix, x, y, z);
         float yt = MatrixHelper.transformPositionY(matrix, x, y, z);
         float zt = MatrixHelper.transformPositionZ(matrix, x, y, z);
@@ -37,8 +36,7 @@ public interface VertexConsumerMixin {
      * @author JellySquid
      */
     @Overwrite
-    default VertexConsumer normal(PoseStack.Pose pose, float x, float y, float z) {
-        Matrix3f matrix = pose.normal();
+    default VertexConsumer normal(Matrix3f matrix, float x, float y, float z) {
 
         float xt = MatrixHelper.transformNormalX(matrix, x, y, z);
         float yt = MatrixHelper.transformNormalY(matrix, x, y, z);
