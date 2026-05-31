@@ -244,9 +244,9 @@ public class RenderSectionManager {
         return useOcclusionCulling;
     }
 
-    // public void beforeSectionUpdates() {
-//         this.renderableSectionTree.ensureCapacity(this.getRenderDistance());
-//     }
+    public void beforeSectionUpdates() {
+        this.renderableSectionTree.ensureCapacity(this.getRenderDistance());
+    }
 
     private void resetRenderLists() {
         this.renderLists = SortedRenderLists.empty();

@@ -42,3 +42,6 @@ accessible class net/minecraft/client/renderer/block/model/ItemModelGenerator$Sp
 accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator$SpanFacing isHorizontal ()Z
 
 accessible field net/minecraft/client/renderer/entity/ItemRenderer itemColors Lnet/minecraft/client/color/item/ItemColors;
+
+accessible method it/unimi/dsi/fastutil/longs/Long2ReferenceLinkedOpenHashMap ensureCapacity (I)V
+accessible method it/unimi/dsi/fastutil/objects/ReferenceArrayList ensureCapacity (I)V

@@ -25,12 +25,10 @@ public class RemovableMultiForest implements RemovableForest {
         var forestDim = BaseMultiForest.forestDimFromBuildDistance(buildDistance) + 1;
         return forestDim * forestDim * forestDim;
     }
-    
-    // TODO: Maybe fix this private function?
-    
-    // public void ensureCapacity(float buildDistance) {
-//         this.trees.ensureCapacity(getCapacity(buildDistance));
-//     }
+
+    public void ensureCapacity(float buildDistance) {
+        this.trees.ensureCapacity(getCapacity(buildDistance));
+    }
 
     @Override
     public void prepareForTraversal() {
@@ -62,7 +60,7 @@ public class RemovableMultiForest implements RemovableForest {
 
         // sort the trees by distance from the camera by sorting a packed index array.
         this.treeSortList.clear();
-        // this.treeSortList.ensureCapacity(this.trees.size());
+        this.treeSortList.ensureCapacity(this.trees.size());
         this.treeSortList.addAll(this.trees.values());
         for (var tree : this.treeSortList) {
             tree.updateSortKeyFor(cameraSectionX, cameraSectionY, cameraSectionZ);
