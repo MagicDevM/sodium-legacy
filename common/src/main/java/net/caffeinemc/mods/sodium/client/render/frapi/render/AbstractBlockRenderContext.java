@@ -247,7 +247,7 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
     /* Handling of vanilla models - this is the hot path for non-modded models */
     public void bufferDefaultModel(BakedModel model, @Nullable BlockState state) {
         MutableQuadViewImpl editorQuad = this.editorQuad;
-
+        
         // Per-submodel state pushed by FFAPI's multipart mixin, falls through to the root context otherwise.
         final SodiumModelData currentData = this.currentModelData();
         final TriState aoOverride = this.useAO;

@@ -328,7 +328,7 @@ public class QuadViewImpl implements QuadView, ModelQuadView {
     }
 
     @Override
-    public int getColorIndex() {
+    public int getTintIndex() {
         return material().disableColorIndex() ? -1 : colorIndex();
     }
 
@@ -345,5 +345,10 @@ public class QuadViewImpl implements QuadView, ModelQuadView {
     @Override
     public int getFlags() {
         return geometryFlags();
+    }
+    
+    @Override
+    public int getMaxLightQuad(int idx) {
+        return getLight(idx);
     }
 }

@@ -19,7 +19,6 @@ package net.caffeinemc.mods.sodium.client.render.frapi.material;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialView;
 import net.caffeinemc.mods.sodium.client.render.frapi.mesh.SodiumShadeMode;
-;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.util.Mth;
 
@@ -34,7 +33,7 @@ public class MaterialViewImpl implements MaterialView {
     private static final int BLEND_MODE_COUNT = BLEND_MODES.length;
     private static final TriState[] TRI_STATES = TriState.values();
     private static final int TRI_STATE_COUNT = TRI_STATES.length;
-    private static final SodiumShadeMode[] SHADE_MODES = SodiumShadeMode.values();
+    protected static final SodiumShadeMode[] SHADE_MODES = SodiumShadeMode.values();
     private static final int SHADE_MODE_COUNT = SHADE_MODES.length;
 
     protected static final int BLEND_MODE_BIT_LENGTH = Mth.ceillog2(BLEND_MODE_COUNT);
@@ -112,10 +111,5 @@ public class MaterialViewImpl implements MaterialView {
     @Override
     public TriState glint() {
         return TRI_STATES[(bits & GLINT_MASK) >>> GLINT_BIT_OFFSET];
-    }
-
-    @Override
-    public SodiumShadeMode shadeMode() {
-        return SHADE_MODES[(bits & SHADE_MODE_MASK) >>> SHADE_MODE_BIT_OFFSET];
     }
 }

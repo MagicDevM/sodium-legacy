@@ -83,7 +83,6 @@ public class MaterialFinderImpl extends MaterialViewImpl implements MaterialFind
         return this;
     }
 
-    @Override
     public MaterialFinder shadeMode(SodiumShadeMode mode) {
         Objects.requireNonNull(mode, "ShadeMode may not be null");
 

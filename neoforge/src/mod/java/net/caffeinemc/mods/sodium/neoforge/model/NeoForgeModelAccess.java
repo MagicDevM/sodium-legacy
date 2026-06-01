@@ -2,6 +2,7 @@ package net.caffeinemc.mods.sodium.neoforge.model;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.caffeinemc.mods.sodium.client.world.LevelSlice;
 import net.caffeinemc.mods.sodium.client.services.PlatformModelAccess;
 import net.caffeinemc.mods.sodium.client.services.SodiumModelData;
 import net.caffeinemc.mods.sodium.client.services.SodiumModelDataContainer;
@@ -24,7 +25,12 @@ import java.util.Set;
 
 public class NeoForgeModelAccess implements PlatformModelAccess {
     @Override
-    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType) {
+    public Iterable<RenderType> getModelRenderTypes(BlockAndTintGetter level, BakedModel model, BlockState state, BlockPos pos, RandomSource random, SodiumModelData modelData) {
+        return model.getRenderTypes(state, random, (ModelData) (Object) modelData);
+    }
+
+    @Override
+    public List<BakedQuad> getQuads(BlockAndTintGetter level, BlockPos pos, BlockModel model, BlockState state, Direction face, RandomSource random, RenderType renderType, SodiumModelData, data) {
         return model.getQuads(face);
     }
 
@@ -41,12 +47,12 @@ public class NeoForgeModelAccess implements PlatformModelAccess {
     }
 
     @Override
-    public SodiumModelData getEmptyModelData() {
-        return (SodiumModelData) (Object) ModelData.EMPTY;
+    public SodiumModelData getModelData(LevelSlice slice, BakedModel model, BlockState state, BlockPos pos, SodiumModelData originalData) {
+        return (SodiumModelData) (Object) model.getModelData(slice, pos, state, (ModelData) (Object) originalData);
     }
 
     @Override
-    public RenderType getPartRenderType(BlockModel part, BlockState state, RenderType defaultType) {
-        return part.getRenderType(state);
+    public SodiumModelData getEmptyModelData() {
+        return (SodiumModelData) (Object) ModelData.EMPTY;
     }
 }

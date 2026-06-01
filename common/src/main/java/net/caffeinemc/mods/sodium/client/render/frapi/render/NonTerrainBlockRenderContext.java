@@ -22,6 +22,7 @@ import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.util.ColorMixer;
 import net.caffeinemc.mods.sodium.client.model.light.LightMode;
+import net.caffeinemc.mods.sodium.client.render.frapi.material.RenderMaterialImpl;
 import net.caffeinemc.mods.sodium.client.model.light.LightPipelineProvider;
 import net.caffeinemc.mods.sodium.client.model.light.data.SingleBlockLightDataCache;
 import net.caffeinemc.mods.sodium.client.render.frapi.mesh.MutableQuadViewImpl;
@@ -66,7 +67,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
 
         this.vertexConsumer = buffer;
         this.matPosition = poseStack.last().pose();
-        this.trustedNormals = poseStack.last().trustedNormals;
+        this.trustedNormals = true;
         this.matNormal = poseStack.last().normal();
         this.overlay = overlay;
         this.type = ItemBlockRenderTypes.getChunkRenderType(state);
@@ -91,7 +92,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
         final RenderMaterial mat = quad.material();
         final int colorIndex = mat.disableColorIndex() ? -1 : quad.colorIndex();
         final TriState aoMode = mat.ambientOcclusion();
-        final SodiumShadeMode shadeMode = mat.shadeMode();
+        final SodiumShadeMode shadeMode = ((RenderMaterialImpl) mat).shadeMode();
         final LightMode lightMode;
         if (aoMode == TriState.DEFAULT) {
             lightMode = this.defaultLightMode;

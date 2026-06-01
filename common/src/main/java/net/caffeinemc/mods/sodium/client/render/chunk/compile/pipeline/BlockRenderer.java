@@ -3,6 +3,7 @@ package net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
 import net.caffeinemc.mods.sodium.api.util.ColorARGB;
 import net.caffeinemc.mods.sodium.api.util.ColorMixer;
+import net.caffeinemc.mods.sodium.client.render.frapi.material.RenderMaterialImpl;
 import net.caffeinemc.mods.sodium.client.compatibility.workarounds.Workarounds;
 import net.caffeinemc.mods.sodium.client.model.color.ColorProvider;
 import net.caffeinemc.mods.sodium.client.model.color.ColorProviderRegistry;
@@ -21,22 +22,29 @@ import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.parameter
 import net.caffeinemc.mods.sodium.client.render.chunk.translucent_sorting.TranslucentGeometryCollector;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.builder.ChunkMeshBufferBuilder;
 import net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEncoder;
-import net.fabricmc.fabric.api.util.TriState;
 import net.caffeinemc.mods.sodium.client.render.frapi.mesh.MutableQuadViewImpl;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.AbstractBlockRenderContext;
-import net.caffeinemc.mods.sodium.client.render.frapi.mesh.SodiumShadeMode;
 import net.caffeinemc.mods.sodium.client.render.texture.SpriteFinderCache;
+import net.caffeinemc.mods.sodium.client.services.PlatformModelAccess;
+import net.caffeinemc.mods.sodium.client.services.SodiumModelData;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;
+import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
+import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
+import net.caffeinemc.mods.sodium.client.render.frapi.mesh.SodiumShadeMode;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+
+import java.util.Iterator;
 
 public class BlockRenderer extends AbstractBlockRenderContext {
     private final ColorProviderRegistry colorProviderRegistry;
@@ -44,17 +52,18 @@ public class BlockRenderer extends AbstractBlockRenderContext {
     private final ChunkVertexEncoder.Vertex[] vertices = ChunkVertexEncoder.Vertex.uninitializedQuad();
 
     private ChunkBuildBuffers buffers;
-    
+
     private final Vector3f posOffset = new Vector3f();
     private final BlockPos.MutableBlockPos scratchPos = new BlockPos.MutableBlockPos();
     @Nullable
     private ColorProvider<BlockState> colorProvider;
     private TranslucentGeometryCollector collector;
+    private boolean allowDowngrade;
 
     public BlockRenderer(ColorProviderRegistry colorRegistry, LightPipelineProvider lighters) {
         this.colorProviderRegistry = colorRegistry;
         this.lighters = lighters;
-        
+
         this.random = new SingleThreadedRandomSource(42L);
     }
 
@@ -76,26 +85,43 @@ public class BlockRenderer extends AbstractBlockRenderContext {
         this.state = state;
         this.pos = pos;
 
-        this.prepareAoInfo(true);
-
+        this.randomSeed = state.getSeed(pos);
 
         this.posOffset.set(origin.getX(), origin.getY(), origin.getZ());
         if (state.hasOffsetFunction()) {
-            Vec3 modelOffset = state.getOffset(level, pos);
+            Vec3 modelOffset = state.getOffset(this.level, pos);
             this.posOffset.add((float) modelOffset.x, (float) modelOffset.y, (float) modelOffset.z);
         }
 
         this.colorProvider = this.colorProviderRegistry.getColorProvider(state.getBlock());
 
-        this.prepareCulling(true);
+        type = ItemBlockRenderTypes.getChunkRenderType(state);
 
-        this.defaultRenderType = ItemBlockRenderTypes.getChunkRenderType(state);
+        this.prepareCulling(true);
+        this.prepareAoInfo(model.useAmbientOcclusion());
+
+        modelData = PlatformModelAccess.getInstance().getModelData(slice, model, state, pos, slice.getPlatformModelData(pos));
+
+        Iterable<RenderType> renderTypes = PlatformModelAccess.getInstance().getModelRenderTypes(level, model, state, pos, random, modelData);
         this.allowDowngrade = true;
 
+        Iterator<RenderType> it = renderTypes.iterator();
+        var defaultType = ItemBlockRenderTypes.getChunkRenderType(state);
 
-        random.setSeed(state.getSeed(pos));
+        while (it.hasNext()) {
+            this.type = it.next();
 
-        this.defaultRenderType = null;
+            // TODO: This can be removed once we have a better solution for https://github.com/CaffeineMC/sodium/issues/2868
+            // If the model contains any materials that are not the default, we can't allow the block to be downgraded. This avoids a potentially incorrect render order if there are overlapping quads.
+            if (it.hasNext() || this.type != defaultType) {
+                this.allowDowngrade = false;
+            }
+
+            ((FabricBakedModel) model).emitBlockQuads(this.level, state, pos, this.randomSupplier, this);
+        }
+
+        type = null;
+        modelData = SodiumModelData.EMPTY;
     }
 
     /**
@@ -103,28 +129,34 @@ public class BlockRenderer extends AbstractBlockRenderContext {
      */
     @Override
     protected void processQuad(MutableQuadViewImpl quad) {
-        final TriState aoMode = quad.ambientOcclusion();
-        final SodiumShadeMode shadeMode = quad.getShadeMode();
+        final RenderMaterial mat = quad.material();
+        final int colorIndex = mat.disableColorIndex() ? -1 : quad.colorIndex();
+        final TriState aoMode = mat.ambientOcclusion();
+        final SodiumShadeMode shadeMode = ((RenderMaterialImpl) mat).shadeMode();
         final LightMode lightMode;
         if (aoMode == TriState.DEFAULT) {
             lightMode = this.defaultLightMode;
         } else {
-            lightMode = this.useAmbientOcclusion && aoMode != TriState.FALSE ? LightMode.SMOOTH : LightMode.FLAT;
+            lightMode = this.useAmbientOcclusion && aoMode.get() ? LightMode.SMOOTH : LightMode.FLAT;
         }
-        final boolean emissive = quad.emissive();
+        final boolean emissive = mat.emissive();
 
-        final RenderType blendMode = quad.getRenderType();
-        final Material material = DefaultMaterials.forChunkLayer(blendMode == null ? defaultRenderType : blendMode);
+        Material material;
 
-        this.tintQuad(quad);
+        final BlendMode blendMode = mat.blendMode();
+        if (blendMode == BlendMode.DEFAULT) {
+            material = DefaultMaterials.forChunkLayer(type);
+        } else {
+            material = DefaultMaterials.forChunkLayer(blendMode.blockRenderLayer == null ? type : blendMode.blockRenderLayer);
+        }
+
+        this.colorizeQuad(quad, colorIndex);
         this.shadeQuad(quad, lightMode, emissive, shadeMode);
         this.bufferQuad(quad, this.quadLightData.br, material);
     }
 
-    private void tintQuad(MutableQuadViewImpl quad) {
-        int tintIndex = quad.getTintIndex();
-
-        if (tintIndex != -1) {
+    private void colorizeQuad(MutableQuadViewImpl quad, int colorIndex) {
+        if (colorIndex != -1) {
             ColorProvider<BlockState> colorProvider = this.colorProvider;
 
             if (colorProvider != null) {
@@ -132,7 +164,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
                 colorProvider.getColors(this.slice, this.pos, this.scratchPos, this.state, quad, vertexColors, slice.hasBiomeBlend());
 
                 for (int i = 0; i < 4; i++) {
-                    quad.setColor(i, ColorMixer.mulComponentWise(vertexColors[i], quad.baseColor(i)));
+                    quad.color(i, ColorMixer.mulComponentWise(vertexColors[i], quad.color(i)));
                 }
             }
         }
@@ -148,18 +180,18 @@ public class BlockRenderer extends AbstractBlockRenderContext {
             int srcIndex = orientation.getVertexIndex(dstIndex);
 
             ChunkVertexEncoder.Vertex out = vertices[dstIndex];
-            out.x = quad.getX(srcIndex) + offset.x;
-            out.y = quad.getY(srcIndex) + offset.y;
-            out.z = quad.getZ(srcIndex) + offset.z;
+            out.x = quad.x(srcIndex) + offset.x;
+            out.y = quad.y(srcIndex) + offset.y;
+            out.z = quad.z(srcIndex) + offset.z;
 
             // FRAPI uses ARGB color format; convert to ABGR.
-            out.color = ColorARGB.toABGR(quad.baseColor(srcIndex));
+            out.color = ColorARGB.toABGR(quad.color(srcIndex));
             out.ao = brightnesses[srcIndex];
 
-            out.u = quad.getTexU(srcIndex);
-            out.v = quad.getTexV(srcIndex);
+            out.u = quad.u(srcIndex);
+            out.v = quad.v(srcIndex);
 
-            out.light = quad.getLight(srcIndex);
+            out.light = quad.lightmap(srcIndex);
         }
 
         var atlasSprite = quad.sprite(SpriteFinderCache.forBlockAtlas());
@@ -183,6 +215,7 @@ public class BlockRenderer extends AbstractBlockRenderContext {
 
         // if there was a downgrade from translucent to cutout, the material bits' alpha cutoff needs to be updated
         if (downgradedPass != null && material == DefaultMaterials.TRANSLUCENT && pass == DefaultTerrainRenderPasses.CUTOUT) {
+            // ONE_TENTH and HALF are functionally the same so it doesn't matter which one we take here
             materialBits = MaterialParameters.pack(AlphaCutoffParameter.HALF, material.mipped);
         }
 
