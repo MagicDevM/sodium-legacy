@@ -137,7 +137,7 @@ public class ItemRenderContext extends AbstractRenderContext {
         this.transformMode = transformMode;
         this.poseStack = poseStack;
         matPosition = poseStack.last().pose();
-        trustedNormals = poseStack.last().trustedNormals;
+        trustedNormals = true;
         matNormal = poseStack.last().normal();
         this.bufferSource = bufferSource;
         this.lightmap = lightmap;
@@ -306,7 +306,7 @@ public class ItemRenderContext extends AbstractRenderContext {
 
     private VertexConsumer createDynamicDisplayGlintVertexConsumer(RenderType type) {
         if (dynamicDisplayGlintEntry == null) {
-            dynamicDisplayGlintEntry = poseStack.last().copy();
+            dynamicDisplayGlintEntry = poseStack.last();
 
             if (transformMode == ItemDisplayContext.GUI) {
                 MatrixUtil.mulComponentWise(dynamicDisplayGlintEntry.pose(), 0.5F);

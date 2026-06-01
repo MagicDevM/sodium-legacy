@@ -16,6 +16,7 @@
 
 package net.caffeinemc.mods.sodium.client.render.frapi.material;
 
+import net.caffeinemc.mods.sodium.client.render.frapi.mesh.SodiumShadeMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.util.TriState;
 
@@ -57,5 +58,9 @@ public class RenderMaterialImpl extends MaterialViewImpl implements RenderMateri
         }
 
         return material;
+    }
+    
+    public SodiumShadeMode shadeMode() {
+        return SHADE_MODES[(bits & SHADE_MODE_MASK) >>> SHADE_MODE_BIT_OFFSET];
     }
 }

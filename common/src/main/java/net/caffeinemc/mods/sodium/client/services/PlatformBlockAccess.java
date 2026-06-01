@@ -1,5 +1,6 @@
 package net.caffeinemc.mods.sodium.client.services;
 
+import net.caffeinemc.mods.sodium.client.services.SodiumModelData;
 import net.caffeinemc.mods.sodium.client.model.quad.ModelQuadView;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.AmbientOcclusionMode;
 import net.minecraft.client.player.LocalPlayer;
@@ -75,7 +76,7 @@ public interface PlatformBlockAccess {
      * @param pos The current position
      * @return If ambient occlusion is forced, or {@code DEFAULT}
      */
-    AmbientOcclusionMode usesAmbientOcclusion(BakedModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos);
+    AmbientOcclusionMode usesAmbientOcclusion(BakedModel model, BlockState state, SodiumModelData data, RenderType renderType, BlockAndTintGetter level, BlockPos pos);
 
     /**
      * @param blockEntity The block entity to check.

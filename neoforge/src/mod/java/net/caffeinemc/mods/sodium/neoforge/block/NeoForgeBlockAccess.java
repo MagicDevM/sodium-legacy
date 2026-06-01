@@ -1,5 +1,6 @@
 package net.caffeinemc.mods.sodium.neoforge.block;
 
+import net.caffeinemc.mods.sodium.client.services.SodiumModelData;
 import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.caffeinemc.mods.sodium.client.model.quad.ModelQuadView;
 import net.caffeinemc.mods.sodium.client.render.frapi.render.AmbientOcclusionMode;
@@ -43,7 +44,7 @@ public class NeoForgeBlockAccess implements PlatformBlockAccess {
     }
 
     @Override
-    public AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
+    public AmbientOcclusionMode usesAmbientOcclusion(BlockModel model, BlockState state, SodiumModelData data, RenderType renderType, BlockAndTintGetter level, BlockPos pos) {
         return switch (model.ambientOcclusion()) {
             case TRUE -> AmbientOcclusionMode.ENABLED;
             case FALSE -> AmbientOcclusionMode.DISABLED;
