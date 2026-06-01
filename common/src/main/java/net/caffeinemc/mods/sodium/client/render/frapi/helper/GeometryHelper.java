@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package net.caffeinemc.mods.sodium.client.render.helper;
+package net.caffeinemc.mods.sodium.client.render.frapi.helper;
 
-import net.caffeinemc.mods.sodium.api.util.NormI8;
-import net.caffeinemc.mods.sodium.client.model.quad.ModelQuadView;
-import net.caffeinemc.mods.sodium.client.render.frapi.mesh.QuadViewImpl;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import org.joml.Vector3fc;
+import org.joml.Vector3f;
 
 /**
  * Static routines of general utility for renderer implementations.
@@ -32,15 +30,12 @@ import org.joml.Vector3fc;
 public abstract class GeometryHelper {
     private GeometryHelper() { }
 
-    /** how many bits quad header encoding should reserve for encoding geometry flags. */
-    public static final int FLAG_BIT_COUNT = 3;
-
     /**
      * Returns true if quad is parallel to the given face.
      * Does not validate quad winding order.
      * Expects convex quads with all points co-planar.
      */
-    public static boolean isQuadParallelToFace(Direction face, QuadViewImpl quad) {
+    public static boolean isQuadParallelToFace(Direction face, QuadView quad) {
         int i = face.getAxis().ordinal();
         final float val = quad.posByIndex(0, i);
         return Mth.equal(val, quad.posByIndex(1, i)) && Mth.equal(val, quad.posByIndex(2, i)) && Mth.equal(val, quad.posByIndex(3, i));
@@ -48,19 +43,17 @@ public abstract class GeometryHelper {
 
     /**
      * Identifies the face to which the quad is most closely aligned.
-     * This mimics the value that {@link BakedQuad#direction()} returns, and is
+     * This mimics the value that {@link BakedQuad#getDirection()} returns, and is
      * used in the vanilla renderer for all diffuse lighting.
      *
      * <p>Derived from the quad face normal and expects convex quads with all points co-planar.
      */
-    public static Direction lightFace(ModelQuadView quad) {
-        final float normalX = NormI8.unpackX(quad.getFaceNormal());
-        final float normalY = NormI8.unpackY(quad.getFaceNormal());
-        final float normalZ = NormI8.unpackZ(quad.getFaceNormal());
-        return switch (GeometryHelper.longestAxis(normalX, normalY, normalZ)) {
-            case X -> normalX > 0 ? Direction.EAST : Direction.WEST;
-            case Y -> normalY > 0 ? Direction.UP : Direction.DOWN;
-            case Z -> normalZ > 0 ? Direction.SOUTH : Direction.NORTH;
+    public static Direction lightFace(QuadView quad) {
+        final Vector3f normal = quad.faceNormal();
+        return switch (GeometryHelper.longestAxis(normal)) {
+            case X -> normal.x() > 0 ? Direction.EAST : Direction.WEST;
+            case Y -> normal.y() > 0 ? Direction.UP : Direction.DOWN;
+            case Z -> normal.z() > 0 ? Direction.SOUTH : Direction.NORTH;
             default ->
                 // handle WTF case
                     Direction.UP;
@@ -70,7 +63,7 @@ public abstract class GeometryHelper {
     /**
      * @see #longestAxis(float, float, float)
      */
-    public static Direction.Axis longestAxis(Vector3fc vec) {
+    public static Direction.Axis longestAxis(Vector3f vec) {
         return longestAxis(vec.x(), vec.y(), vec.z());
     }
 
