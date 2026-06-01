@@ -5,7 +5,6 @@ object BuildConfig {
     val NEOFORGE_VERSION: String = "21.11.42"
     val FABRIC_LOADER_VERSION: String = "0.19.2"
     val FABRIC_API_VERSION: String = "0.92.9+1.20.1"
-    val SUPPORT_FRAPI : Boolean = false
 
     // This value can be set to null to disable Parchment.
     val PARCHMENT_VERSION: String? = null

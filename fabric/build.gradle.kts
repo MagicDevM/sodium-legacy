@@ -19,10 +19,6 @@ val configurationCommonModJava: Configuration = configurations.create("commonJav
     isCanBeResolved = true
 }
 
-val configurationFrapiModJava: Configuration = configurations.create("frapiJava") {
-    isCanBeResolved = true
-}
-
 val configurationApiModSources: Configuration = configurations.create("apiSources") {
     isCanBeResolved = true
 }
@@ -31,22 +27,16 @@ val configurationCommonModResources: Configuration = configurations.create("comm
     isCanBeResolved = true
 }
 
-val configurationFrapiModResources: Configuration = configurations.create("frapiResources") {
-    isCanBeResolved = true
-}
-
 dependencies {
     configurationCommonModJava(project(path = ":common", configuration = "commonMainJava"))
     configurationApiModJava(project(path = ":common", configuration = "commonApiJava"))
     configurationCommonModJava(project(path = ":common", configuration = "commonBootJava"))
-    if (BuildConfig.SUPPORT_FRAPI) configurationFrapiModJava(project(path = ":frapi", configuration = "frapiMainJava"))
 
     configurationApiModSources(project(path = ":common", configuration = "commonApiSources"))
 
     configurationCommonModResources(project(path = ":common", configuration = "commonMainResources"))
     configurationCommonModResources(project(path = ":common", configuration = "commonApiResources"))
     configurationCommonModResources(project(path = ":common", configuration = "commonBootResources"))
-    if (BuildConfig.SUPPORT_FRAPI) configurationFrapiModResources(project(path = ":frapi", configuration = "frapiMainResources"))
 }
 
 sourceSets.apply {
@@ -55,9 +45,6 @@ sourceSets.apply {
         compileClasspath += configurationApiModJava
         runtimeClasspath += configurationCommonModJava
         runtimeClasspath += configurationApiModJava
-        if (BuildConfig.SUPPORT_FRAPI) {
-            runtimeClasspath += configurationFrapiModJava
-        }
     }
 }
 
@@ -86,10 +73,6 @@ dependencies {
     addEmbeddedFabricModule("fabric-api-base")
     addEmbeddedFabricModule("fabric-block-view-api-v2")
     addEmbeddedFabricModule("fabric-rendering-v1")
-
-    if (BuildConfig.SUPPORT_FRAPI) {
-        addEmbeddedFabricModule("fabric-renderer-api-v1")
-    }
 
     addEmbeddedFabricModule("fabric-lifecycle-events-v1")
     addEmbeddedFabricModule("fabric-rendering-fluids-v1")
@@ -123,9 +106,6 @@ tasks {
     jar {
         from(configurationCommonModJava)
         from(configurationApiModJava)
-        if (BuildConfig.SUPPORT_FRAPI) {
-            from(configurationFrapiModJava)
-        }
     }
 
     val apiJar = register<org.gradle.jvm.tasks.Jar>("apiJar") {
@@ -165,9 +145,6 @@ tasks {
 
     processResources {
         from(configurationCommonModResources)
-        if (BuildConfig.SUPPORT_FRAPI) {
-            from(configurationFrapiModResources)
-        }
     }
 }
 
