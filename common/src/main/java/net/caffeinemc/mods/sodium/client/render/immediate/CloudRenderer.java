@@ -1,4 +1,4 @@
-package net.caffienemc.mods.sodium.client.render.immediate;
+package net.caffeinemc.mods.sodium.client.render.immediate;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;

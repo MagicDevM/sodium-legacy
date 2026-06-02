@@ -1,4 +1,4 @@
-package net.caffienemc.mods.sodium.mixin.features.render.particle;
+package net.caffeinemc.mods.sodium.mixin.features.render.particle;
 
 import net.caffeinemc.mods.sodium.client.render.vertex.VertexConsumerUtils;
 import net.caffeinemc.mods.sodium.api.vertex.format.common.ParticleVertex;

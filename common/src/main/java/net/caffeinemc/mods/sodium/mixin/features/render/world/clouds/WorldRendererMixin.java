@@ -1,6 +1,6 @@
-package net.caffienemc.mods.sodium.mixin.features.render.world.clouds;
+package net.caffeinemc.mods.sodium.mixin.features.render.world.clouds;
 
-import net.caffienemc.mods.sodium.client.render.immediate.CloudRenderer;
+import net.caffeinemc.mods.sodium.client.render.immediate.CloudRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
