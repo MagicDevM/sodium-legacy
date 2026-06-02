@@ -6,6 +6,8 @@ changelog on GitHub, Modrinth and CurseForge.
 ----------
 Sodium [SodiumVersion]() fixes a number of bugs, adds some new features, and improves memory usage. It also includes multiple improvements to lighting.
 
+**INITIAL RELEASE**
+
 The release includes a new display of FPS percentiles which more accurately represent what you actually want to know about the FPS.
 - The median (labeled p50) shows the typical frame rate ignoring the slow frames
 - The 98th and 99.5th percentiles show the FPS of slow and very slow frames.
@@ -25,5 +27,4 @@ The bug fixes include multiple crash fixes and changes to avoid retaining large 
 - Fix #3612 by performing uniform binding on particle rendering ([#3637](https://github.com/CaffeineMC/sodium/pull/3637))
 - Fixed #3603 (incorrect AO and skylight level around light sources) ([#3631](https://github.com/CaffeineMC/sodium/pull/3631))
 - Add option to sort Entity Quads by Closest Point ([#3635](https://github.com/CaffeineMC/sodium/pull/3635))
-- Fix Minecraft's CompactVectorArray#getZ returning the wrong value which broke some mods' rendering ([#3643](https://github.com/CaffeineMC/sodium/pull/3643))
 - Change fullbright blocks to only emit block light and no sky light ([#3640](https://github.com/CaffeineMC/sodium/pull/3640))
