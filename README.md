@@ -17,8 +17,7 @@ then consider [buying me a coffee](https://caffeinemc.net/donate).
 
 #### Stable builds
 
-The latest stable release of Sodium can be downloaded from our official [Modrinth](https://modrinth.com/mod/sodium) and
-[CurseForge](https://www.curseforge.com/minecraft/mc-mods/sodium) pages.
+The latest stable release of Sodium can be downloaded from our official
 
 #### Nightly builds (for developers)
 

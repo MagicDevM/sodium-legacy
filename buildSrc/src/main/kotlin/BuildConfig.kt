@@ -14,9 +14,6 @@ object BuildConfig {
 
     val RELEASE_TAG: String = "mc$MINECRAFT_VERSION-$MOD_VERSION"
 
-    val CURSEFORGE_PROJECT_ID = "394468"
-    val MODRINTH_PROJECT_ID = "AANobbMI"
-
     fun createVersionString(project: Project): String {
         val builder = StringBuilder()
 

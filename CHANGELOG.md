@@ -2,7 +2,7 @@
 [MCVersion]() is automatically replaced with the minecraft version, e.g. 26.1
 [SodiumVersion]() is automatically replaced with the sodium version, e.g. 0.8.9
 Everything above the line is ignored and not included in the changelog. Everything below will be in the
-changelog on GitHub, Modrinth and CurseForge.
+changelog on GitHub.
 ----------
 Sodium [SodiumVersion]() fixes a number of bugs, adds some new features, and improves memory usage. It also includes multiple improvements to lighting.
 
