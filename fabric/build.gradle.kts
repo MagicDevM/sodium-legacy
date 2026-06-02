@@ -27,6 +27,10 @@ val configurationCommonModResources: Configuration = configurations.create("comm
     isCanBeResolved = true
 }
 
+val configurationPreLaunch: Configuration = configurations.create("preLaunchDeps") {
+    isCanBeResolved = true
+}
+
 dependencies {
     configurationCommonModJava(project(path = ":common", configuration = "commonMainJava"))
     configurationApiModJava(project(path = ":common", configuration = "commonApiJava"))
@@ -37,12 +41,15 @@ dependencies {
     configurationCommonModResources(project(path = ":common", configuration = "commonMainResources"))
     configurationCommonModResources(project(path = ":common", configuration = "commonApiResources"))
     configurationCommonModResources(project(path = ":common", configuration = "commonBootResources"))
+    
+    configurationPreLaunch(project(path = ":common", configuration = "preLaunchDeps"))
 }
 
 sourceSets.apply {
     main {
         compileClasspath += configurationCommonModJava
         compileClasspath += configurationApiModJava
+        compileClasspath += configurationPreLaunch
         runtimeClasspath += configurationCommonModJava
         runtimeClasspath += configurationApiModJava
     }
