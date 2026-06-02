@@ -54,10 +54,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew publishMods -Pbuild.release=true -Pbuild.release.platform=${{ inputs.platform }}
-
-      - name: Publish Tag Release to CaffeineMC Maven
-        env:
-          ORG_GRADLE_PROJECT_caffeineMCMavenUsername: ${{ secrets.CAFFEINEMC_MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_caffeineMCMavenPassword: ${{ secrets.CAFFEINEMC_MAVEN_PASSWORD }}
-        if: ${{ env.ORG_GRADLE_PROJECT_caffeineMCMavenUsername != '' && env.ORG_GRADLE_PROJECT_caffeineMCMavenPassword != '' }}
-        run: ./gradlew publishAllPublicationsToCaffeineMCRepository -Pbuild.release=true
