@@ -49,9 +49,11 @@ sourceSets.apply {
     main {
         compileClasspath += configurationCommonModJava
         compileClasspath += configurationApiModJava
-        compileClasspath += configurationPreLaunch
         runtimeClasspath += configurationCommonModJava
         runtimeClasspath += configurationApiModJava
+        
+        compileClasspath += configurationPreLaunch
+        runtimeClasspath += configurationPreLaunch
     }
 }
 
