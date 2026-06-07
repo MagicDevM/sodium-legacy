@@ -1,6 +1,7 @@
 package net.caffeinemc.mods.sodium.mixin.features.gui.hooks.debug;
 
 import com.google.common.collect.Lists;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.caffeinemc.mods.sodium.client.util.MathUtil;
@@ -15,8 +16,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import com.llamalad7.mixinextras.sugar.Local;
-import org.jspecify.annotations.Nullable;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -48,28 +48,12 @@ public abstract class DebugHudMixin {
 
         return strings;
     }
-    
-    @Redirect(method = "getGameInformation", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList([Ljava/lang/Object;)Ljava/util/ArrayList;", remap = false))
-    private @Nullable List<String> redirectLeftTextEarly(Object[] elements, GuiGraphics guiGraphics, CallbackInfo ci, @Local(ordinal = 0) List<String> leftLines) {
-        ArrayList<String> strings = Lists.newArrayList((String[]) elements);
-        strings.add("");
-        
-        Minecraft minecraft = Minecraft.getInstance();
-        
+
+    @ModifyReturnValue(method = "getGameInformation", at = @At("RETURN"))
+    private List<String> sodium$insertFpsPercentiles(List<String> lines) {
         var results = FrameTimeStatistics.INSTANCE.get();
         if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        // splice the percentile fps display into the debug lines to make sure it's right under the fps string.
-        // without this, it may be put somewhere else on the screen.
-        int insertAt = 0;
-        for (int i = 0; i < leftLines.size(); i++) {
-            String line = leftLines.get(i);
-            if (line != null && line.contains(" fps T:")) {
-                insertAt = i + 1;
-                break;
-            }
+            return lines;
         }
 
         var sb = new StringBuilder();
@@ -83,12 +67,12 @@ public abstract class DebugHudMixin {
                     .append(ChatFormatting.RESET)
                     .append(sodium$nanosToFps(ns));
         }
-
         sb.append(ChatFormatting.GRAY).append(" fps");
 
-        leftLines.add(insertAt, sb.toString());
-        
-        return leftLines;
+        // put it right after the fps line, which vanilla always emits as the second entry
+        lines.add(2, sb.toString());
+
+        return lines;
     }
     
     @Unique

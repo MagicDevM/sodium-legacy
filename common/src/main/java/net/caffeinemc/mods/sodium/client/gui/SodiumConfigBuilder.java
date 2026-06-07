@@ -81,10 +81,6 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         return this.window.findBestMonitor();
     }
 
-    public static void registerIcon(TextureManager textureManager) {
-        textureManager.register(SODIUM_ICON, new SodiumLogo());
-    }
-
     static class SodiumLogo extends SimpleTexture {
         public SodiumLogo() {
             super(SODIUM_ICON);

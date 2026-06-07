@@ -15,6 +15,7 @@
     "core.WindowMixin",
     "core.gui.LevelLoadTrackerMixin",
     "core.model.colors.BlockColorsMixin",
+    "core.render.VertexFormatAccessor",
     "core.render.BlockEntityTypeMixin",
     "core.render.VertexFormatMixin",
     "core.render.frustum.FrustumMixin",
@@ -69,7 +70,6 @@
     "features.textures.animations.tracking.TextureAtlasSpriteMixin",
     "features.textures.animations.tracking.TextureSheetParticleMixin",
     "features.textures.scan.SpriteContentsMixin",
-    "workarounds.context_creation.RenderSystemMixin",
     "workarounds.context_creation.WindowMixin",
     "workarounds.event_loop.RenderSystemMixin"
   ]

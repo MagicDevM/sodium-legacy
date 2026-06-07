@@ -1,3 +1,5 @@
+// TODOME: Maybe see if this can be implemented somehow?
+
 package net.caffeinemc.mods.sodium.mixin.features.render.immediate.buffer_builder.sorting;
 
 import java.nio.ByteBuffer;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(MultiBufferSource.BufferSource.class)
 public class MultiBufferSourceMixin {
+    /*
     @Unique
     private static final int VERTICES_PER_QUAD = 6;
     
@@ -81,5 +84,5 @@ public class MultiBufferSourceMixin {
         );
     
         MemoryUtil.memFree(copy);
-    }
+    }*/
 }

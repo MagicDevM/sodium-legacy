@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import net.caffeinemc.mods.sodium.client.SodiumClientMod;
 import net.caffeinemc.mods.sodium.client.checks.ResourcePackScanner;
 import net.caffeinemc.mods.sodium.client.config.ConfigManager;
+import net.caffeinemc.mods.sodium.client.util.FrameTimeStatistics;
 import net.caffeinemc.mods.sodium.client.gui.SodiumConfigBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.objectweb.asm.Opcodes;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(Minecraft.class)
@@ -83,7 +85,7 @@ public class MinecraftMixin {
      * Check for problematic core shader resource packs after the initial game launch.
      */
     @Inject(method = "setInitialScreen", at = @At("TAIL"))
-    private void postInit(RealmsClient realms, ReloadInstance reloader, GameConfig.QuickPlayData data, CallbackInfoReturnable<Runnable> cir) {
+    private void postInit(RealmsClient realms, ReloadInstance reloader, GameConfig.QuickPlayData data, CallbackInfo ci) {
         ResourcePackScanner.checkIfCoreShaderLoaded(this.resourceManager);
 
         ConfigManager.registerConfigsLate();
@@ -96,10 +98,14 @@ public class MinecraftMixin {
     private void postResourceReload(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
         ResourcePackScanner.checkIfCoreShaderLoaded(this.resourceManager);
     }
-
-    @WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;registerTextures(Lnet/minecraft/client/renderer/texture/TextureManager;)V"))
-    private void registerSodiumIcon(TextureManager textureManager, Operation<Void> original) {
-        SodiumConfigBuilder.registerIcon(textureManager);
-        original.call(textureManager);
+    /**
+     * hook the vanilla fps update to update our fps display only when it does too, once a second
+      */
+    @Inject(
+        method = "runTick",
+        at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;fps:I", opcode = Opcodes.PUTSTATIC, shift = At.Shift.AFTER)
+    )
+    private void sodium$updatePercentileCache(boolean advanceGameTime, CallbackInfo ci) {
+        FrameTimeStatistics.INSTANCE.invalidate();
     }
 }

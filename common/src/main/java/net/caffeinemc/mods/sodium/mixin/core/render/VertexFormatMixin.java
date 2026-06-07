@@ -10,15 +10,17 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
+import java.lang.String;
 
 @Mixin(VertexFormat.class)
 public class VertexFormatMixin implements VertexFormatExtensions {
     private int sodium$globalId;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void afterInit(List<VertexFormatElement> elements, List<String> names, IntList offsets, int vertexSize, CallbackInfo ci) {
+    private void afterInit(ImmutableMap<String, VertexFormatElement> elementMap, CallbackInfo ci) {
         this.sodium$globalId = VertexFormatRegistry.instance()
                 .allocateGlobalId((VertexFormat) (Object) this);
     }
