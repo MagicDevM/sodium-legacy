@@ -1,6 +1,7 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
 import net.caffeinemc.mods.sodium.api.config.option.OptionImpact;
+import net.caffeinemc.mods.sodium.client.gui.GuiTint;
 import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.gui.options.control.ControlElement;
@@ -209,38 +210,30 @@ public class ScrollableTooltip {
         if (this.hoveredElement == null) {
             return;
         }
-
-        if (!this.overlayMode) {
+        
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0f, 0.0f, 400.0f);
+        try {
+            this.renderInternal(graphics);
+        } finally {
+            graphics.pose().popPose();
+        }
+    }
+    
+    private void renderInternal(@NonNull GuiGraphics graphics) {
+      if (!this.overlayMode) {
             // draw small triangular arrow attached to the side of the tooltip box pointing at the hovered element, in the margin between the hovered element and the tooltip box
             int arrowX = this.visibleDim.x() - ARROW_WIDTH;
             int arrowY = this.hoveredElement.getCenterY() - (ARROW_HEIGHT / 2);
 
-            // constraint the arrow to be within the tooltip area
+            // constrain the arrow to be within the tooltip area
             arrowY = Math.max(arrowY, this.tooltipArea.y());
-            arrowY = Math.min(arrowY + ARROW_HEIGHT, this.tooltipArea.getLimitY()) - ARROW_HEIGHT;
+            int arrowYConstrained = Math.min(arrowY + ARROW_HEIGHT, this.tooltipArea.getLimitY()) - ARROW_HEIGHT;
 
-            graphics.pose().translate(0.0F, 0.0F, 1.0F);
-
-            // parameters are: render type, sprite, x, y, u offset, v offset, render width, render height, u size, v size, color
-            graphics.setColor(
-                Colors.r(Colors.BACKGROUND_LIGHT),
-                Colors.g(Colors.BACKGROUND_LIGHT),
-                Colors.b(Colors.BACKGROUND_LIGHT),
-                Colors.a(Colors.BACKGROUND_LIGHT)
-            );
-            
-            graphics.blit(ARROW_TEXTURE, arrowX, arrowY, ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT);
-            
-            graphics.setColor(
-                Colors.r(Colors.BACKGROUND_DEFAULT),
-                Colors.g(Colors.BACKGROUND_DEFAULT),
-                Colors.b(Colors.BACKGROUND_DEFAULT),
-                Colors.a(Colors.BACKGROUND_DEFAULT)
-            );
-            
-            graphics.blit(ARROW_TEXTURE, arrowX, arrowY, 0, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT);
-            
-            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            GuiTint.withTint(Colors.BACKGROUND_LIGHT, () ->
+                    graphics.blit(ARROW_TEXTURE, arrowX, arrowYConstrained, ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT));
+            GuiTint.withTint(Colors.BACKGROUND_DEFAULT, () ->
+                    graphics.blit(ARROW_TEXTURE, arrowX, arrowYConstrained, 0, 0, ARROW_WIDTH, ARROW_HEIGHT, SPRITE_WIDTH, ARROW_HEIGHT));
         }
 
         int lineHeight = this.getLineHeight();
@@ -254,9 +247,6 @@ public class ScrollableTooltip {
 
         graphics.enableScissor(this.visibleDim.x(), this.visibleDim.y(), this.visibleDim.getLimitX(), this.visibleDim.getLimitY());
         graphics.fill(this.visibleDim.x(), this.visibleDim.y(), this.visibleDim.getLimitX(), this.visibleDim.getLimitY(), backgroundColor);
-        
-        graphics.pose().translate(0.0F, 0.0F, 1.0F);
-        
         for (int i = 0; i < this.content.size(); i++) {
             graphics.drawString(this.font, this.content.get(i),
                     this.visibleDim.x() + TEXT_HORIZONTAL_PADDING, this.visibleDim.y() + TEXT_VERTICAL_PADDING + (i * lineHeight) - scrollAmount,

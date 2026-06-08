@@ -1,6 +1,7 @@
 package net.caffeinemc.mods.sodium.client.gui.widgets;
 
 import org.lwjgl.glfw.GLFW;
+import net.caffeinemc.mods.sodium.client.gui.GuiTint;
 import net.caffeinemc.mods.sodium.client.gui.Colors;
 import net.caffeinemc.mods.sodium.client.gui.Layout;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
@@ -62,21 +63,8 @@ public class ResetButton extends AbstractWidget {
         int x = this.getCenterX() - ICON_SIZE / 2;
         int y = this.getCenterY() - ICON_SIZE / 2;
 
-        graphics.setColor(
-          Colors.r(COLOR),
-          Colors.g(COLOR),
-          Colors.b(COLOR),
-          Colors.a(COLOR)
-        );
-
-        graphics.blit(ICON, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
-
-        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        GLFW.glfwSetCursor(
-          Minecraft.getInstance().getWindow().getWindow(),
-          GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR)
-      );
+        GuiTint.withTint(COLOR, () ->
+                graphics.blit(ICON, x, y, ICON_SIZE, ICON_SIZE, 0.0f, 0.0f, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE));
     }
 
     @Override
