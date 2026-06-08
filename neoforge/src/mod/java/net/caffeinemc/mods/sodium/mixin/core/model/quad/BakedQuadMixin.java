@@ -22,8 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BakedQuad.class)
 public abstract class BakedQuadMixin implements BakedQuadView {
-
-
     @Shadow
     @Final
     private boolean shade;

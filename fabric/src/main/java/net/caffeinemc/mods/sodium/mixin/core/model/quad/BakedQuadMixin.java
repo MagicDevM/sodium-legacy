@@ -34,6 +34,7 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     @Shadow
     @Final
     private int tintIndex;
+    
     @Shadow
     @Final
     private Direction direction;
@@ -43,34 +44,34 @@ public abstract class BakedQuadMixin implements BakedQuadView {
     @Unique
     private int normal;
 
-    @Unique
-    private int[] vertices;
+    @Shadow
+    @Final
+    protected int[] vertices;
 
     @Unique
     private ModelQuadFacing normalFace = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(Vector3fc vector3fc, Vector3fc vector3fc2, Vector3fc vector3fc3, Vector3fc vector3fc4, long l, long m, long n, long o, int i, Direction direction, TextureAtlasSprite textureAtlasSprite, boolean bl, int j, CallbackInfo ci) {
+    private void init(int[] vertexData, int colorIndex, Direction direction, TextureAtlasSprite textureAtlasSprite, boolean shade, CallbackInfo ci) {
         this.normal = this.calculateNormal();
         this.normalFace = ModelQuadFacing.fromPackedNormal(this.normal);
 
         this.flags = ModelQuadFlags.getQuadFlags(this, direction);
-        this.vertices = this.getVertices();
     }
 
     @Override
     public float getX(int idx) {
-        return Float.intBitsToFloat(vertices[idx * 8]);
+        return Float.intBitsToFloat(this.vertices[idx * 8]);
     }
 
     @Override
     public float getY(int idx) {
-        return Float.intBitsToFloat(vertices[idx * 8 + 1]);
+        return Float.intBitsToFloat(this.vertices[idx * 8 + 1]);
     }
 
     @Override
     public float getZ(int idx) {
-        return Float.intBitsToFloat(vertices[idx * 8 + 2]);
+        return Float.intBitsToFloat(this.vertices[idx * 8 + 2]);
     }
 
     @Override
