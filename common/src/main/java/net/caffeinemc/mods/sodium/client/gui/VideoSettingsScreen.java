@@ -324,6 +324,8 @@ public class VideoSettingsScreen extends Screen implements ScreenPromptable, Scr
     @Override
     public void render(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         this.updateControls(mouseX, mouseY);
+        
+        super.renderBackground(graphics);
 
         super.render(graphics, this.prompt != null ? -1 : mouseX, this.prompt != null ? -1 : mouseY, delta);
 
