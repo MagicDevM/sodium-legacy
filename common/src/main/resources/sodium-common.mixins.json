@@ -38,6 +38,7 @@
     "features.options.render_layers.ItemBlockRenderTypesMixin",
     "features.options.render_layers.LeavesBlockMixin",
     "features.options.weather.LevelRendererMixin",
+    "features.gui.screen.LevelLoadingScreenMixin",
     "features.gui.hooks.console.GameRendererMixin",
     "features.gui.hooks.debug.DebugHudMixin",
     "features.gui.hooks.debug.MinecraftRenderFrameMixin",
