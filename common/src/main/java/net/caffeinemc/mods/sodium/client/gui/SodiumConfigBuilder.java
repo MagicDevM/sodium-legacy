@@ -81,24 +81,6 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
         return this.window.findBestMonitor();
     }
 
-    static class SodiumLogo extends SimpleTexture {
-        public SodiumLogo() {
-            super(SODIUM_ICON);
-        }
-
-        @Override
-        public void load(ResourceManager resourceManager) throws IOException {
-            try (InputStream inputStream = SodiumConfigBuilder.class.getResourceAsStream("/config-icon.png")) {
-                NativeImage image = NativeImage.read(inputStream);
-                
-                TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
-                
-                this.bind();
-                image.upload(0, 0, 0, true);
-            }
-        }
-    }
-
     @Override
     public void registerConfigEarly(ConfigBuilder builder) {
         new SodiumConfigBuilder().buildEarlyConfig(builder);
