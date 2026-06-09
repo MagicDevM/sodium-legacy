@@ -304,8 +304,8 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                   .addOption(
                         builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.weather"), SodiumOptions.WeatherQuality.class)
                                 .setStorageHandler(this.vanillaStorage)
-                                .setName(Component.translatable("options.weather_quality"))
-                                .setTooltip(Component.translatable("options.weather_quality.tooltip"))
+                                .setName(Component.translatable("sodium.options.weather_quality.name"))
+                                .setTooltip(Component.translatable("sodium.options.weather_quality.tooltip"))
                                 .setDefaultValue(DEFAULTS.quality.weatherQuality)
                                 .setBinding(value -> this.sodiumOpts.quality.weatherQuality = value, () -> this.sodiumOpts.quality.weatherQuality)
                                 .setImpact(OptionImpact.LOW)
@@ -313,8 +313,8 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                   .addOption(
                         builder.createEnumOption(new ResourceLocation("sodium").tryParse("sodium:quality.leaves"), SodiumOptions.LeavesQuality.class)
                                 .setStorageHandler(this.vanillaStorage)
-                                .setName(Component.translatable("options.leaves_quality.name"))
-                                .setTooltip(Component.translatable("options.leaves_quality.tooltip"))
+                                .setName(Component.translatable("sodium.options.leaves_quality.name"))
+                                .setTooltip(Component.translatable("sodium.options.leaves_quality.tooltip"))
                                 .setDefaultValue(DEFAULTS.quality.leavesQuality)
                                 .setBinding(value -> this.sodiumOpts.quality.leavesQuality = value, () -> this.sodiumOpts.quality.leavesQuality)
                                 .setImpact(OptionImpact.MEDIUM)
@@ -379,8 +379,8 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                  .addOption(
                         builder.createBooleanOption(new ResourceLocation("sodium").tryParse("sodium:quality.vignette"))
                                 .setStorageHandler(this.sodiumStorage)
-                                .setName(Component.translatable("options.vignette"))
-                                .setTooltip(Component.translatable("options.vignette.tooltip"))
+                                .setName(Component.translatable("sodium.options.vignette.name"))
+                                .setTooltip(Component.translatable("sodium.options.vignette.tooltip"))
                                 .setDefaultValue(DEFAULTS.quality.enableVignette)
                                 .setBinding(value -> this.sodiumOpts.quality.enableVignette = value, () -> this.sodiumOpts.quality.enableVignette)
                 )
