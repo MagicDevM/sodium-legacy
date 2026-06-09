@@ -306,9 +306,6 @@ public class SodiumConfigBuilder implements ConfigEntryPoint {
                                 .setStorageHandler(this.vanillaStorage)
                                 .setName(Component.translatable("options.weather_quality"))
                                 .setTooltip(Component.translatable("options.weather_quality.tooltip"))
-                                .setElementNameProvider(EnumOptionBuilder.nameProviderFrom(
-                                        Component.translatable("options.weather_quality.fast"),
-                                        Component.translatable("options.weather_quality.fancy")))
                                 .setDefaultValue(DEFAULTS.quality.weatherQuality)
                                 .setBinding(value -> this.sodiumOpts.quality.weatherQuality = value, () -> this.sodiumOpts.quality.weatherQuality)
                                 .setImpact(OptionImpact.LOW)
