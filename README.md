@@ -1,7 +1,7 @@
 > [!IMPORTANT]
 > This is an successful attempt at backporting the v8 version of sodium for 1.20.1 it boots up till the main menu incompatible with immediatelyfast and is not tested if it could load onto a world
 
-img src="common/src/main/resources/sodium-icon.png" width="128">
+<img src="common/src/main/resources/sodium-icon.png" width="128">
 
 # Sodium
 
